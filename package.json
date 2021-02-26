@@ -1,0 +1,27 @@
+{
+  "name": "claptastic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -S -C 'keys/cert.pem' docs",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-keys": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout keys/key.pem -out keys/cert.pem"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danyo1399/claptastic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danyo1399/claptastic/issues"
+  },
+  "homepage": "https://github.com/danyo1399/claptastic#readme",
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
+}
