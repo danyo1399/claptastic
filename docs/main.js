@@ -1,5 +1,5 @@
 "use strict";
-const version = "V1.0.1";
+const version = "V1.0.2";
 
 
 if ('serviceWorker' in navigator) {
