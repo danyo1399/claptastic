@@ -122,6 +122,7 @@ updateVersion();
       background-color: #f3466f;
         padding-top:50px;
     }
+
     .header {
       height: 50px;
       width: 100%;
@@ -139,12 +140,8 @@ updateVersion();
       right: 0;
     }
     .page-content {
-      position: fixed;
-      padding-top: 50px;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+        height:100%;
+        width:100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -155,10 +152,22 @@ updateVersion();
       max-height: 80vh;
     }
 
-    @media (orientation: landscape) {
+    @media (max-height: 480px) {
       .wrapper {
-        max-width: 200px;
+        max-width: 300px;
       }
+    }
+
+    @media (max-height: 360px) {
+        .wrapper {
+            max-width: 200px;
+        }
+        .header {
+            display:none;
+        }
+        body {
+            padding-top: 0px
+        }
     }
 
     .svg-wrapper {
