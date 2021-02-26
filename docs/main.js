@@ -1,6 +1,25 @@
 "use strict";
 const version = "V1.0.0";
 
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('sw.js')
+        .then(() => { console.log('Service Worker Registered'); });
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('before install prompt')
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI to notify the user they can add to home screen
+
+});
+
+
 setupAudio();
 updateVersion();
 showDialogIfRequired();
