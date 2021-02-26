@@ -1,15 +1,15 @@
 
-console.log('service worker init V1.0.3');
+console.log('service worker init V1.0.5');
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open('claptastic-store').then((cache) => cache.addAll([
-            '/index.html',
-            '/main.js',
-            '/styles.css',
+            'index.html',
+            'main.js',
+            'styles.css',
 'https://unpkg.com/tailwindcss@%5E2/dist/tailwind.min.css',
             'audio.mp3',
-            'favicon.ico',
-            '/'
+            'icon/favicon.ico',
+            '/claptastic/'
         ])),
     );
 });
