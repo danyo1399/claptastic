@@ -1,5 +1,5 @@
 
-console.log('service worker init V1.0.8');
+console.log('service worker init V1.0.9');
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open('claptastic-store').then((cache) => cache.addAll([
@@ -11,7 +11,10 @@ self.addEventListener('install', (e) => {
             '/claptastic/',
             '/claptastic/icon/hand-icon-1024.png',
             '/claptastic/icon/hand-icon.png',
-            '/claptastic/icon/hand-icon-512.png'
+            '/claptastic/icon/hand-icon-512.png',
+            '/claptastic/icon/maskable_icon_x192.png',
+            '/claptastic/icon/hand-icon_x144.png'
+
         ])),
     );
 });

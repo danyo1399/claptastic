@@ -1,5 +1,5 @@
 "use strict";
-const version = "1.0.8";
+const version = "1.0.9";
 
 
 if ('serviceWorker' in navigator) {
@@ -12,7 +12,7 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     console.log('before install prompt')
     // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
+    //e.preventDefault();
     // Stash the event so it can be triggered later.
     deferredPrompt = e;
     // Update UI to notify the user they can add to home screen
