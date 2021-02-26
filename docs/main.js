@@ -1,10 +1,10 @@
 "use strict";
-const version = "1.0.5";
+const version = "1.0.8";
 
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-        .register('sw.js')
+        .register('/claptastic/sw.js')
         .then(() => { console.log('Service Worker Registered'); });
 }
 
