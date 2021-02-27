@@ -1,12 +1,16 @@
 "use strict";
 let deferredPrompt;
+const audioFileUrl = '/claptastic/audio.mp3';
+const serviceWorkerFile = '/claptastic/service-worker.js'
 const audio = new Audio();
 const version = '1.0.30'
+
+const dialogShownKey = 'dialog_shown'
 
 if ("serviceWorker" in navigator) {
     // Use the window load event to keep the page load performant
     window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js");
+        navigator.serviceWorker.register(serviceWorkerFile);
     });
 }
 
@@ -70,7 +74,7 @@ function compareVersions(v1, v2){
 }
 async function versionCheck() {
     try {
-        const resp = await fetch('version.json?rnd=' + Date.now());
+        const resp = await fetch('/claptastic/version.json?rnd=' + Date.now());
         const json = await resp.json()
         const latestVersion = json.version;
         console.log('version check', {latestVersion, currentVersion: version});
@@ -91,17 +95,19 @@ function updateVersion() {
 }
 
 async function loadMp3() {
+    const storageItemKey = 'mp3'
   // Noticed some odd behavior in android where if offline for certain amount of time looks like audio is
   // removed from cache?
   // store in indexdb just to be safe
   // If we have previous saved version in db, we may still live
   try {
-    const mp3 = await fetch("audio.mp3");
+    const mp3 = await fetch(audioFileUrl);
     const blob = await mp3.blob();
-    await localforage.setItem("mp3", blob);
+    await localforage.setItem(storageItemKey, blob);
   } catch (e) {
     console.error("Failed to load audio", e);
   }
+  return storageItemKey;
 }
 
 async function setupVisibilityChange() {
@@ -129,9 +135,9 @@ async function setupVisibilityChange() {
 
 }
 async function setupAudio() {
-  await loadMp3();
+  const storageItemKey = await loadMp3();
 
-  const blob = await localforage.getItem("mp3");
+  const blob = await localforage.getItem(storageItemKey);
   const url = URL.createObjectURL(blob);
 
   audio.src = url;
@@ -144,7 +150,7 @@ async function setupAudio() {
   window.play = () => audio.play();
 }
 function showDialogIfRequired() {
-  const dialogShown = localStorage.getItem("dialog_shown");
+  const dialogShown = localStorage.getItem(dialogShownKey);
   if (!dialogShown) {
     showDialog();
   }
@@ -180,7 +186,7 @@ function stopAnim() {
 function closeDialog() {
   const ele = document.getElementById("dialog");
   ele.style.display = "none";
-  localStorage.setItem("dialog_shown", "Y");
+  localStorage.setItem(dialogShownKey, "Y");
 }
 function showDialog() {
   const ele = document.getElementById("dialog");

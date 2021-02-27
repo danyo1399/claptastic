@@ -9,7 +9,7 @@ const filesToCache = [
   "/claptastic/",
   "/claptastic/icon/hand-icon-192.png",
   "/claptastic/icon/hand-icon-512.png",
-  "localforage.min.js",
+  "/claptastic/localforage.min.js",
 ];
 
 
@@ -25,7 +25,7 @@ self.addEventListener('fetch', (e) => {
         const r = await caches.match(e.request);
         console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
         if (r) return r;
-        const response = await fetch(e.request);
+
         // Dont allow dynamic addition of files to cache
         // const cache = await caches.open(cacheName);
         // console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
