@@ -1,7 +1,7 @@
 "use strict";
 let deferredPrompt;
 const audio = new Audio();
-const version = '1.0.27'
+const version = '1.0.29'
 
 if ("serviceWorker" in navigator) {
     // Use the window load event to keep the page load performant
