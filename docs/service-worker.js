@@ -1,10 +1,10 @@
-console.log("service worker init V1.0.22");
+console.log("service worker init V1.0.23");
 const cacheName = 'claptastic-store';
 const filesToCache = [
   "/claptastic/index.html",
   "/claptastic/main.js",
   "/claptastic/styles.css",
-  "https://unpkg.com/tailwindcss@%5E2/dist/tailwind.min.css",
+  "/claptastic/tailwind.min.css",
   "/claptastic/audio.mp3",
   "/claptastic/",
   "/claptastic/icon/hand-icon-192.png",
