@@ -20,5 +20,11 @@
   "devDependencies": {
     "live-server": "^1.2.1",
     "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "workbox-cacheable-response": "^6.1.1",
+    "workbox-expiration": "^6.1.1",
+    "workbox-routing": "^6.1.1",
+    "workbox-strategies": "^6.1.1"
   }
 }
