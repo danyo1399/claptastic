@@ -70,7 +70,7 @@ function compareVersions(v1, v2){
 }
 async function versionCheck() {
     try {
-        const resp = await fetch('version.json');
+        const resp = await fetch('version.json?rnd=' + Date.now());
         const json = await resp.json()
         const latestVersion = json.version;
         console.log('version check', {latestVersion, currentVersion: version});
