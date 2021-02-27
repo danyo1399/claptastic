@@ -1,7 +1,7 @@
 "use strict";
 let deferredPrompt;
 const audio = new Audio();
-const version = '1.0.23'
+const version = '1.0.24'
 
 window.addEventListener("beforeinstallprompt", (e) => {
   console.log("before install prompt");

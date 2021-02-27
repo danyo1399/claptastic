@@ -1,4 +1,4 @@
-console.log("service worker init V1.0.23");
+console.log("service worker init V1.0.24");
 const cacheName = 'claptastic-store';
 const filesToCache = [
   "/claptastic/index.html",
