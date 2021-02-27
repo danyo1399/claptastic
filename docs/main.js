@@ -1,14 +1,23 @@
 "use strict";
 let deferredPrompt;
 const audio = new Audio();
-const version = '1.0.24'
+const version = '1.0.26'
+
+if ("serviceWorker" in navigator) {
+    // Use the window load event to keep the page load performant
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js");
+    });
+}
 
 window.addEventListener("beforeinstallprompt", (e) => {
   console.log("before install prompt");
   // Prevent Chrome 67 and earlier from automatically showing the prompt
   e.preventDefault();
   // Stash the event so it can be triggered later.
+
   deferredPrompt = e;
+    installButton.style.display = 'flex';
   // Update UI to notify the user they can add to home screen
 });
 
@@ -26,6 +35,19 @@ updateButton.onclick = async () => {
     window.location.reload(true)
 }
 
+const installButton = document.getElementById('install-button');
+installButton.onclick = async () => {
+    // Hide the app provided install promotion
+    installButton.style.display = 'none';
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    // Optionally, send analytics event with outcome of user choice
+    console.log(`User response to the install prompt: ${outcome}`);
+    // We've used the prompt, and can't use it again, throw it away
+    deferredPrompt = null;
+}
 
 (async () => {
   await setupAudio();
@@ -43,7 +65,7 @@ async function versionCheck() {
         console.log('version check', {latestVersion, currentVersion: version});
 
         if (latestVersion !== version ) {
-            updateButton.style.display = 'block';
+            updateButton.style.display = 'flex';
         }
     }
     catch(e) {
