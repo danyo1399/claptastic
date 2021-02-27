@@ -49,8 +49,9 @@ body {
     padding: 0.5rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-weight: 100;
-    padding-left: 2rem;
+    padding-left: 1.5rem;
     font-size: 1.5rem;
     position: fixed;
     top: 0;

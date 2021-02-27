@@ -1,24 +1,55 @@
 "use strict";
-const version = "1.0.14";
-
 let deferredPrompt;
 const audio = new Audio();
+const version = '1.0.22'
 
 window.addEventListener("beforeinstallprompt", (e) => {
   console.log("before install prompt");
   // Prevent Chrome 67 and earlier from automatically showing the prompt
-  //e.preventDefault();
+  e.preventDefault();
   // Stash the event so it can be triggered later.
   deferredPrompt = e;
   // Update UI to notify the user they can add to home screen
 });
+
+// IOS pwa updates are janky. instead give button to force update.
+// Dont autoupdate as could end up in endless loop
+const updateButton = document.getElementById('update-button');
+updateButton.onclick = async () => {
+    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        for (let registration of registrations) {
+            registration.unregister()
+        }
+    })
+
+    await caches.delete('claptastic-store')
+    window.location.reload(true)
+}
+
 
 (async () => {
   await setupAudio();
   updateVersion();
   showDialogIfRequired();
   setupVisibilityChange();
+  await versionCheck();
 })();
+
+async function versionCheck() {
+    try {
+        const resp = await fetch('version.json');
+        const json = await resp.json()
+        const latestVersion = json.version;
+        console.log('version check', {latestVersion, currentVersion: version});
+
+        if (latestVersion !== version ) {
+            updateButton.style.display = 'block';
+        }
+    }
+    catch(e) {
+        console.warn('Failed version check', e)
+    }
+}
 
 function updateVersion() {
   const ele = document.getElementById("version");

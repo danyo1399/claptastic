@@ -1,4 +1,4 @@
-console.log("service worker init V1.0.14");
+console.log("service worker init V1.0.22");
 const cacheName = 'claptastic-store';
 const filesToCache = [
   "/claptastic/index.html",
@@ -26,9 +26,10 @@ self.addEventListener('fetch', (e) => {
         console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
         if (r) return r;
         const response = await fetch(e.request);
-        const cache = await caches.open(cacheName);
-        console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
-        cache.put(e.request, response.clone());
+        // Dont allow dynamic addition of files to cache
+        // const cache = await caches.open(cacheName);
+        // console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
+        // cache.put(e.request, response.clone());
         return response;
     })());
 });
