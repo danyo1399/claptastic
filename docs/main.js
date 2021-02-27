@@ -1,7 +1,7 @@
 "use strict";
 let deferredPrompt;
 const audio = new Audio();
-const version = '1.0.26'
+const version = '1.0.27'
 
 if ("serviceWorker" in navigator) {
     // Use the window load event to keep the page load performant
@@ -57,14 +57,26 @@ installButton.onclick = async () => {
   await versionCheck();
 })();
 
+function compareVersions(v1, v2){
+    const v1Parts = v1.split('.');
+    const v2Parts = v2.split('.');
+    for(let i = 0;i<3;i++) {
+        const result = + v1Parts[i] - v2Parts[i];
+        if(result !== 0) {
+            return result;
+        }
+    }
+    return 0;
+}
 async function versionCheck() {
     try {
         const resp = await fetch('version.json');
         const json = await resp.json()
         const latestVersion = json.version;
         console.log('version check', {latestVersion, currentVersion: version});
+        const compareResult = compareVersions(version, latestVersion);
 
-        if (latestVersion !== version ) {
+        if (compareResult < 0 ) {
             updateButton.style.display = 'flex';
         }
     }
