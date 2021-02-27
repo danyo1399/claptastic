@@ -31,7 +31,7 @@ updateButton.onclick = async () => {
   await setupAudio();
   updateVersion();
   showDialogIfRequired();
-  setupVisibilityChange();
+  await setupVisibilityChange();
   await versionCheck();
 })();
 
@@ -70,7 +70,7 @@ async function loadMp3() {
   }
 }
 
-function setupVisibilityChange() {
+async function setupVisibilityChange() {
     var hidden, visibilityChange;
     if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
         hidden = "hidden";
@@ -82,10 +82,12 @@ function setupVisibilityChange() {
         hidden = "webkitHidden";
         visibilityChange = "webkitvisibilitychange";
     }
-    function handleVisibilityChange() {
+    async function handleVisibilityChange() {
         if (document[hidden]) {
             stopAnim();
             audio.load();
+        } else {
+            await versionCheck();
         }
     }
 
