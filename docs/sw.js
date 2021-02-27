@@ -1,5 +1,5 @@
 
-console.log('service worker init V1.0.11');
+console.log('service worker init V1.0.12');
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open('claptastic-store').then((cache) => cache.addAll([
