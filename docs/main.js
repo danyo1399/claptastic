@@ -3,15 +3,18 @@ let deferredPrompt;
 const audioFileUrl = '/claptastic/audio.mp3';
 const serviceWorkerFile = '/claptastic/service-worker.js'
 const audio = new Audio();
-const version = '1.0.30'
+const version = '1.0.32'
 
 const dialogShownKey = 'dialog_shown'
 
 if ("serviceWorker" in navigator) {
     // Use the window load event to keep the page load performant
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register(serviceWorkerFile);
-    });
+    navigator.serviceWorker.register(serviceWorkerFile,)
+        .then(reg => {
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(err => {
+        console.log('Registration failed with ' + err);
+    })
 }
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -29,14 +32,8 @@ window.addEventListener("beforeinstallprompt", (e) => {
 // Dont autoupdate as could end up in endless loop
 const updateButton = document.getElementById('update-button');
 updateButton.onclick = async () => {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        for (let registration of registrations) {
-            registration.unregister()
-        }
-    })
-
-    await caches.delete('claptastic-store')
-    window.location.reload(true)
+    console.log('update click')
+    navigator.serviceWorker.register("service-worker.js");
 }
 
 const installButton = document.getElementById('install-button');
@@ -58,7 +55,6 @@ installButton.onclick = async () => {
   updateVersion();
   showDialogIfRequired();
   await setupVisibilityChange();
-  await versionCheck();
 })();
 
 function compareVersions(v1, v2){
@@ -71,22 +67,6 @@ function compareVersions(v1, v2){
         }
     }
     return 0;
-}
-async function versionCheck() {
-    try {
-        const resp = await fetch('/claptastic/version.json?rnd=' + Date.now());
-        const json = await resp.json()
-        const latestVersion = json.version;
-        console.log('version check', {latestVersion, currentVersion: version});
-        const compareResult = compareVersions(version, latestVersion);
-
-        if (compareResult < 0 ) {
-            updateButton.style.display = 'flex';
-        }
-    }
-    catch(e) {
-        console.warn('Failed version check', e)
-    }
 }
 
 function updateVersion() {
@@ -126,8 +106,6 @@ async function setupVisibilityChange() {
         if (document[hidden]) {
             stopAnim();
             audio.load();
-        } else {
-            await versionCheck();
         }
     }
 

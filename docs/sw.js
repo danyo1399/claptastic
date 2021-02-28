@@ -1,3 +1,4 @@
+// DONT USE THIS. TRYING TO FIX FILE RENAME IN V1.0.12
 const version = "1.0.32";
 console.log("service worker init V" + version);
 const appkey = "claptastic";
