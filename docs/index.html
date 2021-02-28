@@ -5,21 +5,138 @@
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
+      <script>
+          window.version = '1.0.35';
+      </script>
     <script src="/claptastic/vendor/localforage.min.js"></script>
-    <link rel="shortcut icon" type="image/png" href="/claptastic/icon/hand-icon-192.png" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/claptastic/icon/hand-icon-192.png"
+    />
     <meta property="og:image" content="/claptastic/icon/hand-icon-512.png" />
     <link rel="apple-touch-icon" href="/claptastic/icon/hand-icon-192.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#f3466f" />
     <meta http-equiv="ScreenOrientation" content="autoRotate:disabled" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="manifest" href="/claptastic/manifest.webmanifest" />
-      <link href="/claptastic/vendor/tailwind.min.css" rel="stylesheet">
+    <link rel="manifest" href="/claptastic/manifest.webmanifest?v=1.0.35" />
+    <link href="/claptastic/vendor/tailwind.min.css" rel="stylesheet" />
     <title>Claptastic</title>
-    <script src="/claptastic/main.js" defer></script>
-    <link href="/claptastic/styles.css" type="text/css" rel="stylesheet" />
+    <script id="main-script" src="/claptastic/main.js?v=1.0.35" defer></script>
   </head>
   <body>
+    <style>
+      :root {
+        touch-action: pan-x pan-y;
+        height: 100%;
+      }
+
+      .button-wrapper {
+        position: relative;
+        padding-bottom: 100%;
+        height: 0;
+        width: 100%;
+      }
+      .button-icon {
+        outline: none !important;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 999px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at bottom center,
+          #ffc837 15px,
+          #ff8008
+        );
+        box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+      }
+      .icon {
+        width: 60%;
+        height: 60%;
+        transition: transform 50ms;
+      }
+
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #f3466f;
+        padding-top: 50px;
+      }
+
+      .header {
+        height: 50px;
+        width: 100%;
+        background-color: #323030;
+        color: white;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 100;
+        padding-left: 1.5rem;
+        font-size: 1.5rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+      .page-content {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .wrapper {
+        width: 80vw;
+        max-width: 400px;
+        max-height: 80vh;
+      }
+
+      @media (max-height: 480px) {
+        .wrapper {
+          max-width: 300px;
+        }
+      }
+
+      @media (max-height: 360px) {
+        .wrapper {
+          max-width: 200px;
+        }
+        .header {
+          display: none;
+        }
+        body {
+          padding-top: 0px;
+        }
+      }
+
+      .svg-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+      .version {
+        padding-left: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: normal;
+      }
+
+      .dialog {
+        background-color: white;
+        color: black;
+        font-weight: 300;
+      }
+    </style>
     <div
       id="dialog"
       style="display: none"
@@ -41,16 +158,16 @@
     <div class="header">
       <div class="flex">
         <span>Claptastic</span>
-        <span id="version" class="version">V</span>
+        <span id="version" class="version">V1.0.35</span>
       </div>
-      <div class="flex ">
+      <div class="flex">
         <button
           id="install-button"
           class="update text-white mr-4 flex flex-col items-center hidden"
         >
           <svg
             class="fill-current"
-            style="transform:scale(0.8)"
+            style="transform: scale(0.8)"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
             viewBox="0 0 24 24"

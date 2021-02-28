@@ -1,9 +1,9 @@
 "use strict";
+// Version: 1.0.35
 let deferredPrompt;
 const audioFileUrl = '/claptastic/audio.mp3';
 const serviceWorkerFile = '/claptastic/service-worker.js'
 const audio = new Audio();
-const version = '1.0.34'
 
 const dialogShownKey = 'dialog_shown'
 
@@ -46,7 +46,6 @@ installButton.onclick = async () => {
 
 (async () => {
   await setupAudio();
-  updateVersion();
   showDialogIfRequired();
   await setupVisibilityChange();
 })();
@@ -63,11 +62,6 @@ function compareVersions(v1, v2){
     return 0;
 }
 
-function updateVersion() {
-  const ele = document.getElementById("version");
-  ele.innerText = `V${version}`;
-}
-
 async function loadMp3() {
     const storageItemKey = 'mp3'
   // Noticed some odd behavior in android where if offline for certain amount of time looks like audio is
@@ -75,8 +69,11 @@ async function loadMp3() {
   // store in indexdb just to be safe
   // If we have previous saved version in db, we may still live
   try {
-    const mp3 = await fetch(audioFileUrl);
-    const blob = await mp3.blob();
+    const response = await fetch(audioFileUrl);
+    if(!response.ok) {
+        throw response;
+    }
+    const blob = await response.blob();
     await localforage.setItem(storageItemKey, blob);
   } catch (e) {
     console.error("Failed to load audio", e);
