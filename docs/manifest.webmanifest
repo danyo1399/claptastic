@@ -5,16 +5,34 @@
   "display": "fullscreen",
   "icons": [
     {
-      "src": "/claptastic/icon/maskable_icon_x192.png",
+      "src": "/claptastic/icon/hand-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/claptastic/icon/hand-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/claptastic/icon/maskable-hand-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon/maskable-hand-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon/maskable-hand-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "name": "Claptastic",

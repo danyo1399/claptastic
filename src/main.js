@@ -1,7 +1,7 @@
 "use strict";
-// Version: 1.0.37
+// Version: 1.0.36
 let deferredPrompt;
-const audioFileUrl = '/claptastic/audio.mp3?v=1.0.37';
+const audioFileUrl = '/claptastic/audio.mp3?v=1.0.36';
 const serviceWorkerFile = '/claptastic/service-worker.js'
 const audio = new Audio();
 

@@ -1,82 +1,77 @@
-/**
- * NOT CURRENTLY USED. JUST EXPERIMENTING.
- */
+const version = "1.0.36";
+console.log("service worker init V" + version);
+const appkey = "claptastic";
+const immutableUrls = [/tailwind/i];
 
-import { registerRoute } from 'workbox-routing';
-import { precacheAndRoute, matchPrecache } from 'workbox-precaching';
-import { setCatchHandler } from 'workbox-routing';
+const cacheName = `${appkey}-store-${version}`;
 
-import {
-    NetworkFirst,
-    StaleWhileRevalidate,
-    CacheFirst,
-} from 'workbox-strategies';
+function log(msg, args) {
+    if(args) console.log("[sw] " + msg, args);
+    else console.log("[sw] " + msg);
+}
 
-// Used for filtering matches based on status code, header, or both
-import { CacheableResponsePlugin } from 'workbox-cacheable-response';
-// Used to limit entries in cache, remove entries after a certain period of time
-import { ExpirationPlugin } from 'workbox-expiration';
+function isImmutableResource(url) {
+  return immutableUrls.some((x) => x.test(url));
+}
 
-// Cache page navigations (html) with a Network First strategy
-registerRoute(
-    // Check to see if the request is a navigation to a new page
-    ({ request }) => request.mode === 'navigate',
-    // Use a Network First caching strategy
-    new NetworkFirst({
-        // Put all cached files in a cache named 'pages'
-        cacheName: 'pages',
-        plugins: [
-            // Ensure that only requests that result in a 200 status are cached
-            new CacheableResponsePlugin({
-                statuses: [200],
-            }),
-        ],
-    }),
-);
+self.addEventListener("activate", (e) => {
+  log("activating", e);
 
-// Cache CSS, JS, and Web Worker requests with a Stale While Revalidate strategy
-registerRoute(
-    // Check to see if the request's destination is style for stylesheets, script for JavaScript, or worker for web worker
-    ({ request }) =>
-        request.destination === 'style' ||
-        request.destination === 'script' ||
-        request.destination === 'worker',
-    // Use a Stale While Revalidate caching strategy
-    new StaleWhileRevalidate({
-        // Put all cached files in a cache named 'assets'
-        cacheName: 'assets',
-        plugins: [
-            // Ensure that only requests that result in a 200 status are cached
-            new CacheableResponsePlugin({
-                statuses: [200],
-            }),
-        ],
-    }),
-);
+  e.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(
+        keyList.map((key) => {
+          if (cacheName !== key) {
+            log("deleting cache", key);
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
+});
 
-// Cache images with a Cache First strategy
-registerRoute(
-    // Check to see if the request's destination is style for an image
-    ({ request }) => request.destination === 'image',
-    // Use a Cache First caching strategy
-    new CacheFirst({
-        // Put all cached files in a cache named 'images'
-        cacheName: 'images',
-        plugins: [
-            // Ensure that only requests that result in a 200 status are cached
-            new CacheableResponsePlugin({
-                statuses: [200],
-            })
-        ],
-    }),
-);
+self.addEventListener("install", (e) => {
+  self.skipWaiting();
+  // log("installing", filesToCache);
+  // e.waitUntil(
+  //   caches.open(cacheName).then((cache) => cache.addAll(filesToCache))
+  // );
+});
 
-// Catch routing errors, like if the user is offline
-setCatchHandler(async ({ event }) => {
-    // Return the precached offline page if a document is being requested
-    if (event.request.destination === 'document') {
-        return matchPrecache('/claptastic/offline.html');
-    }
+// Fetching content using Service Worker
+self.addEventListener("fetch", (fetchEvent) => {
+  fetchEvent.respondWith(
+    (async () => {
+      const cache = await caches.open(cacheName);
+      let fetchResponse;
+      const url = fetchEvent.request.url;
+      try {
 
-    return Response.error();
+
+        if (isImmutableResource(url)) {
+          const cachedResponse = await cache.match(fetchEvent.request);
+          if (cachedResponse) {
+            log("returning immutable cached resource: " + url);
+            return cachedResponse;
+          }
+        }
+          log("fetching: " + url);
+        fetchResponse = await fetch(fetchEvent.request);
+        if (!fetchResponse.ok) {
+          throw  fetchResponse;
+        }
+        log(`updating cache: ${url}`);
+        await cache.put(fetchEvent.request, fetchResponse.clone());
+      } catch (err) {
+        log(
+          `Error fetching response. Last chance find a local cache version: ${url}`,err
+        );
+        const cachedResponse = cache.match(fetchEvent.request);
+        if (cachedResponse) return cachedResponse;
+      }
+
+      return fetchResponse;
+    })()
+  );
 });
