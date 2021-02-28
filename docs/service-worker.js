@@ -1,4 +1,4 @@
-const version = "1.0.32";
+const version = "1.0.33";
 console.log("service worker init V" + version);
 const appkey = "claptastic";
 const immutableUrls = [/tailwind/i];

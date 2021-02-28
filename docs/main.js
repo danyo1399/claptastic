@@ -3,7 +3,7 @@ let deferredPrompt;
 const audioFileUrl = '/claptastic/audio.mp3';
 const serviceWorkerFile = '/claptastic/service-worker.js'
 const audio = new Audio();
-const version = '1.0.32'
+const version = '1.0.33'
 
 const dialogShownKey = 'dialog_shown'
 
