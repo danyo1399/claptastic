@@ -1,5 +1,5 @@
 // DONT USE THIS. TRYING TO FIX FILE RENAME IN V1.0.12
-const version = "1.0.33";
+const version = "1.0.34";
 console.log("service worker init V" + version);
 const appkey = "claptastic";
 const immutableUrls = [/tailwind/i];

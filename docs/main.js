@@ -3,7 +3,7 @@ let deferredPrompt;
 const audioFileUrl = '/claptastic/audio.mp3';
 const serviceWorkerFile = '/claptastic/service-worker.js'
 const audio = new Audio();
-const version = '1.0.33'
+const version = '1.0.34'
 
 const dialogShownKey = 'dialog_shown'
 
@@ -17,6 +17,8 @@ if ("serviceWorker" in navigator) {
     })
 }
 
+const installButton = document.getElementById('install-button');
+
 window.addEventListener("beforeinstallprompt", (e) => {
   console.log("before install prompt");
   // Prevent Chrome 67 and earlier from automatically showing the prompt
@@ -28,15 +30,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
   // Update UI to notify the user they can add to home screen
 });
 
-// IOS pwa updates are janky. instead give button to force update.
-// Dont autoupdate as could end up in endless loop
-const updateButton = document.getElementById('update-button');
-updateButton.onclick = async () => {
-    console.log('update click')
-    navigator.serviceWorker.register("service-worker.js");
-}
 
-const installButton = document.getElementById('install-button');
 installButton.onclick = async () => {
     // Hide the app provided install promotion
     installButton.style.display = 'none';
