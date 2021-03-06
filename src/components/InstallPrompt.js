@@ -27,11 +27,11 @@ const Container = styled.div`
   button {
     position: fixed;
     bottom: 10px;
-    right: 5px;
+    right: 10px;
     margin-right: -50px;
     animation-name: ${kf2};
     animation-duration: 500ms;
-    animation-delay: 2s;
+    animation-delay: 1s;
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
   }
