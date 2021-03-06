@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "description": "",
   "scripts": {
-    "start:dev": "cross-env HOST_PATH=dist node ./bin/index.js",
+    "start:dev": "cross-env NODE_ENV=development webpack serve",
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",

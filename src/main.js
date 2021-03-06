@@ -1,5 +1,5 @@
 "use strict";
-import "./tailwind.css";
+
 import "./styles.css";
 import audioFileUrl from "./media/audio.mp3";
 

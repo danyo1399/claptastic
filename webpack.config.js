@@ -5,7 +5,7 @@ const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
-
+const fs = require("fs");
 const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
 const version = `1.0.37-${buildNo}`;
 module.exports = {
@@ -15,6 +15,27 @@ module.exports = {
       import: "./src/service-worker.js",
       filename: "service-worker.js",
     },
+    tailwind: { import: "./src/tailwind.js", filename: "[name].[hash].js" },
+  },
+  devtool: "inline-source-map",
+  target: "web",
+  devServer: {
+    serveIndex: true,
+    contentBase: "./dist",
+    publicPath: "/claptastic/",
+    compress: true,
+    historyApiFallback: true,
+    watchContentBase: true,
+    // hot: true,
+    // injectHot: true,
+    // inline: true,
+    https: {
+      key: fs.readFileSync("./keys/localhost-key.pem"),
+      cert: fs.readFileSync("./keys/localhost.pem"),
+    },
+  },
+  output: {
+    path: path.resolve(__dirname, "dist/claptastic"),
   },
   module: {
     rules: [
@@ -43,9 +64,7 @@ module.exports = {
       },
     ],
   },
-  output: {
-    path: path.resolve(__dirname, "dist/claptastic"),
-  },
+
   plugins: [
     new webpack.DefinePlugin({
       WEBPACK_VERSION: JSON.stringify(version),
