@@ -21,5 +21,5 @@ Setting up dev/test/preview deployments can be done via netlify
 Dont forget to add /claptastic/ to the end of the url.
 
 ## Publish to github docs
-- Just run npm script npm run publish to update docs folder 
+- Just run npm script npm run publish publish to github
 - check in to main and youre done.
