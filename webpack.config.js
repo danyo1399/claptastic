@@ -6,8 +6,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
 const fs = require("fs");
-//const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
-const version = `1.0.40`;
+const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
+const versionInfo = require("./version.json");
+
+const version = `${versionInfo.version}-${buildNo}`;
 module.exports = {
   entry: {
     main: { import: "./src/main.js", filename: "[name].[hash].js" },

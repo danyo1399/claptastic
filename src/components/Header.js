@@ -1,5 +1,5 @@
 import React from "react";
-import InstallButton from "./InstallButton";
+import InstallPrompt from "./InstallPrompt";
 
 export default function Header() {
   const version = WEBPACK_VERSION;
@@ -12,7 +12,7 @@ export default function Header() {
         </span>
       </div>
       <div className="flex">
-        <InstallButton></InstallButton>
+        <InstallPrompt></InstallPrompt>
       </div>
     </div>
   );
