@@ -7,7 +7,7 @@ const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
 const fs = require("fs");
 //const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
-const version = `1.0.37`;
+const version = `1.0.40`;
 module.exports = {
   entry: {
     main: { import: "./src/main.js", filename: "[name].[hash].js" },
