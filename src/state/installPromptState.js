@@ -1,8 +1,8 @@
 import { atom } from "recoil";
 
-const installPrompt = atom({
+const installPromptState = atom({
   key: "installationState",
   default: null,
 });
 
-export default installPrompt;
+export default installPromptState;

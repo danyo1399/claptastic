@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import Header from "./Header";
 import ClapButton from "./ClapButton";
 import StartDialog from "./StartDialog";
-import installPrompt from "../state/installPrompt";
+import installPromptState from "../state/installPromptState";
 import { useSetRecoilState } from "recoil";
 import { log } from "../logger";
 export default function App() {
-  const setInstallState = useSetRecoilState(installPrompt);
+  const setInstallState = useSetRecoilState(installPromptState);
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (e) => {
       log("Prompting install");

@@ -1,10 +1,10 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import installPrompt from "../state/installPrompt";
+import installPromptState from "../state/installPromptState";
 
 import { log } from "../logger";
 export default function InstallButton() {
-  const [installState, setInstallState] = useRecoilState(installPrompt);
+  const [installState, setInstallState] = useRecoilState(installPromptState);
   async function click() {
     // Show the install prompt
     installState.prompt();
