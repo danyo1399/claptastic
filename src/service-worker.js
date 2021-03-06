@@ -42,11 +42,16 @@ self.addEventListener("install", (e) => {
 
 // Fetching content using Service Worker
 self.addEventListener("fetch", (fetchEvent) => {
+  const url = fetchEvent.request.url;
+  if (url.toLowerCase().includes("/claptastic/") === false) {
+    log("Bypassing fetch as url is not local");
+    return false;
+  }
   fetchEvent.respondWith(
     (async () => {
       const cache = await caches.open(cacheName);
       let fetchResponse;
-      const url = fetchEvent.request.url;
+
       try {
         if (isImmutableResource(url)) {
           const cachedResponse = await cache.match(fetchEvent.request);

@@ -1,23 +1,17 @@
-
-
-
 // DONT USE THIS. TRYING TO FIX FILE RENAME IN V1.0.12
+// Any old installations would be orphaned if they were initialised with V1.0.12 or prior.
 
+const version = WEBPACK_VERSION;
 
-
-
-
-const version = "1.0.37";
-console.log("service worker init V" + version);
 const appkey = "claptastic";
 const immutableUrls = [/tailwind/i];
 
 const cacheName = `${appkey}-store-${version}`;
 
-function log(msg, args) {
-    if(args) console.log("[sw] " + msg, args);
-    else console.log("[sw] " + msg);
-}
+import logger from "./logger";
+const { error, debug, log, warn } = logger("sw");
+
+log("loading service worker");
 
 function isImmutableResource(url) {
   return immutableUrls.some((x) => x.test(url));
@@ -41,6 +35,7 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("install", (e) => {
+  log("installing");
   self.skipWaiting();
   // log("installing", filesToCache);
   // e.waitUntil(
@@ -50,14 +45,17 @@ self.addEventListener("install", (e) => {
 
 // Fetching content using Service Worker
 self.addEventListener("fetch", (fetchEvent) => {
+  const url = fetchEvent.request.url;
+  if (url.toLowerCase().includes("/claptastic/") === false) {
+    log("Bypassing fetch as url is not local");
+    return false;
+  }
   fetchEvent.respondWith(
     (async () => {
       const cache = await caches.open(cacheName);
       let fetchResponse;
-      const url = fetchEvent.request.url;
+
       try {
-
-
         if (isImmutableResource(url)) {
           const cachedResponse = await cache.match(fetchEvent.request);
           if (cachedResponse) {
@@ -65,16 +63,17 @@ self.addEventListener("fetch", (fetchEvent) => {
             return cachedResponse;
           }
         }
-          log("fetching: " + url);
+        debug("fetching: " + url);
         fetchResponse = await fetch(fetchEvent.request);
         if (!fetchResponse.ok) {
-          throw  fetchResponse;
+          throw fetchResponse;
         }
-        log(`updating cache: ${url}`);
+        debug(`updating cache: ${url}`);
         await cache.put(fetchEvent.request, fetchResponse.clone());
       } catch (err) {
-        log(
-          `Error fetching response. Last chance find a local cache version: ${url}`,err
+        warn(
+          `Error fetching response. Last chance find a local cache version: ${url}`,
+          err
         );
         const cachedResponse = cache.match(fetchEvent.request);
         if (cachedResponse) return cachedResponse;

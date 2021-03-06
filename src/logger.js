@@ -18,3 +18,5 @@ export default function createLogger(prefix) {
 
   return { log, error, warn, debug };
 }
+
+export const { log, error, warn, debug } = createLogger("app");
