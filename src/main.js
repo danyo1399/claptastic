@@ -4,7 +4,12 @@ import "./styles.css";
 import audioFileUrl from "./media/audio.mp3";
 
 import * as localForage from "localforage";
-// Version: 1.0.37
+const clapAudioStorageKeyItem = "mp3";
+
+import createLogger from "./logger";
+const { error, debug, log, warn } = createLogger("app");
+
+log("Initialising");
 let deferredPrompt;
 
 const audio = new Audio();
@@ -14,7 +19,7 @@ const dialogShownKey = "dialog_shown";
 const installButton = document.getElementById("install-button");
 
 window.addEventListener("beforeinstallprompt", (e) => {
-  console.log("before install prompt");
+  log("before install prompt");
   // Prevent Chrome 67 and earlier from automatically showing the prompt
   e.preventDefault();
   // Stash the event so it can be triggered later.
@@ -32,7 +37,7 @@ installButton.onclick = async () => {
   // Wait for the user to respond to the prompt
   const { outcome } = await deferredPrompt.userChoice;
   // Optionally, send analytics event with outcome of user choice
-  console.log(`User response to the install prompt: ${outcome}`);
+  log(`User response to the install prompt: ${outcome}`);
   // We've used the prompt, and can't use it again, throw it away
   deferredPrompt = null;
 };
@@ -56,7 +61,6 @@ installButton.onclick = async () => {
 // }
 
 async function loadMp3() {
-  const storageItemKey = "mp3";
   // Noticed some odd behavior in android where if offline for certain amount of time looks like audio is
   // removed from cache?
   // store in indexdb just to be safe
@@ -68,11 +72,11 @@ async function loadMp3() {
     }
 
     const blob = await response.blob();
-    await localForage.setItem(storageItemKey, blob);
+    await localForage.setItem(clapAudioStorageKeyItem, blob);
   } catch (e) {
-    console.error("Failed to load audio", e);
+    error("Failed to load audio", e);
   }
-  return storageItemKey;
+  return clapAudioStorageKeyItem;
 }
 
 async function setupVisibilityChange() {

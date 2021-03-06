@@ -1,12 +1,13 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
 
+const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
+const version = `1.1.${buildNo}`;
 module.exports = {
   entry: {
     main: { import: "./src/main.js", filename: "[name].[hash].js" },
@@ -47,7 +48,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      VERSION: "1.0.39",
+      WEBPACK_VERSION: JSON.stringify(version),
     }),
     new MiniCssExtractPlugin({
       filename: devMode ? "[name].css" : "[name].[contenthash].css",
@@ -64,6 +65,7 @@ module.exports = {
       template: "./src/index.html",
       excludeChunks: ["service-worker"],
       favicon: "./src/icons/hand-icon-192.png",
+      environment: { WEBPACK_VERSION: version },
     }),
     new WebpackPwaManifest({
       name: "Claptastic",
