@@ -19,7 +19,11 @@ export function ExpandIconButton() {
     });
   }
   return (
-    <StyledButton onClick={onClick} className="min-height-hide">
+    <StyledButton
+      onClick={onClick}
+      className="min-height-hide"
+      data-testid="side-nav-button"
+    >
       {state.expanded ? <CloseIcon></CloseIcon> : <MenuIcon></MenuIcon>}
     </StyledButton>
   );
@@ -59,7 +63,11 @@ export default function SideNav() {
   const version = WEBPACK_VERSION;
   const state = useRecoilValue(sideNavState);
   return (
-    <SideNavContainer className="min-height-hide" expanded={state.expanded}>
+    <SideNavContainer
+      className="min-height-hide"
+      expanded={state.expanded}
+      data-testid="side-nav"
+    >
       <div className="version-header">
         Version:
         <span id="version" className="version">
