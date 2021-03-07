@@ -5,6 +5,7 @@ import StartDialog from "./StartDialog";
 import installPromptState from "../state/installPromptState";
 import { useSetRecoilState } from "recoil";
 import { log } from "../logger";
+import SideNav from "./SideNav";
 export default function App() {
   const setInstallState = useSetRecoilState(installPromptState);
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function App() {
     <>
       <StartDialog></StartDialog>
       <Header></Header>
-
+      <SideNav></SideNav>
       <div className="page-content">
         <ClapButton></ClapButton>
       </div>
