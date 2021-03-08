@@ -28,7 +28,7 @@ netlify to host a pre prod env for testing on mobile phones etc
 
 ### testing
 - start local server with npm run start:dev
-- Run npm run test to perform cypress tests.
+- Run npm run cypress:open to perform cypress tests.
 
 
 ## Publish to github docs
