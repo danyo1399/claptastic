@@ -5,13 +5,27 @@ import installPromptState from "../state/installPromptState";
 
 import { log } from "../logger";
 
-const kf2 = keyframes`
+const installKeyFrames = keyframes`
   from {
     margin-right: -50px;
+    transform: none;
   }
 
+  50% {
+    margin-right: 0px;
+    transform: none;
+  }
+  40% {
+    margin-right: 0px;
+    transform: none;
+  }
+  70% {
+    transform:rotate3d(0, 1, 0, 180deg);
+    background-color: white !important;
+  }
   100% {
     margin-right: 0px;
+    transform: rotate3d(0);
   }
 
 `;
@@ -29,8 +43,8 @@ const Container = styled.div`
     bottom: 10px;
     right: 10px;
     margin-right: -50px;
-    animation-name: ${kf2};
-    animation-duration: 500ms;
+    animation-name: ${installKeyFrames};
+    animation-duration: 1000ms;
     animation-delay: 1s;
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
