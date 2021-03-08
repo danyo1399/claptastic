@@ -8,18 +8,29 @@ https://web.dev/how-to-use-local-https/
 
 ## Setup
 - install mkcert for your os
-- run npm run ssh-setup to setup dev build
-- run npm run start:dev to start web server
+- Execute the following commands  
+```
+npm install
+npm run ssh-setup
+npm run start:dev
+```
 - open browser to https://localhost:8080/claptastic/
 
-## Deployment stuff
-Setting up dev/test/preview deployments can be done via netlify
+### Dev workflow setup
+If you want to setup dev workflow process, you will need to setup an account on 
+netlify to host a pre prod env for testing on mobile phones etc
 
-- Setup an account and website
-- run npm run deploy:netlify:preview to deploy it.
+- Setup an account on netlify
+- Create a website on netlify
+- run npm run deploy:netlify:preview to deploy it(setup process first time run)
+- open website url. Dont forget to add /claptastic/ to the end of the url
 
-Dont forget to add /claptastic/ to the end of the url.
+
+### testing
+- start local server with npm run start:dev
+- Run npm run test to perform cypress tests.
+
 
 ## Publish to github docs
-- Just run npm script npm run publish publish to github
 - check in to main and youre done.
+- Just run npm script npm run publish publish to github
