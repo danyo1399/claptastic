@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development webpack serve",
+    "start:dev:http-only": "cross-env NODE_ENV=development HTTP_ONLY=true webpack serve",
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",

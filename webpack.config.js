@@ -5,6 +5,7 @@ const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
+const httpOnly = !!process.env.HTTP_ONLY;
 const fs = require("fs");
 const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
 const versionInfo = require("./version.json");
@@ -31,10 +32,12 @@ module.exports = {
     // hot: true,
     // injectHot: true,
     // inline: true,
-    https: {
-      key: fs.readFileSync("./keys/localhost-key.pem"),
-      cert: fs.readFileSync("./keys/localhost.pem"),
-    },
+    https: httpOnly
+      ? undefined
+      : {
+          key: fs.readFileSync("./keys/localhost-key.pem"),
+          cert: fs.readFileSync("./keys/localhost.pem"),
+        },
   },
   output: {
     path: path.resolve(__dirname, "dist/claptastic"),
