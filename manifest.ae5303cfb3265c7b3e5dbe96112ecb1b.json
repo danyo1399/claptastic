@@ -85,5 +85,6 @@
   "start_url": "index.html",
   "description": "You ever tried clapping while holding your phone? Well now you can",
   "background_color": "#323030",
-  "theme_color": "#323030"
+  "theme_color": "#323030",
+  "prefer_related_applications": false
 }
