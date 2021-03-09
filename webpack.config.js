@@ -28,7 +28,7 @@ module.exports = {
     // },
     tailwind: { import: "./src/tailwind.js", filename: "[name].[hash].js" },
   },
-  devtool: "inline-source-map",
+  devtool: devMode ? "inline-source-map" : undefined,
   target: "web",
   devServer: {
     serveIndex: true,
@@ -80,6 +80,11 @@ module.exports = {
   },
 
   plugins: [
+    new WorkboxPlugin.InjectManifest({
+      swSrc: "./src/service-worker.js",
+      maximumFileSizeToCacheInBytes: 1024 * 1024 * 6,
+    }),
+
     new webpack.DefinePlugin({
       WEBPACK_VERSION: JSON.stringify(version),
     }),
@@ -128,13 +133,6 @@ module.exports = {
           purpose: "maskable",
         },
       ],
-    }),
-    new WorkboxPlugin.GenerateSW({
-      // these options encourage the ServiceWorkers to get in there fast
-      // and not allow any straggling "old" SWs to hang around
-      clientsClaim: true,
-      skipWaiting: true,
-      maximumFileSizeToCacheInBytes: 1024 * 1024 * 6,
     }),
   ],
 };

@@ -1,82 +1,44 @@
+"use strict";
+import { clientsClaim } from "workbox-core";
+
 const version = WEBPACK_VERSION;
 
 const appkey = "claptastic";
-const immutableUrls = [/tailwind/i];
-
-const cacheName = `${appkey}-store-${version}`;
 
 import logger from "./logger";
+import { precacheAndRoute } from "workbox-precaching";
+import { registerRoute } from "workbox-routing";
+import { CacheFirst } from "workbox-strategies";
+import { ExpirationPlugin } from "workbox-expiration";
 const { error, debug, log, warn } = logger("sw");
 
-log("loading service worker");
+log("loading");
 
-function isImmutableResource(url) {
-  return immutableUrls.some((x) => x.test(url));
-}
+self.skipWaiting();
+clientsClaim();
+/**
+ * The precacheAndRoute() method efficiently caches and responds to
+ * requests for URLs in the manifest.
+ * See https://goo.gl/S9QRab
+ */
 
-self.addEventListener("activate", (e) => {
-  log("activating", e);
-
-  e.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          if (cacheName !== key) {
-            log("deleting cache", key);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
-  );
+const cacheName = "claptastic-floating";
+const expiration = new ExpirationPlugin({
+  maxEntries: 20,
+  purgeOnQuotaError: true,
+  maxAgeSeconds: 60 * 60 * 24 * 31, // roughly 1 month
 });
 
-self.addEventListener("install", (e) => {
-  log("installing");
-  self.skipWaiting();
-  // log("installing", filesToCache);
-  // e.waitUntil(
-  //   caches.open(cacheName).then((cache) => cache.addAll(filesToCache))
-  // );
-});
+precacheAndRoute([
+  //ADD_ADDITIONAL_SW_ROUTES
+  ...self.__WB_MANIFEST,
+]);
 
-// Fetching content using Service Worker
-self.addEventListener("fetch", (fetchEvent) => {
-  const url = fetchEvent.request.url;
-  if (url.toLowerCase().includes("/claptastic/") === false) {
-    log("Bypassing fetch as url is not local");
-    return false;
-  }
-  fetchEvent.respondWith(
-    (async () => {
-      const cache = await caches.open(cacheName);
-      let fetchResponse;
-
-      try {
-        if (isImmutableResource(url)) {
-          const cachedResponse = await cache.match(fetchEvent.request);
-          if (cachedResponse) {
-            log("returning immutable cached resource: " + url);
-            return cachedResponse;
-          }
-        }
-        debug("fetching: " + url);
-        fetchResponse = await fetch(fetchEvent.request);
-        if (!fetchResponse.ok) {
-          throw fetchResponse;
-        }
-        debug(`updating cache: ${url}`);
-        await cache.put(fetchEvent.request, fetchResponse.clone());
-      } catch (err) {
-        warn(
-          `Error fetching response. Last chance find a local cache version: ${url}`,
-          err
-        );
-        const cachedResponse = cache.match(fetchEvent.request);
-        if (cachedResponse) return cachedResponse;
-      }
-
-      return fetchResponse;
-    })()
-  );
-});
+// local files with hash
+registerRoute(
+  /\/claptastic\/.+\.[0-9a-f]{32}\./,
+  new CacheFirst({
+    cacheName,
+    plugins: [expiration],
+  })
+);

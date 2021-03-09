@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "",
   "scripts": {
+    "start:live": "node ./bin/index.js",
     "start:dev": "cross-env NODE_ENV=development webpack serve",
     "start:dev:http-only": "cross-env NODE_ENV=development HTTP_ONLY=true webpack serve",
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
@@ -66,6 +67,7 @@
     "styled-components": "^5.2.1",
     "workbox-cacheable-response": "^6.1.1",
     "workbox-expiration": "^6.1.1",
+    "workbox-precaching": "^6.1.1",
     "workbox-routing": "^6.1.1",
     "workbox-strategies": "^6.1.1"
   }
