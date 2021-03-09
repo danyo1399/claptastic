@@ -1,6 +1,67 @@
 import React, { useState, useEffect, useRef } from "react";
 import localForage from "localforage";
 import audioFileUrl from "../media/audio.mp3";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  width: 80vw;
+  max-width: 400px;
+  max-height: 80vh;
+
+  animation-name: loadButton;
+  animation-duration: 500ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier();
+  @media (max-height: 480px) {
+    max-width: 300px;
+  }
+
+  @media (max-height: 360px) {
+    max-width: 200px;
+  }
+
+  .svg-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .button-wrapper {
+    position: relative;
+    padding-bottom: 100%;
+    height: 0;
+    width: 100%;
+  }
+
+  .button-icon {
+    outline: none !important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 999px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at bottom center, #ffc837 15px, #ff8008);
+    box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes loadButton {
+    from {
+      transform: rotate(180deg) scale(0.1);
+      opacity: 0.1;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  } ;
+`;
 
 const audio = new Audio();
 
@@ -125,7 +186,7 @@ export default function ClapButton() {
       document.removeEventListener(visibilityChange, handleVisibilityChange);
   }, []);
   return (
-    <div className="wrapper">
+    <Wrapper>
       <div className="button-wrapper">
         <button className="button-icon" onClick={play}>
           <div className="svg-wrapper">
@@ -133,6 +194,6 @@ export default function ClapButton() {
           </div>
         </button>
       </div>
-    </div>
+    </Wrapper>
   );
 }
