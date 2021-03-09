@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import produce from "immer";
 
-export function useImmerState(atom) {
+export function useImmerRecoilState(atom) {
   const [state, setState] = useRecoilState(atom);
 
   const immerSetState = (updater) => {

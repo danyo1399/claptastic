@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import sideNavState from "../state/sideNavState";
-import { useImmerState } from "../state/immerRecoil";
+import { useImmerRecoilState } from "../state/immerRecoil";
 import { useRecoilValue } from "recoil";
 import CloseIcon from "./CloseIcon";
 import MenuIcon from "./MenuIcon";
+import clapsState from "../state/clapsState";
 
 const StyledButton = styled.button`
   color: white;
   outline: none !important;
 `;
 export function ExpandIconButton() {
-  const [state, setState] = useImmerState(sideNavState);
+  const [state, setState] = useImmerRecoilState(sideNavState);
 
   function onClick() {
     setState((value) => {
@@ -32,12 +33,12 @@ export function ExpandIconButton() {
 const SideNavContainer = styled.div`
   position: fixed;
   overflow: hidden;
-  width: 12rem;
+  width: 100vw;
   top: 50px;
   left: 0px;
   background-color: white;
   bottom: 0;
-  margin-left: -12rem;
+  margin-left: -100vw;
   padding: 10px;
   color: gray;
   z-index: 20;
@@ -62,6 +63,7 @@ const SideNavContainer = styled.div`
 export default function SideNav() {
   const version = WEBPACK_VERSION;
   const state = useRecoilValue(sideNavState);
+  const claps = useRecoilValue(clapsState);
   return (
     <SideNavContainer
       className="min-height-hide"

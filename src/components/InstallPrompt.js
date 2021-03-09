@@ -30,9 +30,9 @@ const installKeyFrames = keyframes`
 
 `;
 const Container = styled.div`
+  display: contents;
   color: black;
   margin: -50px;
-  display: flex;
   fill: black;
   //background-color: rgba(255, 255, 255, 0.1);
   align-items: center;

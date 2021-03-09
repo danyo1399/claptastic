@@ -6,8 +6,10 @@ import installPromptState from "../state/installPromptState";
 import { useSetRecoilState } from "recoil";
 import { log } from "../logger";
 import SideNav from "./SideNav";
+import useDb from "../hooks/useDb";
 export default function App() {
   const setInstallState = useSetRecoilState(installPromptState);
+  useDb();
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (e) => {
       log("Prompting install");

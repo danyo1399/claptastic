@@ -104,6 +104,7 @@ module.exports = {
       orientation: "portrait",
       publicPath: "/claptastic/",
       start_url: "index.html",
+      prefer_related_applications: false,
       icons: [
         {
           src: path.resolve("src/icons/icon.png"),
