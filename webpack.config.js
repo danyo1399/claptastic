@@ -8,7 +8,14 @@ const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
 const httpOnly = !!process.env.HTTP_ONLY;
 const fs = require("fs");
-const buildNo = Math.ceil(Date.now() / 1000 - 1614980000);
+const date = new Date();
+const buildNo =
+  date.getFullYear() +
+  (date.getMonth() + 1).toString().padStart(2, "0") +
+  date.getDate().toString().padStart(2, "0") +
+  date.getHours().toString().padStart(2, "0") +
+  date.getMinutes().toString().padStart(2, "0") +
+  date.getSeconds().toString().padStart(2, "0");
 const versionInfo = require("./version.json");
 
 const version = `${versionInfo.version}-${buildNo}`;
