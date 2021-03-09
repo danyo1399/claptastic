@@ -44,7 +44,6 @@ const HeaderWrapper = styled.div`
 
 export default function Header() {
   const claps = useRecoilValue(clapsState);
-  console.log(claps);
   return (
     <HeaderWrapper className="min-height-hide">
       <div className="flex">
@@ -54,7 +53,7 @@ export default function Header() {
       </div>
       <div className="right-section flex">
         <div className="flex items-center pr-1">
-          <span className="px-2">{claps?.total_rows || "_"}</span>
+          <span className="px-2">{claps?.total_rows || 0}</span>
           <div className="counter-icon">
             <ClapSvg width="1.25rem"></ClapSvg>
           </div>

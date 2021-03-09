@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const WorkboxPlugin = require("workbox-webpack-plugin");
 const webpack = require("webpack");
 const devMode = process.env.NODE_ENV !== "production";
 const httpOnly = !!process.env.HTTP_ONLY;
@@ -14,10 +15,10 @@ const version = `${versionInfo.version}-${buildNo}`;
 module.exports = {
   entry: {
     main: { import: "./src/main.js", filename: "[name].[hash].js" },
-    "service-worker": {
-      import: "./src/service-worker.js",
-      filename: "service-worker.js",
-    },
+    // "service-worker": {
+    //   import: "./src/service-worker.js",
+    //   filename: "service-worker.js",
+    // },
     tailwind: { import: "./src/tailwind.js", filename: "[name].[hash].js" },
   },
   devtool: "inline-source-map",
@@ -120,6 +121,13 @@ module.exports = {
           purpose: "maskable",
         },
       ],
+    }),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 1024 * 1024 * 6,
     }),
   ],
 };
