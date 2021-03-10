@@ -116,8 +116,9 @@ module.exports = {
       display: "fullscreen",
       orientation: "portrait",
       publicPath: "/claptastic/",
-      start_url: "index.html",
+      start_url: "index.html?src=manifest",
       prefer_related_applications: false,
+
       icons: [
         {
           src: path.resolve("src/icons/icon.png"),

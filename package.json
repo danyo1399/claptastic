@@ -7,7 +7,7 @@
     "start:dev": "cross-env NODE_ENV=development webpack serve",
     "start:dev:http-only": "cross-env NODE_ENV=development HTTP_ONLY=true webpack serve",
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "cross-env NODE_ENV=production webpack && ncp dist/assets dist/claptastic",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "deploy:netlify:preview": "npm run build && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
     "publish": "npm run bump-version && npm run build && node ./scripts/github-publish.js",
