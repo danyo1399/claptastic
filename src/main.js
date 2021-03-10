@@ -11,7 +11,7 @@ import App from "./components/App";
 
 const env = process.env.NODE_ENV;
 console.log("Current environment", env);
-if (env !== "development" || true) {
+if (env !== "development") {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker

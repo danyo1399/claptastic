@@ -22,10 +22,7 @@ const version = `${versionInfo.version}-${buildNo}`;
 module.exports = {
   entry: {
     main: { import: "./src/main.js", filename: "[name].[hash].js" },
-    // "service-worker": {
-    //   import: "./src/service-worker.js",
-    //   filename: "service-worker.js",
-    // },
+
     tailwind: { import: "./src/tailwind.js", filename: "[name].[hash].js" },
   },
   devtool: devMode ? "inline-source-map" : undefined,

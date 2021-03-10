@@ -5,7 +5,6 @@
   "scripts": {
     "start:live": "node ./bin/index.js",
     "start:dev": "cross-env NODE_ENV=development webpack serve",
-    "start:dev:http-only": "cross-env NODE_ENV=development HTTP_ONLY=true webpack serve",
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
     "build": "cross-env NODE_ENV=production webpack && ncp dist/assets dist/claptastic",
     "build:dev": "cross-env NODE_ENV=development webpack",
