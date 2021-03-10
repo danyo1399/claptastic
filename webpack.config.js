@@ -47,8 +47,16 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist/claptastic"),
   },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
+  },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
       {
         test: /\.(png|jpe?g|gif|mp3)$/i,
         use: [

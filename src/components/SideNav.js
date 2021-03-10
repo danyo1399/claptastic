@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import CloseIcon from "./CloseIcon";
 import MenuIcon from "./MenuIcon";
 import clapsState from "../state/clapsState";
+import { ClapperCard } from "./ClapperCard";
 
 const StyledButton = styled.button`
   color: white;
@@ -36,11 +37,11 @@ const SideNavContainer = styled.div`
   width: 100vw;
   top: 50px;
   left: 0px;
-  background-color: white;
+  background-color: rgb(82 79 79);
   bottom: 0;
   margin-left: -100vw;
   padding: 10px;
-  color: gray;
+  color: white;
   z-index: 20;
   transition-property: all;
   transition-duration: 200ms;
@@ -63,7 +64,6 @@ const SideNavContainer = styled.div`
 export default function SideNav() {
   const version = WEBPACK_VERSION;
   const state = useRecoilValue(sideNavState);
-  const claps = useRecoilValue(clapsState);
   return (
     <SideNavContainer
       className="min-height-hide"
@@ -76,9 +76,10 @@ export default function SideNav() {
           {version}
         </span>
       </div>
-      <ul>
-        <li className="li"></li>
-      </ul>
+
+      <div>
+        <ClapperCard></ClapperCard>
+      </div>
     </SideNavContainer>
   );
 }

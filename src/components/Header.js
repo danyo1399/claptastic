@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import InstallPrompt from "./InstallPrompt";
 import SideNav, { ExpandIconButton } from "./SideNav";
-import ClapSvg from "./ClapSvg";
 import { useRecoilValue } from "recoil";
 import clapsState from "../state/clapsState";
+import { ClapsCounter } from "./ClapsCounter";
 
 const HeaderWrapper = styled.div`
   height: 50px;
@@ -52,13 +52,9 @@ export default function Header() {
         <span className="sub-header">by danyo1399</span>
       </div>
       <div className="right-section flex">
-        <div className="flex items-center pr-1">
-          <span className="px-2">{claps?.total_rows || 0}</span>
-          <div className="counter-icon">
-            <ClapSvg width="1.25rem"></ClapSvg>
-          </div>
-        </div>
-
+        <ClapsCounter
+          count={claps?.total_rows || claps?.length || 0}
+        ></ClapsCounter>
         <InstallPrompt></InstallPrompt>
       </div>
     </HeaderWrapper>

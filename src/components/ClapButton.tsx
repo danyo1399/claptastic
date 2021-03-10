@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import localForage from "localforage";
+// @ts-ignore
 import audioFileUrl from "../media/audio.mp3";
 import styled from "styled-components";
 
@@ -70,6 +71,7 @@ import ClapSvg from "./ClapSvg";
 import { useImmerRecoilState } from "../state/immerRecoil";
 import clapsState from "../state/clapsState";
 import { addClap } from "../db";
+import useDb from "../hooks/useDb";
 const { error } = logger("clapButton");
 const clapAudioStorageKeyItem = "mp3";
 
@@ -102,7 +104,7 @@ export default function ClapButton() {
   const [playing, setPlaying] = useState(null);
   const intervalRef = useRef();
 
-  const [state, setState] = useImmerRecoilState(clapsState);
+  const { addClap } = useDb();
   const svgRef = useRef(null);
 
   async function play() {
@@ -144,11 +146,7 @@ export default function ClapButton() {
     const start = async (_) => {
       startAnim();
       setPlaying(true);
-      const clap = await addClap();
-      setState((x) => {
-        x.total_rows++;
-        x.rows.push(clap);
-      });
+      await addClap();
     };
 
     audio.addEventListener("ended", stop);
@@ -163,14 +161,15 @@ export default function ClapButton() {
   // visibility change
   useEffect(() => {
     var hidden, visibilityChange;
-    if (typeof document.hidden !== "undefined") {
+    const anyDoc = document as any;
+    if (typeof anyDoc.hidden !== "undefined") {
       // Opera 12.10 and Firefox 18 and later support
       hidden = "hidden";
       visibilityChange = "visibilitychange";
-    } else if (typeof document.msHidden !== "undefined") {
+    } else if (typeof anyDoc.msHidden !== "undefined") {
       hidden = "msHidden";
       visibilityChange = "msvisibilitychange";
-    } else if (typeof document.webkitHidden !== "undefined") {
+    } else if (typeof anyDoc.webkitHidden !== "undefined") {
       hidden = "webkitHidden";
       visibilityChange = "webkitvisibilitychange";
     }

@@ -9,6 +9,19 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./components/App";
 
+import * as mic from "./mic";
+
+mic
+  .hasAccess()
+  .then((x) => console.log("lol mic", x))
+  .then((x) => mic.promptAndGetMediaRecorder())
+  .then(async (x) => {
+    const p = mic.Record(x);
+    x.start();
+    setTimeout(() => x.stop(), 2000);
+    const data = await p;
+    console.log("lol data", data);
+  });
 const env = process.env.NODE_ENV;
 console.log("Current environment", env);
 if (env !== "development") {
