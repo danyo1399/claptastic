@@ -51,7 +51,7 @@ const Container = styled.div`
   }
 `;
 
-export default function InstallPrompt({ show }) {
+export default function InstallPrompt() {
   const [installState, setInstallState] = useRecoilState(installPromptState);
   const [dismissed, setDismissed] = useState(false);
   async function click() {

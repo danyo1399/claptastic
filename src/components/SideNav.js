@@ -5,7 +5,6 @@ import { useImmerRecoilState } from "../state/immerRecoil";
 import { useRecoilValue } from "recoil";
 import CloseIcon from "./CloseIcon";
 import MenuIcon from "./MenuIcon";
-import clapsState from "../state/clapsState";
 import { ClapperCard } from "./ClapperCard";
 
 const StyledButton = styled.button`

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import InstallPrompt from "./InstallPrompt";
-import SideNav, { ExpandIconButton } from "./SideNav";
+import { ExpandIconButton } from "./SideNav";
 import { useRecoilValue } from "recoil";
-import clapsState from "../state/clapsState";
+import clapAtom from "../claps/clap.state";
 import { ClapsCounter } from "./ClapsCounter";
 
 const HeaderWrapper = styled.div`
@@ -43,7 +43,7 @@ const HeaderWrapper = styled.div`
 `;
 
 export default function Header() {
-  const claps = useRecoilValue(clapsState);
+  const clapState = useRecoilValue(clapAtom);
   return (
     <HeaderWrapper className="min-height-hide">
       <div className="flex">
@@ -53,7 +53,7 @@ export default function Header() {
       </div>
       <div className="right-section flex">
         <ClapsCounter
-          count={claps?.total_rows || claps?.length || 0}
+          count={(clapState as any)?.total_rows || clapState?.claps?.length || 0}
         ></ClapsCounter>
         <InstallPrompt></InstallPrompt>
       </div>

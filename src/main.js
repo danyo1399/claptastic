@@ -9,19 +9,24 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./components/App";
 
-import * as mic from "./mic";
+import * as mic from "./utils/mic.utils";
+import "./db.legacy";
 
-mic
-  .hasAccess()
-  .then((x) => console.log("lol mic", x))
-  .then((x) => mic.promptAndGetMediaRecorder())
-  .then(async (x) => {
-    const p = mic.Record(x);
-    x.start();
-    setTimeout(() => x.stop(), 2000);
-    const data = await p;
-    console.log("lol data", data);
-  });
+// Experimenting with mic
+// mic
+//   .hasAccess()
+//   .then((x) => console.log("lol mic", x))
+//   .then((x) => mic.promptAndGetMediaRecorder())
+//   .then(async (x) => {
+//     const p = mic.getRecordedData(x);
+//     x.start();
+//     setTimeout(() => x.stop(), 2000);
+//     const data = await p;
+//     console.log("lol data", data);
+//     const audio = new Audio(URL.createObjectURL(data));
+//     audio.play();
+//   });
+
 const env = process.env.NODE_ENV;
 console.log("Current environment", env);
 if (env !== "development") {
@@ -38,8 +43,6 @@ if (env !== "development") {
     });
   }
 }
-
-import "./db";
 
 render(
   <RecoilRoot>

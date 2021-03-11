@@ -68,10 +68,8 @@ const audio = new Audio();
 
 import logger from "../logger";
 import ClapSvg from "./ClapSvg";
-import { useImmerRecoilState } from "../state/immerRecoil";
-import clapsState from "../state/clapsState";
-import { addClap } from "../db";
-import useDb from "../hooks/useDb";
+
+import { clapped } from "../claps/clap.events";
 const { error } = logger("clapButton");
 const clapAudioStorageKeyItem = "mp3";
 
@@ -104,7 +102,6 @@ export default function ClapButton() {
   const [playing, setPlaying] = useState(null);
   const intervalRef = useRef();
 
-  const { addClap } = useDb();
   const svgRef = useRef(null);
 
   async function play() {
@@ -146,7 +143,7 @@ export default function ClapButton() {
     const start = async (_) => {
       startAnim();
       setPlaying(true);
-      await addClap();
+      clapped.addEvent({});
     };
 
     audio.addEventListener("ended", stop);

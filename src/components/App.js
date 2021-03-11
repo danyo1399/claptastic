@@ -6,7 +6,8 @@ import installPromptState from "../state/installPromptState";
 import { useSetRecoilState } from "recoil";
 import { log } from "../logger";
 import SideNav from "./SideNav";
-import { DbProvider } from "../hooks/useDb";
+import { useClap } from "../claps/clap.hooks";
+import { EventHandlerProvider } from "../events/event.provider";
 export default function App() {
   const setInstallState = useSetRecoilState(installPromptState);
 
@@ -21,9 +22,11 @@ export default function App() {
       // Update UI to notify the user they can add to home screen
     });
   }, []);
+
+  const { clapChangeHandler } = useClap();
   return (
     <>
-      <DbProvider />
+      <EventHandlerProvider handlers={[clapChangeHandler]} />
       <StartDialog></StartDialog>
       <Header></Header>
       <SideNav></SideNav>

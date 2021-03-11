@@ -1,11 +1,15 @@
 import { atom } from "recoil";
 
-const clapsState = atom<ClapModel[]>({
+const clapAtom = atom<ClapState>({
   key: "clapsState",
-  default: [],
+  default: { claps: [] },
 });
 
-export default clapsState;
+export default clapAtom;
+
+export interface ClapState {
+  claps: ClapModel[];
+}
 
 export interface ClapModel {
   lat?: number;
