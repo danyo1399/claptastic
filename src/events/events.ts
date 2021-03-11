@@ -1,4 +1,3 @@
-
 export interface EventModel<T> {
   _id: string;
   _rev?: string;

@@ -53,7 +53,9 @@ export default function Header() {
       </div>
       <div className="right-section flex">
         <ClapsCounter
-          count={(clapState as any)?.total_rows || clapState?.claps?.length || 0}
+          count={
+            (clapState as any)?.total_rows || clapState?.claps?.length || 0
+          }
         ></ClapsCounter>
         <InstallPrompt></InstallPrompt>
       </div>
