@@ -9,8 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack && ncp dist/assets dist/claptastic",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "deploy:netlify:preview": "npm run build && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
-    "publish": "npm run bump-version && npm run build && node ./scripts/github-publish.js",
-    "bump-version": "node scripts/bump-version.js",
+    "publish": "npm run build && node ./scripts/github-publish.js",
     "cypress:open": "cypress open",
     "cypress:headless": "cypress run --headless chrome"
   },

@@ -16,7 +16,7 @@ const buildNo =
   date.getHours().toString().padStart(2, "0") +
   date.getMinutes().toString().padStart(2, "0") +
   date.getSeconds().toString().padStart(2, "0");
-const versionInfo = require("./version.json");
+const versionInfo = require("./package.json");
 
 const version = `${versionInfo.version}-${buildNo}`;
 module.exports = {

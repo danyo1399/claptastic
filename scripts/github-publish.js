@@ -3,7 +3,7 @@ const ghpages = require("gh-pages");
 const process = require("process");
 const path = require("path");
 const distPath = path.resolve(__dirname, "../dist/claptastic");
-const version = require("../version.json");
+const version = require("../package.json");
 
 console.log("dist path", distPath);
 ghpages.publish(distPath, { tag: version.version }, function (err) {
