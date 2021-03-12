@@ -53,6 +53,9 @@ const SideNavContainer = styled.div`
       padding-left: 0.5rem;
     }
   }
+  section {
+    margin-bottom: 2rem;
+  }
   ${(props) =>
     props.expanded &&
     css`
@@ -69,16 +72,17 @@ export default function SideNav() {
       expanded={state.expanded}
       data-testid="side-nav"
     >
-      <div className="version-header">
-        Version:
-        <span id="version" className="version">
-          {version}
-        </span>
-      </div>
-
-      <div>
+      <section>
+        <div className="version-header">
+          Version:
+          <span id="version" className="version">
+            {version}
+          </span>
+        </div>
+      </section>
+      <section>
         <ClapperCard></ClapperCard>
-      </div>
+      </section>
     </SideNavContainer>
   );
 }

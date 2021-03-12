@@ -21,37 +21,6 @@ const Wrapper = styled.div`
     max-width: 200px;
   }
 
-  .svg-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .button-wrapper {
-    position: relative;
-    padding-bottom: 100%;
-    height: 0;
-    width: 100%;
-  }
-
-  .button-icon {
-    outline: none !important;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 999px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at bottom center, #ffc837 15px, #ff8008);
-    box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  }
-
   @keyframes loadButton {
     from {
       transform: rotate(180deg) scale(0.1);
@@ -70,6 +39,7 @@ import logger from "../logger";
 import ClapSvg from "./ClapSvg";
 
 import { clapped } from "../claps/clap.events";
+import { ClapIconContainer } from "./ClapIconContainer";
 const { error } = logger("clapButton");
 const clapAudioStorageKeyItem = "mp3";
 
@@ -183,13 +153,9 @@ export default function ClapButton() {
   }, []);
   return (
     <Wrapper>
-      <div className="button-wrapper">
-        <button className="button-icon" onClick={play}>
-          <div className="svg-wrapper">
-            <ClapSvg clapping={playing} ref={svgRef}></ClapSvg>
-          </div>
-        </button>
-      </div>
+      <ClapIconContainer onClick={play}>
+        <ClapSvg clapping={playing} ref={svgRef}></ClapSvg>
+      </ClapIconContainer>
     </Wrapper>
   );
 }

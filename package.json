@@ -8,7 +8,8 @@
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
     "build": "cross-env NODE_ENV=production webpack && ncp dist/assets dist/claptastic",
     "build:dev": "cross-env NODE_ENV=development webpack",
-    "deploy:netlify:preview": "npm run build && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
+    "deploy:netlify:preview": "npm run build && netlify deploy --dir=dist && echo dont forget to add /claptastic/ to end of url",
+    "deploy:netlify": "npm run build && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
     "publish": "npm run build && node ./scripts/github-publish.js",
     "cypress:open": "cypress open",
     "cypress:headless": "cypress run --headless chrome"
