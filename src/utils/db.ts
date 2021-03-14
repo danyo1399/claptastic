@@ -31,6 +31,9 @@ export function blobStorage(db: PouchDB.Database) {
   }
 
   async function deleteItem(key: string) {
+    if (key == null || key == "") {
+      return;
+    }
     const id = await genId(key);
     const doc = await tryGet(id, db);
     if (doc) {
