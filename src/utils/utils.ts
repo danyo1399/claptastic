@@ -1,5 +1,7 @@
 export function tryAction(action: () => any) {
     try {
         action()
-    } catch (err) {}
+    } catch (err) {
+        return err
+    }
 }
