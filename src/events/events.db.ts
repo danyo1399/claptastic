@@ -10,17 +10,17 @@ export function addEvent<T>(event: EventModel<T>) {
 
 export type ChangeHandler = (
   change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>
-) => void;
+) => Promise<void>;
 
 export function getEventChanges(
   options: PouchDB.Core.ChangesOptions,
   changeFn: (
     change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>
-  ) => Promise<void>
+  ) => any
 ) {
   const x = eventsDb
     .changes({ ...options, include_docs: true })
-    .on("change", (x) => changeFn(x));
+    .on("change", changeFn);
   return x;
 }
 

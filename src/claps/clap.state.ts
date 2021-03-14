@@ -8,6 +8,9 @@ import {
 import { ClapState } from "./clap.models";
 import { getClapperAudio } from "./clap.db";
 import { tryAction } from "../utils/utils";
+import getLogger from "../utils/logger";
+
+const logger = getLogger("clap-state");
 
 const clapAtom = atom<ClapState>({
   key: "clapAtom",
@@ -64,6 +67,7 @@ export function useClapReducer() {
         stateActions(state).setAduio(data.clapperId, url);
       });
     });
+    logger.debug("after chang handler");
   };
   return clapChangeHandler;
 }

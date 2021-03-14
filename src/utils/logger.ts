@@ -1,5 +1,7 @@
+import { isProd } from "./environment";
+
 export default function getLogger(prefix) {
-  const version = WEBPACK_VERSION;
+  const version = process.env.version;
   function log(msg, ...args) {
     console.log(`[${prefix} ${version}] ${msg}`, ...args);
   }
@@ -13,7 +15,9 @@ export default function getLogger(prefix) {
   }
 
   function debug(msg, ...args) {
-    console.debug(`[${prefix} ${version}] ${msg}`, ...args);
+    if (!isProd()) {
+      console.debug(`[${prefix} ${version}] ${msg}`, ...args);
+    }
   }
 
   return { log, error, warn, debug };

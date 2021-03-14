@@ -1,7 +1,7 @@
 // DONT USE THIS. TRYING TO FIX FILE RENAME IN V1.0.12
 // Any old installations would be orphaned if they were initialised with V1.0.12 or prior.
 
-const version = WEBPACK_VERSION;
+const version = process.env.version;
 
 const appkey = "claptastic";
 const immutableUrls = [/tailwind/i];

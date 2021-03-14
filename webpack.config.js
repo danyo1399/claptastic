@@ -92,7 +92,7 @@ module.exports = {
     }),
 
     new webpack.DefinePlugin({
-      WEBPACK_VERSION: JSON.stringify(version),
+      "process.env.version": JSON.stringify(version),
       "process.env.sentry": JSON.stringify(sentry),
     }),
     new MiniCssExtractPlugin({
@@ -110,7 +110,6 @@ module.exports = {
       template: "./src/index.html",
       excludeChunks: ["service-worker"],
       favicon: "./src/icons/hand-icon-192.png",
-      environment: { WEBPACK_VERSION: version },
     }),
     new WebpackPwaManifest({
       name: "Claptastic",

@@ -1,7 +1,7 @@
 "use strict";
 import { clientsClaim } from "workbox-core";
 
-const version = WEBPACK_VERSION;
+const version = process.env.version;
 
 const appkey = "claptastic";
 

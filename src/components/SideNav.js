@@ -64,7 +64,7 @@ const SideNavContainer = styled.div`
 `;
 
 export default function SideNav() {
-  const version = WEBPACK_VERSION;
+  const version = process.env.version;
   const state = useRecoilValue(sideNavState);
   return (
     <SideNavContainer
