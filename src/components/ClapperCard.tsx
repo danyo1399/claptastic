@@ -3,6 +3,9 @@ import styled, { css, keyframes } from "styled-components";
 import ClapSvg from "./ClapSvg";
 import { ClapIconContainer } from "./ClapIconContainer";
 import { deleteClapperAudio, setClapperAudio } from "../claps/clap.db";
+import getLogger from "../utils/logger";
+
+const logger = getLogger("clapper-card");
 
 const Container = styled.div`
   width: 100%;
@@ -54,8 +57,16 @@ export function ClapperCard(props: {}) {
   async function onChange(e) {
     const ele: HTMLInputElement = e.target;
     const file = ele.files[0] as File;
-    if (!file || !file.type.includes("audio/")) {
-      console.log("not an audio file");
+    if (!file) {
+      logger.log("No file");
+      return;
+    }
+    if (!file.type.includes("audio/")) {
+      logger.log("not an audio file:" + file.type);
+      return;
+    }
+    if (file.size > 1024 * 1024 * 2) {
+      logger.log("file cant be bigger than 2 MB");
       return;
     }
     console.log(ele.files[0]);
