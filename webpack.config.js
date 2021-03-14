@@ -17,6 +17,7 @@ const buildNo =
   date.getMinutes().toString().padStart(2, "0") +
   date.getSeconds().toString().padStart(2, "0");
 const versionInfo = require("./package.json");
+const sentry = process.env.sentry || "";
 
 const version = `${versionInfo.version}-${buildNo}`;
 module.exports = {
@@ -92,6 +93,7 @@ module.exports = {
 
     new webpack.DefinePlugin({
       WEBPACK_VERSION: JSON.stringify(version),
+      "process.env.sentry": JSON.stringify(sentry),
     }),
     new MiniCssExtractPlugin({
       filename: devMode ? "[name].css" : "[name].[contenthash].css",
