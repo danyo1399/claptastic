@@ -49,16 +49,28 @@ export default function ClapButton() {
 
   const svgRef = useRef(null);
 
+  function stopPlaying() {
+    audioRef.current.load();
+    stopAnim();
+    setPlaying(false);
+  }
   async function play() {
     if (!playing) {
-      audioRef.current.src = clappers[0].audioUrl || (await defaultAudioUrl);
       await audioRef.current.play();
     } else {
-      audioRef.current.load();
-      stopAnim();
-      setPlaying(false);
+      stopPlaying();
     }
   }
+
+  useEffect(() => {
+    (async () => {
+      if (audioRef.current) {
+        stopPlaying();
+        audioRef.current.src = clappers[0].audioUrl || (await defaultAudioUrl);
+        console.debug("setting audio  " + audioRef.current.src);
+      }
+    })();
+  }, [clappers[0]?.audioUrl, audioRef.current]);
 
   // TODO: Replace this with a css animation
   function startAnim() {
@@ -91,8 +103,7 @@ export default function ClapButton() {
     const audio = new Audio();
     audioRef.current = audio;
     const onStop = (_) => {
-      stopAnim();
-      setPlaying(false);
+      stopPlaying();
     };
     const onStart = async (_) => {
       startAnim();
