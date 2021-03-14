@@ -37,15 +37,18 @@ import { clapped } from "../claps/clap.events";
 import { ClapIconContainer } from "./ClapIconContainer";
 import { useRecoilValue } from "recoil";
 import clapAtom, { clappersSelector } from "../claps/clap.state";
-import { defaultAudioUrl } from "../claps/audio";
+import { defaultAudioUrlPromise } from "../claps/audio";
+import { blobStorage } from "../utils/db";
+import { blobs } from "../claps/clap.db";
 const { error } = getLogger("clapButton");
 const clapAudioStorageKeyItem = "mp3";
 
 export default function ClapButton() {
   const [playing, setPlaying] = useState<boolean>(false);
-  const clappers = useRecoilValue(clappersSelector);
+  const clapper = useRecoilValue(clappersSelector)[0];
   const intervalRef = useRef<NodeJS.Timeout>();
   const audioRef = useRef<HTMLAudioElement>();
+  const currentAudioBlobRef = useRef<string>();
 
   const svgRef = useRef(null);
 
@@ -64,13 +67,37 @@ export default function ClapButton() {
 
   useEffect(() => {
     (async () => {
-      if (audioRef.current) {
-        stopPlaying();
-        audioRef.current.src = clappers[0].audioUrl || (await defaultAudioUrl);
-        console.debug("setting audio  " + audioRef.current.src);
+      if (!audioRef.current) {
+        return;
       }
+      if (currentAudioBlobRef.current == clapper.userAudioBlobKey) {
+        return;
+      }
+      const defaultAudioUrl = await defaultAudioUrlPromise;
+
+      stopPlaying();
+      const existingUrl = audioRef.current.src;
+      if (existingUrl && existingUrl !== defaultAudioUrl) {
+        URL.revokeObjectURL(existingUrl);
+        audioRef.current.src = defaultAudioUrl;
+        await blobs.deleteItem(currentAudioBlobRef.current);
+      }
+
+      if (clapper.userAudioBlobKey) {
+        const blob = await blobs.getItem(clapper.userAudioBlobKey);
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          audioRef.current.src = url;
+        }
+      }
+
+      if (!audioRef.current.src) {
+        currentAudioBlobRef.current = null;
+        audioRef.current.src = defaultAudioUrl;
+      }
+      currentAudioBlobRef.current = clapper.userAudioBlobKey;
     })();
-  }, [clappers[0]?.audioUrl, audioRef.current]);
+  }, [clapper?.userAudioBlobKey, audioRef.current]);
 
   // TODO: Replace this with a css animation
   function startAnim() {

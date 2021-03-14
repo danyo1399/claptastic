@@ -2,8 +2,9 @@
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 
+const logger = getLogger("main");
 if (process.env.sentry) {
-  console.log("Initialising Sentry");
+  logger.log("Initialising Sentry");
   Sentry.init({
     dsn:
       "https://698a6ff842d340e6b7b78f0eb4873ce5@o551318.ingest.sentry.io/5674666",
@@ -19,7 +20,7 @@ import "./styles.css";
 
 import { RecoilRoot } from "recoil";
 
-import { log } from "./utils/logger";
+import getLogger, { log } from "./utils/logger";
 import React from "react";
 import { render } from "react-dom";
 import App from "./components/App";
@@ -44,17 +45,17 @@ import { isProd } from "./utils/environment";
 //   });
 
 const env = process.env.NODE_ENV;
-console.log("Current environment", env);
+logger.log("Current environment", env);
 if (env !== "development") {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker
         .register("service-worker.js")
         .then((registration) => {
-          console.log("SW registered: ", registration);
+          logger.log("SW registered: ", registration);
         })
         .catch((registrationError) => {
-          console.log("SW registration failed: ", registrationError);
+          logger.error("SW registration failed: ", registrationError);
         });
     });
   }

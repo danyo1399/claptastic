@@ -30,4 +30,4 @@ async function getDefaultAudio() {
   return URL.createObjectURL(blob);
 }
 
-export const defaultAudioUrl = getDefaultAudio();
+export const defaultAudioUrlPromise = getDefaultAudio();

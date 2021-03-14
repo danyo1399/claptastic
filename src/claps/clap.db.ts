@@ -9,17 +9,7 @@ export const clapsDb = new PouchDB("claptastic", { auto_compaction: true });
 export const blobs = blobStorage(clapsDb);
 
 function genId(id: number) {
-  return `${id}#clapper-audio`;
-}
-export async function getClapperAudio(id: number) {
-  const docId = genId(id);
-  return await blobs.getItem(docId);
-}
-
-export async function deleteClapperAudio(id: number) {
-  const docId = genId(id);
-  await blobs.deleteItem(docId);
-  clapperCustomAudioRemoved.raiseEvent({ clapperId: id });
+  return uniqueId(`${id}#audio`);
 }
 
 export async function setClapperAudio(id: number, name: string, blob: Blob) {
@@ -28,8 +18,7 @@ export async function setClapperAudio(id: number, name: string, blob: Blob) {
 
   await clapperAudioUpdated.raiseEvent({
     clapperId: id,
-    docId: ref.id,
-    docRev: ref.rev,
+    key: docId,
     name: name,
     type: blob.type,
   });

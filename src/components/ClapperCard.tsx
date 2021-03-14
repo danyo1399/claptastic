@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import ClapSvg from "./ClapSvg";
 import { ClapIconContainer } from "./ClapIconContainer";
-import { deleteClapperAudio, setClapperAudio } from "../claps/clap.db";
+import { setClapperAudio } from "../claps/clap.db";
 import getLogger from "../utils/logger";
+import { clapperCustomAudioRemoved } from "../claps/clap.events";
 
 const logger = getLogger("clapper-card");
 
@@ -69,13 +70,12 @@ export function ClapperCard(props: {}) {
       logger.log("file cant be bigger than 2 MB");
       return;
     }
-    console.log(ele.files[0]);
     await setClapperAudio(0, file.name, file);
     ele.value = null;
   }
 
   async function removeCustomAudio() {
-    deleteClapperAudio(0);
+    clapperCustomAudioRemoved.raiseEvent({ clapperId: 0 });
   }
   return (
     <Container className="rounded border p-2 ">

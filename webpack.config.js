@@ -22,11 +22,11 @@ const sentry = process.env.sentry || "";
 const version = `${versionInfo.version}-${buildNo}`;
 module.exports = {
   entry: {
-    main: { import: "./src/main.js", filename: "[name].[hash].js" },
+    main: { import: "./src/main.tsx", filename: "[name].[hash].js" },
 
     tailwind: { import: "./src/tailwind.js", filename: "[name].[hash].js" },
   },
-  devtool: devMode ? "source-map" : "source-map",
+  devtool: devMode ? "inline-source-map" : "source-map",
   target: "web",
   devServer: {
     serveIndex: true,
@@ -54,9 +54,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/,
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
       },
       {
         test: /\.(png|jpe?g|gif|mp3)$/i,
@@ -66,16 +66,21 @@ module.exports = {
           },
         ],
       },
+      // {
+      //   test: /\.js$/i,
+      //   include: path.resolve(__dirname, "src"),
+      //   exclude: /node_modules/,
+      //   use: {
+      //     loader: "babel-loader",
+      //     options: {
+      //       presets: ["@babel/preset-env", "@babel/preset-react"],
+      //     },
+      //   },
+      // },
       {
-        test: /\.js$/i,
-        include: path.resolve(__dirname, "src"),
+        test: /\.tsx?$/,
+        use: "ts-loader",
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
-          },
-        },
       },
       {
         test: /\.css$/i,

@@ -4,7 +4,7 @@ export interface ClapState {
 }
 
 export interface ClapperModel {
-  audioUrl: string | null;
+  userAudioBlobKey: string | undefined;
   color: string;
 }
 export interface ContainerColor {

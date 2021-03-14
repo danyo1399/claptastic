@@ -6,7 +6,6 @@ import {
   clapperCustomAudioRemoved,
 } from "./clap.events";
 import { ClapState } from "./clap.models";
-import { getClapperAudio } from "./clap.db";
 import { tryAction } from "../utils/utils";
 import getLogger from "../utils/logger";
 
@@ -14,27 +13,25 @@ const logger = getLogger("clap-state");
 
 const clapAtom = atom<ClapState>({
   key: "clapAtom",
-  default: { claps: [], clappers: [{ color: "yellow", audioUrl: null }] },
+  default: {
+    claps: [],
+    clappers: [{ color: "yellow", userAudioBlobKey: null }],
+  },
 });
 
 function stateActions(state: ClapState) {
-  function setAduio(id: number, url: string) {
-    removeAudio(id);
+  function setAudio(id: number, key) {
     const clapper = state.clappers[id];
     if (clapper) {
-      clapper.audioUrl = url;
+      clapper.userAudioBlobKey = key;
     }
   }
+
   function removeAudio(id: number) {
-    const clapper = state.clappers[0];
-    if (clapper.audioUrl) {
-      tryAction(() => {
-        URL.revokeObjectURL(clapper.audioUrl);
-      });
-    }
-    clapper.audioUrl = null;
+    const clapper = state.clappers[id];
+    clapper.userAudioBlobKey = null;
   }
-  return { removeAudio, setAduio };
+  return { removeAudio, setAudio: setAudio };
 }
 
 export function useClapReducer() {
@@ -47,6 +44,7 @@ export function useClapReducer() {
         x.claps.push(ev.data);
       });
     });
+
     await clapperCustomAudioRemoved.applyEvent(doc, async (ev) => {
       setState((draft) => {
         stateActions(draft).removeAudio(ev.data.clapperId);
@@ -55,16 +53,8 @@ export function useClapReducer() {
 
     await clapperAudioUpdated.applyEvent(doc, async (x) => {
       const data = x.data;
-      const audio = await getClapperAudio(data.clapperId);
-      if (!audio) {
-        setState((draft) => {
-          stateActions(draft).removeAudio(data.clapperId);
-        });
-        return;
-      }
-      const url = URL.createObjectURL(audio);
       setState((state) => {
-        stateActions(state).setAduio(data.clapperId, url);
+        stateActions(state).setAudio(data.clapperId, data.key);
       });
     });
     logger.debug("after chang handler");

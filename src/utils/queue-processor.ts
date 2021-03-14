@@ -11,6 +11,7 @@ export function queueProcessor(handler: (change) => Promise<any>) {
   async function add(change) {
     queue[addIndex] = change;
     addIndex++;
+    //logger.debug("queue", Object.values(queue));
     await process();
   }
   async function process() {

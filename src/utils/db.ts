@@ -27,7 +27,7 @@ export async function upsert(doc, db: PouchDB.Database) {
 
 export function blobStorage(db: PouchDB.Database) {
   function genId(key: string) {
-    return `${key}#blobStorage`;
+    return `${key}#blob`;
   }
 
   async function deleteItem(key: string) {
@@ -51,7 +51,7 @@ export function blobStorage(db: PouchDB.Database) {
 
   async function setItem(key: string, blob: Blob) {
     const docId = genId(key);
-    const ref = await upsert(
+    await upsert(
       {
         _id: docId,
         _attachments: {
@@ -63,7 +63,6 @@ export function blobStorage(db: PouchDB.Database) {
       },
       db
     );
-    return ref;
   }
 
   return { getItem, setItem, deleteItem };
