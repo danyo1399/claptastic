@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import getLogger from "../utils/logger";
-import ClapSvg from "./ClapSvg";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import getLogger from '../utils/logger';
+import ClapSvg from './ClapSvg';
 
-import { clapped } from "../claps/clap.events";
-import { ClapIconContainer } from "./ClapIconContainer";
-import { useRecoilValue } from "recoil";
-import { clappersSelector } from "../claps/clap.state";
-import { defaultAudioUrlPromise } from "../claps/audio";
-import { blobs } from "../claps/clap.db";
+import { clapped } from '../claps/clap.events';
+import { ClapIconContainer } from './ClapIconContainer';
+import { useRecoilValue } from 'recoil';
+import { clappersSelector } from '../claps/clap.state';
+import { defaultAudioUrlPromise } from '../claps/audio';
+import { blobs } from '../claps/clap.db';
 
 const Wrapper = styled.div`
   width: 80vw;
@@ -104,10 +104,10 @@ export default function ClapButton() {
     let toggle = false;
     intervalRef.current = setInterval(() => {
       if (!toggle) {
-        ele.style.transform = "scale(1.2)";
+        ele.style.transform = 'scale(1.2)';
         toggle = true;
       } else {
-        ele.style.transform = "scale(1)";
+        ele.style.transform = 'scale(1)';
         toggle = false;
       }
     }, 100);
@@ -127,7 +127,7 @@ export default function ClapButton() {
     audioRef.current = audio;
     (async () => {
       audio.src = await defaultAudioUrlPromise;
-      console.log("lol default", audio.src);
+      console.log('lol default', audio.src);
     })();
 
     const onStop = (_) => {
@@ -139,29 +139,29 @@ export default function ClapButton() {
       await clapped.raiseEvent({});
     };
 
-    audio.addEventListener("ended", onStop);
-    audio.addEventListener("play", onStart);
+    audio.addEventListener('ended', onStop);
+    audio.addEventListener('play', onStart);
 
     return () => {
-      audio.removeEventListener("ended", onStop);
-      audio.removeEventListener("play", onStart);
+      audio.removeEventListener('ended', onStop);
+      audio.removeEventListener('play', onStart);
     };
   }, []);
 
   // visibility change
   useEffect(() => {
-    var hidden, visibilityChange;
+    let hidden, visibilityChange;
     const anyDoc = document as any;
-    if (typeof anyDoc.hidden !== "undefined") {
+    if (typeof anyDoc.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
-      hidden = "hidden";
-      visibilityChange = "visibilitychange";
-    } else if (typeof anyDoc.msHidden !== "undefined") {
-      hidden = "msHidden";
-      visibilityChange = "msvisibilitychange";
-    } else if (typeof anyDoc.webkitHidden !== "undefined") {
-      hidden = "webkitHidden";
-      visibilityChange = "webkitvisibilitychange";
+      hidden = 'hidden';
+      visibilityChange = 'visibilitychange';
+    } else if (typeof anyDoc.msHidden !== 'undefined') {
+      hidden = 'msHidden';
+      visibilityChange = 'msvisibilitychange';
+    } else if (typeof anyDoc.webkitHidden !== 'undefined') {
+      hidden = 'webkitHidden';
+      visibilityChange = 'webkitvisibilitychange';
     }
     async function handleVisibilityChange() {
       if (document[hidden]) {
@@ -172,8 +172,7 @@ export default function ClapButton() {
     }
 
     document.addEventListener(visibilityChange, handleVisibilityChange, false);
-    return () =>
-      document.removeEventListener(visibilityChange, handleVisibilityChange);
+    return () => document.removeEventListener(visibilityChange, handleVisibilityChange);
   }, []);
   return (
     <Wrapper>

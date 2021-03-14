@@ -1,68 +1,66 @@
-import { atom, selector } from 'recoil';
-import { useImmerRecoilState } from '../state/immerRecoil';
-import { clapped, clapperAudioUpdated, clapperCustomAudioRemoved } from './clap.events';
-import { ClapState } from './clap.models';
-import { tryAction } from '../utils/utils';
-import getLogger from '../utils/logger';
+import { atom, selector } from 'recoil'
+import { useImmerRecoilState } from '../state/immerRecoil'
+import { clapped, clapperAudioUpdated, clapperCustomAudioRemoved } from './clap.events'
+import { ClapState } from './clap.models'
+import getLogger from '../utils/logger'
 
-const logger = getLogger('clap-state');
+const logger = getLogger('clap-state')
 
 const clapAtom = atom<ClapState>({
-  key: 'clapAtom',
-  default: {
-    claps: [],
-    clappers: [{ color: 'yellow', userAudioBlobKey: null }],
-  },
-});
+    key: 'clapAtom',
+    default: {
+        claps: [],
+        clappers: [{ color: 'yellow', userAudioBlobKey: null }],
+    },
+})
 
 function stateActions(state: ClapState) {
-  function setAudio(id: number, key) {
-    const clapper = state.clappers[id];
-    if (clapper) {
-      clapper.userAudioBlobKey = key;
+    function setAudio(id: number, key) {
+        const clapper = state.clappers[id]
+        if (clapper) {
+            clapper.userAudioBlobKey = key
+        }
     }
-  }
 
-  function removeAudio(id: number) {
-    const clapper = state.clappers[id];
-    clapper.userAudioBlobKey = null;
-  }
-  return { removeAudio, setAudio: setAudio };
+    function removeAudio(id: number) {
+        const clapper = state.clappers[id]
+        clapper.userAudioBlobKey = null
+    }
+    return { removeAudio, setAudio: setAudio }
 }
 
 export function useClapReducer() {
-  const [state, setState] = useImmerRecoilState(clapAtom);
+    const [, setState] = useImmerRecoilState(clapAtom)
 
-  const clapChangeHandler = (change) => {
-    const doc = change.doc;
-    clapped.applyEvent(doc, (ev) => {
-      setState((x) => {
-        x.claps.push(ev.data);
-      });
-    });
+    return (change) => {
+        const doc = change.doc
+        clapped.applyEvent(doc, (ev) => {
+            setState((x) => {
+                x.claps.push(ev.data)
+            })
+        })
 
-    clapperCustomAudioRemoved.applyEvent(doc, (ev) => {
-      setState((draft) => {
-        stateActions(draft).removeAudio(ev.data.clapperId);
-      });
-    });
+        clapperCustomAudioRemoved.applyEvent(doc, (ev) => {
+            setState((draft) => {
+                stateActions(draft).removeAudio(ev.data.clapperId)
+            })
+        })
 
-    clapperAudioUpdated.applyEvent(doc, (x) => {
-      const data = x.data;
-      setState((state) => {
-        stateActions(state).setAudio(data.clapperId, data.key);
-      });
-    });
-    logger.debug('after chang handler');
-  };
-  return clapChangeHandler;
+        clapperAudioUpdated.applyEvent(doc, (x) => {
+            const data = x.data
+            setState((state) => {
+                stateActions(state).setAudio(data.clapperId, data.key)
+            })
+        })
+        logger.debug('after chang handler')
+    }
 }
 
-export default clapAtom;
+export default clapAtom
 
 export const clappersSelector = selector({
-  key: 'clappersSelector',
-  get: ({ get }) => {
-    return get(clapAtom).clappers;
-  },
-});
+    key: 'clappersSelector',
+    get: ({ get }) => {
+        return get(clapAtom).clappers
+    },
+})

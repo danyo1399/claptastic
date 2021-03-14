@@ -1,33 +1,32 @@
-"use strict";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+'use strict'
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 
-const logger = getLogger("main");
+const logger = getLogger('main')
 if (process.env.sentry) {
-  logger.log("Initialising Sentry");
-  Sentry.init({
-    dsn:
-      "https://698a6ff842d340e6b7b78f0eb4873ce5@o551318.ingest.sentry.io/5674666",
-    integrations: [new Integrations.BrowserTracing()],
+    logger.log('Initialising Sentry')
+    Sentry.init({
+        dsn: 'https://698a6ff842d340e6b7b78f0eb4873ce5@o551318.ingest.sentry.io/5674666',
+        integrations: [new Integrations.BrowserTracing()],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  });
+        // Set tracesSampleRate to 1.0 to capture 100%
+        // of transactions for performance monitoring.
+        // We recommend adjusting this value in production
+        tracesSampleRate: 1.0,
+    })
 }
-import "./styles.css";
+import './styles.css'
 
-import { RecoilRoot } from "recoil";
+import { RecoilRoot } from 'recoil'
 
-import getLogger, { log } from "./utils/logger";
-import React from "react";
-import { render } from "react-dom";
-import App from "./components/App";
+import getLogger, { log } from './utils/logger'
+import React from 'react'
+import { render } from 'react-dom'
+import App from './components/App'
 
-import * as mic from "./utils/mic.utils";
-import "./db.legacy";
-import { isProd } from "./utils/environment";
+import * as mic from './utils/mic.utils'
+import './db.legacy'
+import { isProd } from './utils/environment'
 
 // Experimenting with mic
 // mic
@@ -44,27 +43,27 @@ import { isProd } from "./utils/environment";
 //     audio.play();
 //   });
 
-const env = process.env.NODE_ENV;
-logger.log("Current environment", env);
-if (env !== "development") {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("service-worker.js")
-        .then((registration) => {
-          logger.log("SW registered: ", registration);
+const env = process.env.NODE_ENV
+logger.log('Current environment', env)
+if (env !== 'development') {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('service-worker.js')
+                .then((registration) => {
+                    logger.log('SW registered: ', registration)
+                })
+                .catch((registrationError) => {
+                    logger.error('SW registration failed: ', registrationError)
+                })
         })
-        .catch((registrationError) => {
-          logger.error("SW registration failed: ", registrationError);
-        });
-    });
-  }
+    }
 }
 
 render(
-  <RecoilRoot>
-    <App />
-  </RecoilRoot>,
-  document.getElementById("root")
-);
-log("Initialising");
+    <RecoilRoot>
+        <App />
+    </RecoilRoot>,
+    document.getElementById('root'),
+)
+log('Initialising')
