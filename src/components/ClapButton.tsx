@@ -1,5 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import getLogger from "../utils/logger";
+import ClapSvg from "./ClapSvg";
+
+import { clapped } from "../claps/clap.events";
+import { ClapIconContainer } from "./ClapIconContainer";
+import { useRecoilValue } from "recoil";
+import { clappersSelector } from "../claps/clap.state";
+import { defaultAudioUrlPromise } from "../claps/audio";
+import { blobs } from "../claps/clap.db";
 
 const Wrapper = styled.div`
   width: 80vw;
@@ -29,19 +38,6 @@ const Wrapper = styled.div`
     }
   } ;
 `;
-
-import getLogger from "../utils/logger";
-import ClapSvg from "./ClapSvg";
-
-import { clapped } from "../claps/clap.events";
-import { ClapIconContainer } from "./ClapIconContainer";
-import { useRecoilValue } from "recoil";
-import clapAtom, { clappersSelector } from "../claps/clap.state";
-import { defaultAudioUrlPromise } from "../claps/audio";
-import { blobStorage } from "../utils/db";
-import { blobs } from "../claps/clap.db";
-const { error } = getLogger("clapButton");
-const clapAudioStorageKeyItem = "mp3";
 
 export default function ClapButton() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -73,6 +69,7 @@ export default function ClapButton() {
       if (currentAudioBlobRef.current == clapper.userAudioBlobKey) {
         return;
       }
+
       const defaultAudioUrl = await defaultAudioUrlPromise;
 
       stopPlaying();
@@ -86,8 +83,7 @@ export default function ClapButton() {
       if (clapper.userAudioBlobKey) {
         const blob = await blobs.getItem(clapper.userAudioBlobKey);
         if (blob) {
-          const url = URL.createObjectURL(blob);
-          audioRef.current.src = url;
+          audioRef.current.src = URL.createObjectURL(blob);
         }
       }
 
@@ -129,13 +125,18 @@ export default function ClapButton() {
   useEffect(() => {
     const audio = new Audio();
     audioRef.current = audio;
+    (async () => {
+      audio.src = await defaultAudioUrlPromise;
+      console.log("lol default", audio.src);
+    })();
+
     const onStop = (_) => {
       stopPlaying();
     };
     const onStart = async (_) => {
       startAnim();
       setPlaying(true);
-      clapped.raiseEvent({});
+      await clapped.raiseEvent({});
     };
 
     audio.addEventListener("ended", onStop);

@@ -31,3 +31,8 @@ async function getDefaultAudio() {
 }
 
 export const defaultAudioUrlPromise = getDefaultAudio();
+
+export let defaultAudioUrl;
+(async () => {
+  defaultAudioUrl = await defaultAudioUrlPromise;
+})();

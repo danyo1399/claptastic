@@ -1,26 +1,20 @@
-import PouchDB from "pouchdb-browser";
-import { uniqueId } from "../utils/id.utils";
-import { EventModel } from "./events";
+import PouchDB from 'pouchdb-browser';
+import { uniqueId } from '../utils/id.utils';
+import { EventModel } from './events';
 
-const eventsDb = new PouchDB<EventModel<unknown>>("events");
+const eventsDb = new PouchDB<EventModel<unknown>>('events');
 
 export function addEvent<T>(event: EventModel<T>) {
   return eventsDb.put(event);
 }
 
-export type ChangeHandler = (
-  change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>
-) => Promise<void>;
+export type ChangeHandler = (change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>) => void;
 
 export function getEventChanges(
   options: PouchDB.Core.ChangesOptions,
-  changeFn: (
-    change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>
-  ) => any
+  changeFn: (change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>) => any,
 ) {
-  const x = eventsDb
-    .changes({ ...options, include_docs: true })
-    .on("change", changeFn);
+  const x = eventsDb.changes({ ...options, include_docs: true }).on('change', changeFn);
   return x;
 }
 
@@ -42,12 +36,9 @@ export function createEventFn<T>(type: string) {
     return addEvent(create(data));
   }
 
-  async function applyEvent(
-    event: EventModel<T>,
-    fn: (e: EventModel<T>) => void
-  ): Promise<void> {
+  function applyEvent(event: EventModel<T>, fn: (e: EventModel<T>) => void): void {
     if (isType(event)) {
-      await fn(event);
+      fn(event);
     }
   }
 

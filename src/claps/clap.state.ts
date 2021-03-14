@@ -1,21 +1,17 @@
-import { atom, selector } from "recoil";
-import { useImmerRecoilState } from "../state/immerRecoil";
-import {
-  clapped,
-  clapperAudioUpdated,
-  clapperCustomAudioRemoved,
-} from "./clap.events";
-import { ClapState } from "./clap.models";
-import { tryAction } from "../utils/utils";
-import getLogger from "../utils/logger";
+import { atom, selector } from 'recoil';
+import { useImmerRecoilState } from '../state/immerRecoil';
+import { clapped, clapperAudioUpdated, clapperCustomAudioRemoved } from './clap.events';
+import { ClapState } from './clap.models';
+import { tryAction } from '../utils/utils';
+import getLogger from '../utils/logger';
 
-const logger = getLogger("clap-state");
+const logger = getLogger('clap-state');
 
 const clapAtom = atom<ClapState>({
-  key: "clapAtom",
+  key: 'clapAtom',
   default: {
     claps: [],
-    clappers: [{ color: "yellow", userAudioBlobKey: null }],
+    clappers: [{ color: 'yellow', userAudioBlobKey: null }],
   },
 });
 
@@ -37,27 +33,27 @@ function stateActions(state: ClapState) {
 export function useClapReducer() {
   const [state, setState] = useImmerRecoilState(clapAtom);
 
-  const clapChangeHandler = async (change) => {
+  const clapChangeHandler = (change) => {
     const doc = change.doc;
-    await clapped.applyEvent(doc, (ev) => {
+    clapped.applyEvent(doc, (ev) => {
       setState((x) => {
         x.claps.push(ev.data);
       });
     });
 
-    await clapperCustomAudioRemoved.applyEvent(doc, async (ev) => {
+    clapperCustomAudioRemoved.applyEvent(doc, (ev) => {
       setState((draft) => {
         stateActions(draft).removeAudio(ev.data.clapperId);
       });
     });
 
-    await clapperAudioUpdated.applyEvent(doc, async (x) => {
+    clapperAudioUpdated.applyEvent(doc, (x) => {
       const data = x.data;
       setState((state) => {
         stateActions(state).setAudio(data.clapperId, data.key);
       });
     });
-    logger.debug("after chang handler");
+    logger.debug('after chang handler');
   };
   return clapChangeHandler;
 }
@@ -65,7 +61,7 @@ export function useClapReducer() {
 export default clapAtom;
 
 export const clappersSelector = selector({
-  key: "clappersSelector",
+  key: 'clappersSelector',
   get: ({ get }) => {
     return get(clapAtom).clappers;
   },
