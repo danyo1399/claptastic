@@ -1,4 +1,4 @@
-export default function createLogger(prefix) {
+export default function getLogger(prefix) {
   const version = WEBPACK_VERSION;
   function log(msg, ...args) {
     console.log(`[${prefix} ${version}] ${msg}`, ...args);
@@ -19,4 +19,4 @@ export default function createLogger(prefix) {
   return { log, error, warn, debug };
 }
 
-export const { log, error, warn, debug } = createLogger("app");
+export const { log, error, warn, debug } = getLogger("app");

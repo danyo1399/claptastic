@@ -25,7 +25,7 @@ module.exports = {
 
     tailwind: { import: "./src/tailwind.js", filename: "[name].[hash].js" },
   },
-  devtool: devMode ? "inline-source-map" : undefined,
+  devtool: devMode ? "source-map" : "source-map",
   target: "web",
   devServer: {
     serveIndex: true,

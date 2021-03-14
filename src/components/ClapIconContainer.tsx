@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ContainerColor } from "../claps/clap.models";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -44,15 +45,29 @@ const Wrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at bottom center, #ffc837 15px, #ff8008);
+    background: radial-gradient(
+      circle at bottom center,
+      ${(props) => props.color1} 15px,
+      ${(props) => props.color2}
+    );
     box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
 `;
 
-export function ClapIconContainer({ onClick, children }: any) {
+export const containerColors: ContainerColor[] = [
+  { id: "yellow", color1: "#ffc837", color2: "#ff8008" },
+  { id: "blue", color1: "#37afff", color2: "#0863ff" },
+  { id: "green", color1: "#84ff37", color2: "#09a045" },
+  { id: "red", color1: "#fc7b7b", color2: "#e70000" },
+];
+
+export function ClapIconContainer({ onClick, children, colorId }: any) {
+  const color =
+    containerColors.find((x) => x.id === colorId) || containerColors[0];
+
   const type = onClick ? "button" : "div";
   return (
-    <Wrapper>
+    <Wrapper color1={color.color1} color2={color.color2}>
       <div className="button-wrapper">
         <ButtonOrDiv type={type} className="button-icon" onClick={onClick}>
           <div className="svg-wrapper">{children}</div>

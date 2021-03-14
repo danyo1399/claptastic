@@ -5,7 +5,7 @@ const version = WEBPACK_VERSION;
 
 const appkey = "claptastic";
 
-import logger from "./logger";
+import logger from "./utils/logger";
 import { precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { CacheFirst } from "workbox-strategies";

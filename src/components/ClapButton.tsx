@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import localForage from "localforage";
-// @ts-ignore
-import audioFileUrl from "../media/audio.mp3";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -33,49 +30,34 @@ const Wrapper = styled.div`
   } ;
 `;
 
-const audio = new Audio();
-
-import logger from "../logger";
+import getLogger from "../utils/logger";
 import ClapSvg from "./ClapSvg";
 
 import { clapped } from "../claps/clap.events";
 import { ClapIconContainer } from "./ClapIconContainer";
-const { error } = logger("clapButton");
+import { useRecoilValue } from "recoil";
+import clapAtom, { clappersSelector } from "../claps/clap.state";
+import { defaultAudioUrl } from "../claps/audio";
+const { error } = getLogger("clapButton");
 const clapAudioStorageKeyItem = "mp3";
 
-async function loadMp3() {
-  // Noticed some odd behavior in android where if offline for certain amount of time looks like audio is
-  // removed from cache?
-  // store in indexdb just to be safe
-  // If we have previous saved version in db, we may still live
-  try {
-    const response = await fetch(audioFileUrl);
-    if (!response.ok) {
-      throw response;
-    }
-
-    const blob = await response.blob();
-    await localForage.setItem(clapAudioStorageKeyItem, blob);
-  } catch (e) {
-    error("Failed to load audio", e);
-  }
-
-  return localForage.getItem(clapAudioStorageKeyItem);
-}
-
-(async () => {
-  const blob = await loadMp3();
-  audio.src = URL.createObjectURL(blob);
-})();
-
 export default function ClapButton() {
-  const [playing, setPlaying] = useState(null);
-  const intervalRef = useRef();
+  const [playing, setPlaying] = useState<boolean>(false);
+  const clappers = useRecoilValue(clappersSelector);
+  const intervalRef = useRef<NodeJS.Timeout>();
+  const audioRef = useRef<HTMLAudioElement>();
 
   const svgRef = useRef(null);
 
   async function play() {
-    return audio.play();
+    if (!playing) {
+      audioRef.current.src = clappers[0].audioUrl || (await defaultAudioUrl);
+      await audioRef.current.play();
+    } else {
+      audioRef.current.load();
+      stopAnim();
+      setPlaying(false);
+    }
   }
 
   // TODO: Replace this with a css animation
@@ -106,22 +88,24 @@ export default function ClapButton() {
   }
 
   useEffect(() => {
-    const stop = (_) => {
+    const audio = new Audio();
+    audioRef.current = audio;
+    const onStop = (_) => {
       stopAnim();
-      setPlaying(null);
+      setPlaying(false);
     };
-    const start = async (_) => {
+    const onStart = async (_) => {
       startAnim();
       setPlaying(true);
-      clapped.addEvent({});
+      clapped.raiseEvent({});
     };
 
-    audio.addEventListener("ended", stop);
-    audio.addEventListener("play", start);
+    audio.addEventListener("ended", onStop);
+    audio.addEventListener("play", onStart);
 
     return () => {
-      audio.removeEventListener("ended", stop);
-      audio.removeEventListener("play", start);
+      audio.removeEventListener("ended", onStop);
+      audio.removeEventListener("play", onStart);
     };
   }, []);
 
@@ -143,7 +127,8 @@ export default function ClapButton() {
     async function handleVisibilityChange() {
       if (document[hidden]) {
         stopAnim();
-        audio.load();
+        audioRef.current.load();
+        setPlaying(false);
       }
     }
 

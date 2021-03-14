@@ -8,7 +8,7 @@ const immutableUrls = [/tailwind/i];
 
 const cacheName = `${appkey}-store-${version}`;
 
-import logger from "./logger";
+import logger from "./utils/logger";
 const { error, debug, log, warn } = logger("sw");
 
 log("loading service worker");

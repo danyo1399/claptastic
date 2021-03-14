@@ -16,7 +16,7 @@ export function getEventChanges(
   options: PouchDB.Core.ChangesOptions,
   changeFn: (
     change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>
-  ) => void
+  ) => Promise<void>
 ) {
   const x = eventsDb
     .changes({ ...options, include_docs: true })
@@ -34,13 +34,22 @@ export function createEventFn<T>(type: string) {
     };
   }
 
-  function isType(doc: EventModel<T>) {
-    return doc.type === type;
+  function isType(event: EventModel<T>) {
+    return event.type === type;
   }
 
-  function _addEvent(data: T) {
+  function _raiseEvent(data: T) {
     return addEvent(create(data));
   }
 
-  return { create, isType, addEvent: _addEvent };
+  async function applyEvent(
+    event: EventModel<T>,
+    fn: (e: EventModel<T>) => void
+  ): Promise<void> {
+    if (isType(event)) {
+      await fn(event);
+    }
+  }
+
+  return { create, isType, raiseEvent: _raiseEvent, applyEvent };
 }

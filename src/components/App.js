@@ -4,10 +4,10 @@ import ClapButton from "./ClapButton";
 import StartDialog from "./StartDialog";
 import installPromptState from "../state/installPromptState";
 import { useSetRecoilState } from "recoil";
-import { log } from "../logger";
+import { log } from "../utils/logger";
 import SideNav from "./SideNav";
-import { useClap } from "../claps/clap.hooks";
 import { EventHandlerProvider } from "../events/event.provider";
+import { useClapReducer } from "../claps/clap.state";
 export default function App() {
   const setInstallState = useSetRecoilState(installPromptState);
 
@@ -23,7 +23,7 @@ export default function App() {
     });
   }, []);
 
-  const { clapChangeHandler } = useClap();
+  const clapChangeHandler = useClapReducer();
   return (
     <>
       <EventHandlerProvider handlers={[clapChangeHandler]} />

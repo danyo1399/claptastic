@@ -1,6 +1,9 @@
 import { ChangeHandler, getEventChanges } from "./events.db";
 import React, { useEffect } from "react";
+import { isProd } from "../utils/environment";
+import getLogger from "../utils/logger";
 
+const logger = getLogger("events");
 export function EventHandlerProvider({
   handlers,
 }: {
@@ -8,11 +11,17 @@ export function EventHandlerProvider({
 }) {
   useEffect(() => {
     async function load() {
-      getEventChanges({ live: true }, (change) => {
-        (handlers || []).forEach((handler) => {
-          handler(change);
-        });
-      });
+      await getEventChanges(
+        { live: true, return_docs: false },
+        async (change) => {
+          for (let handler of handlers) {
+            if (!isProd()) {
+              logger.debug("event:" + change.doc.type, change);
+            }
+            await handler(change);
+          }
+        }
+      );
     }
     load();
   }, []);

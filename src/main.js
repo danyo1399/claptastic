@@ -1,10 +1,22 @@
 "use strict";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
+Sentry.init({
+  dsn:
+    "https://698a6ff842d340e6b7b78f0eb4873ce5@o551318.ingest.sentry.io/5674666",
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 import "./styles.css";
 
 import { RecoilRoot } from "recoil";
 
-import { log } from "./logger";
+import { log } from "./utils/logger";
 import React from "react";
 import { render } from "react-dom";
 import App from "./components/App";

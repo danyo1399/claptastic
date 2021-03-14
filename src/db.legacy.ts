@@ -9,7 +9,7 @@ const oldDb = new PouchDB("my_database", { skip_setup: true });
     await oldDb.info();
     const docs = await oldDb.allDocs({ include_docs: true });
     docs.rows.forEach((x) => {
-      clapped.addEvent({});
+      clapped.raiseEvent({});
     });
     oldDb.destroy();
   } catch (err) {

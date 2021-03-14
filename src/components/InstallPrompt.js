@@ -3,7 +3,7 @@ import styled, { css, keyframes } from "styled-components";
 import { useRecoilState } from "recoil";
 import installPromptState from "../state/installPromptState";
 
-import { log } from "../logger";
+import { log } from "../utils/logger";
 
 const installKeyFrames = keyframes`
   from {
