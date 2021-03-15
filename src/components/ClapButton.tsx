@@ -81,17 +81,19 @@ export default function ClapButton() {
                     'Failed to call play audio. Resetting and retrying',
                     [audioRef.current.src, err],
                 )
-                await resetAudio()
-                try {
-                    await audioRef.current.play()
-                } catch (err) {
-                    logger.warn(
-                        'failed a second time. Trying to reload blob and play again',
-                        [err, audioRef.current.src],
-                    )
-                    await reloadAudio()
-                    await audioRef.current.play()
-                }
+                audioRef.current = new Audio(audioRef.current.src)
+                await audioRef.current.play()
+                // await resetAudio()
+                // try {
+                //     await audioRef.current.play()
+                // } catch (err) {
+                //     logger.warn(
+                //         'failed a second time. Trying to reload blob and play again',
+                //         [err, audioRef.current.src],
+                //     )
+                //     await reloadAudio()
+                //     await audioRef.current.play()
+                // }
             }
         } else {
             stopPlayingAndReload()

@@ -14,7 +14,7 @@ if (!!process.env.SENTRY) {
             'https://698a6ff842d340e6b7b78f0eb4873ce5@o551318.ingest.sentry.io/5674666',
         integrations: [
             new Integrations.BrowserTracing(),
-            new CaptureConsole({ levels: ['error', 'warn'] }),
+            new CaptureConsole({ levels: ['error'] }),
         ],
 
         // Set tracesSampleRate to 1.0 to capture 100%
