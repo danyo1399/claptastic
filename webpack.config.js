@@ -17,7 +17,7 @@ const buildNo =
     date.getMinutes().toString().padStart(2, '0') +
     date.getSeconds().toString().padStart(2, '0')
 const versionInfo = require('./package.json')
-const sentry = process.env.sentry || ''
+const SENTRY = process.env.SENTRY || ''
 
 const version = `${versionInfo.version}-${buildNo}`
 module.exports = {
@@ -85,7 +85,11 @@ module.exports = {
             {
                 test: /\.css$/i,
                 include: path.resolve(__dirname, 'src'),
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader',
+                ],
             },
         ],
     },
@@ -98,7 +102,7 @@ module.exports = {
 
         new webpack.DefinePlugin({
             'process.env.version': JSON.stringify(version),
-            'process.env.sentry': JSON.stringify(sentry),
+            'process.env.SENTRY': JSON.stringify(SENTRY),
         }),
         new MiniCssExtractPlugin({
             filename: devMode ? '[name].css' : '[name].[contenthash].css',
@@ -119,7 +123,8 @@ module.exports = {
         new WebpackPwaManifest({
             name: 'Claptastic',
             short_name: 'Claptastic',
-            description: 'You ever tried clapping while holding your phone? Well now you can',
+            description:
+                'You ever tried clapping while holding your phone? Well now you can',
             background_color: '#323030',
             theme_color: '#323030',
             crossorigin: 'anonymous', //can be null, use-credentials or anonymous
