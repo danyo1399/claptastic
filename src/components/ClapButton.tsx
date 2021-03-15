@@ -57,6 +57,7 @@ export default function ClapButton() {
     async function play() {
         if (!playing) {
             try {
+                logger.log('Playing audio')
                 await audioRef.current.play()
             } catch (err) {
                 logger.error('Failed to call play', err)
@@ -82,6 +83,10 @@ export default function ClapButton() {
             if (existingUrl && existingUrl !== defaultAudioUrl) {
                 URL.revokeObjectURL(existingUrl)
                 audioRef.current.src = defaultAudioUrl
+                logger.log(
+                    'removing custom audio file, and deleting blob doc',
+                    [existingUrl, currentAudioBlobRef.current],
+                )
                 await blobs.deleteItem(currentAudioBlobRef.current)
             }
 
@@ -89,11 +94,21 @@ export default function ClapButton() {
                 const blob = await blobs.getItem(clapper.userAudioBlobKey)
                 if (blob) {
                     audioRef.current.src = URL.createObjectURL(blob)
+                    logger.log(
+                        'setting audio to custom blob file',
+                        audioRef.current.src,
+                    )
+                } else {
+                    logger.log(
+                        'No blob file found for docid',
+                        clapper.userAudioBlobKey,
+                    )
                 }
             }
 
             if (!audioRef.current.src) {
                 currentAudioBlobRef.current = null
+                logger.log('Setting audio to default file', defaultAudioUrl)
                 audioRef.current.src = defaultAudioUrl
             }
             currentAudioBlobRef.current = clapper.userAudioBlobKey
@@ -139,7 +154,7 @@ export default function ClapButton() {
         audioRef.current = audio
         ;(async () => {
             audio.src = await defaultAudioUrlPromise
-            console.log('lol default', audio.src)
+            logger.log('setting default audio')
         })()
 
         const onStop = () => {
@@ -183,8 +198,16 @@ export default function ClapButton() {
             }
         }
 
-        document.addEventListener(visibilityChange, handleVisibilityChange, false)
-        return () => document.removeEventListener(visibilityChange, handleVisibilityChange)
+        document.addEventListener(
+            visibilityChange,
+            handleVisibilityChange,
+            false,
+        )
+        return () =>
+            document.removeEventListener(
+                visibilityChange,
+                handleVisibilityChange,
+            )
     }, [])
     return (
         <Wrapper>

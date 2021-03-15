@@ -1,26 +1,61 @@
-import { isProd } from "./environment";
+import { isProd } from './environment'
+import Sentry, { Severity } from '@sentry/react'
 
-export default function getLogger(prefix) {
-  const version = process.env.version;
-  function log(msg, ...args) {
-    console.log(`[${prefix} ${version}] ${msg}`, ...args);
-  }
+export type NameFn = () => string
 
-  function error(msg, ...args) {
-    console.error(`[${prefix} ${version}] ${msg}`, ...args);
-  }
-
-  function warn(msg, ...args) {
-    console.warn(`[${prefix} ${version}] ${msg}`, ...args);
-  }
-
-  function debug(msg, ...args) {
-    if (!isProd()) {
-      console.debug(`[${prefix} ${version}] ${msg}`, ...args);
+// Info and above log to sentry breadcrumbs in prod
+// warn and above log to console in prod
+// In dev all sentry logging disabled, and all all console logging enabled
+export default function getLogger(name: string | NameFn) {
+    const version = process.env.version
+    function getName() {
+        if (typeof name === 'function') return name()
+        return name
     }
-  }
+    function log(msg, ...args) {
+        if (isProd()) {
+            Sentry.addBreadcrumb({
+                category: getName(),
+                level: Severity.Info,
+                message: msg,
+                data: { args },
+            })
+        } else {
+            console.log(`[${getName()} ${version}] ${msg}`, ...args)
+        }
+    }
 
-  return { log, error, warn, debug };
+    function error(msg, ...args) {
+        if (isProd()) {
+            Sentry.addBreadcrumb({
+                category: getName(),
+                level: Severity.Error,
+                message: msg,
+                data: { args },
+            })
+        }
+        console.error(`[${getName()} ${version}] ${msg}`, ...args)
+    }
+
+    function warn(msg, ...args) {
+        if (isProd()) {
+            Sentry.addBreadcrumb({
+                category: getName(),
+                level: Severity.Warning,
+                message: msg,
+                data: { args },
+            })
+        }
+        console.warn(`[${getName()} ${version}] ${msg}`, ...args)
+    }
+
+    function debug(msg, ...args) {
+        if (!isProd()) {
+            console.debug(`[${getName()} ${version}] ${msg}`, ...args)
+        }
+    }
+
+    return { log, error, warn, debug }
 }
 
-export const { log, error, warn, debug } = getLogger("app");
+export const { log, error, warn, debug } = getLogger('app')
