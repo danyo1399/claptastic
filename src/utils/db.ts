@@ -40,10 +40,10 @@ export function blobStorage(db: PouchDB.Database) {
         }
     }
 
-    async function getItem(key: string) {
+    async function getItem(key: string): Promise<Blob> {
         const id = genId(key)
         try {
-            return await db.getAttachment(id, id)
+            return (await db.getAttachment(id, id)) as Blob
         } catch (err) {
             if (err.status === 404) {
                 return null
