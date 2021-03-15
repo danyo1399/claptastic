@@ -97,6 +97,13 @@ export default function ClapButton() {
                 audioRef.current.src = defaultAudioUrl
             }
             currentAudioBlobRef.current = clapper.userAudioBlobKey
+            return async () => {
+                const existingUrl = audioRef.current.src
+                if (existingUrl && existingUrl !== defaultAudioUrl) {
+                    URL.revokeObjectURL(existingUrl)
+                    audioRef.current.src = defaultAudioUrl
+                }
+            }
         })()
     }, [clapper?.userAudioBlobKey, audioRef.current])
 

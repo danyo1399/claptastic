@@ -36,10 +36,3 @@ body {
         display:none !important;
     }
 }
-
-
-.dialog {
-    background-color: white;
-    color: black;
-    font-weight: 300;
-}
