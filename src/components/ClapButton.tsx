@@ -94,10 +94,10 @@ export default function ClapButton() {
                 const blob = await blobs.getItem(clapper.userAudioBlobKey)
                 if (blob) {
                     audioRef.current.src = URL.createObjectURL(blob)
-                    logger.log(
-                        'setting audio to custom blob file',
+                    logger.log('setting audio to custom blob file', [
                         audioRef.current.src,
-                    )
+                        clapper.userAudioBlobKey,
+                    ])
                 } else {
                     logger.log(
                         'No blob file found for docid',
