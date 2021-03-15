@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil'
 import { clappersSelector } from '../claps/clap.state'
 import { defaultAudioUrlPromise } from '../claps/audio'
 import { blobs } from '../claps/clap.db'
-import { queueProcessor } from '../utils/queue-processor'
+import { createSerialisedExecutor } from '../utils/create-serialised-executor'
 
 const logger = getLogger('clap-button')
 const Wrapper = styled.div`
@@ -41,13 +41,14 @@ const Wrapper = styled.div`
     } ;
 `
 
-const queue = queueProcessor()
+const serialisedExecutor = createSerialisedExecutor()
 export default function ClapButton() {
     const [playing, setPlaying] = useState<boolean>(false)
     const clapper = useRecoilValue(clappersSelector)[0]
     const intervalRef = useRef<NodeJS.Timeout>()
     const audioRef = useRef<HTMLAudioElement>()
-    const currentAudioBlobRef = useRef<string>()
+    const audioUrlRef = useRef<string>()
+    const currentAudioBlobKeyRef = useRef<string>()
 
     const svgRef = useRef(null)
 
@@ -56,13 +57,24 @@ export default function ClapButton() {
         stopAnim()
         setPlaying(false)
     }
+
+    function resetAudio() {
+        audioRef.current.src = audioUrlRef.current
+        audioRef.current.load()
+    }
     async function play() {
         if (!playing) {
             try {
                 logger.log('Playing audio')
                 await audioRef.current.play()
             } catch (err) {
-                logger.error('Failed to call play', err)
+                // Something funny with ios unloading audio at random intervals
+                logger.warn(
+                    'Failed to call play audio. Resetting and retrying',
+                    [audioRef.current.src, err],
+                )
+                resetAudio()
+                await audioRef.current.play()
             }
         } else {
             stopPlaying()
@@ -74,7 +86,7 @@ export default function ClapButton() {
             if (!audioRef.current) {
                 return
             }
-            if (currentAudioBlobRef.current == clapper.userAudioBlobKey) {
+            if (currentAudioBlobKeyRef.current == clapper.userAudioBlobKey) {
                 return
             }
 
@@ -85,11 +97,12 @@ export default function ClapButton() {
             if (existingUrl && existingUrl !== defaultAudioUrl) {
                 URL.revokeObjectURL(existingUrl)
                 audioRef.current.src = defaultAudioUrl
+
                 logger.log(
                     'removing custom audio file, and deleting blob doc',
-                    [existingUrl, currentAudioBlobRef.current],
+                    [existingUrl, currentAudioBlobKeyRef.current],
                 )
-                await blobs.deleteItem(currentAudioBlobRef.current)
+                await blobs.deleteItem(currentAudioBlobKeyRef.current)
             }
 
             if (clapper.userAudioBlobKey) {
@@ -109,20 +122,14 @@ export default function ClapButton() {
             }
 
             if (!audioRef.current.src) {
-                currentAudioBlobRef.current = null
+                currentAudioBlobKeyRef.current = null
                 logger.log('Setting audio to default file', defaultAudioUrl)
                 audioRef.current.src = defaultAudioUrl
             }
-            currentAudioBlobRef.current = clapper.userAudioBlobKey
-            return async () => {
-                const existingUrl = audioRef.current.src
-                if (existingUrl && existingUrl !== defaultAudioUrl) {
-                    URL.revokeObjectURL(existingUrl)
-                    audioRef.current.src = defaultAudioUrl
-                }
-            }
+            currentAudioBlobKeyRef.current = clapper.userAudioBlobKey
+            audioUrlRef.current = audioRef.current.src
         }
-        queue.add(fn)
+        serialisedExecutor.execute(fn)
     }, [clapper?.userAudioBlobKey, audioRef.current])
 
     // TODO: Replace this with a css animation
@@ -196,6 +203,7 @@ export default function ClapButton() {
         async function handleVisibilityChange() {
             if (document[hidden]) {
                 stopAnim()
+                logger.log('calling audio.load due to visibility change')
                 audioRef.current.load()
                 setPlaying(false)
             }

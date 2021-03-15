@@ -1,10 +1,10 @@
-import { queueProcessor } from './queue-processor'
+import { createSerialisedExecutor } from './create-serialised-executor'
 
 describe('queue-processor tests', function () {
     it('processes single item', async function () {
         const fn = jest.fn()
-        const { add } = queueProcessor()
-        add(fn)
+        const { execute } = createSerialisedExecutor()
+        execute(fn)
 
         await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -13,9 +13,9 @@ describe('queue-processor tests', function () {
 
     it('processes multiple items', async function () {
         const fn = jest.fn()
-        const { add } = queueProcessor()
-        add(fn)
-        add(fn)
+        const { execute } = createSerialisedExecutor()
+        execute(fn)
+        execute(fn)
 
         await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -24,10 +24,10 @@ describe('queue-processor tests', function () {
 
     it('processes multiple items with thread sleep between', async function () {
         const fn = jest.fn()
-        const { add } = queueProcessor()
-        add(fn)
+        const { execute } = createSerialisedExecutor()
+        execute(fn)
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        add(fn)
+        execute(fn)
 
         await new Promise((resolve) => setTimeout(resolve, 1000))
 

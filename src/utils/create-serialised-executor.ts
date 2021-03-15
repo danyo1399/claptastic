@@ -1,7 +1,7 @@
 import getLogger from './logger'
 
 // used to serialise execution of async code
-export function queueProcessor() {
+export function createSerialisedExecutor() {
     const queue = {}
     let addIndex = 0
     let processIndex = 0
@@ -37,5 +37,5 @@ export function queueProcessor() {
         processing = false
     }
 
-    return { add }
+    return { execute: add }
 }
