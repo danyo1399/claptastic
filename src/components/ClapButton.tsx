@@ -9,6 +9,7 @@ import { useRecoilValue } from 'recoil'
 import { clappersSelector } from '../claps/clap.state'
 import { defaultAudioUrlPromise } from '../claps/audio'
 import { blobs } from '../claps/clap.db'
+import { queueProcessor } from '../utils/queue-processor'
 
 const logger = getLogger('clap-button')
 const Wrapper = styled.div`
@@ -40,6 +41,7 @@ const Wrapper = styled.div`
     } ;
 `
 
+const queue = queueProcessor()
 export default function ClapButton() {
     const [playing, setPlaying] = useState<boolean>(false)
     const clapper = useRecoilValue(clappersSelector)[0]
@@ -68,7 +70,7 @@ export default function ClapButton() {
     }
 
     useEffect(() => {
-        ;(async () => {
+        const fn = async () => {
             if (!audioRef.current) {
                 return
             }
@@ -119,7 +121,8 @@ export default function ClapButton() {
                     audioRef.current.src = defaultAudioUrl
                 }
             }
-        })()
+        }
+        queue.add(fn)
     }, [clapper?.userAudioBlobKey, audioRef.current])
 
     // TODO: Replace this with a css animation

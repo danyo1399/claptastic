@@ -1,6 +1,10 @@
 import { atom, selector } from 'recoil'
 import { useImmerRecoilState } from '../state/immerRecoil'
-import { clapped, clapperAudioUpdated, clapperCustomAudioRemoved } from './clap.events'
+import {
+    clapped,
+    clapperAudioUpdated,
+    clapperCustomAudioRemoved,
+} from './clap.events'
 import { ClapState } from './clap.models'
 import getLogger from '../utils/logger'
 
@@ -52,7 +56,6 @@ export function useClapReducer() {
                 stateActions(state).setAudio(data.clapperId, data.key)
             })
         })
-        logger.debug('after chang handler')
     }
 }
 

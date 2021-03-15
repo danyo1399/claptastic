@@ -1,5 +1,5 @@
 import { isProd } from './environment'
-import Sentry, { Severity } from '@sentry/react'
+import { addBreadcrumb, Severity } from '@sentry/react'
 
 export type NameFn = () => string
 
@@ -14,7 +14,7 @@ export default function getLogger(name: string | NameFn) {
     }
     function log(msg, ...args) {
         if (isProd()) {
-            Sentry.addBreadcrumb({
+            addBreadcrumb({
                 category: getName(),
                 level: Severity.Info,
                 message: msg,
@@ -27,7 +27,7 @@ export default function getLogger(name: string | NameFn) {
 
     function error(msg, ...args) {
         if (isProd()) {
-            Sentry.addBreadcrumb({
+            addBreadcrumb({
                 category: getName(),
                 level: Severity.Error,
                 message: msg,
@@ -39,7 +39,7 @@ export default function getLogger(name: string | NameFn) {
 
     function warn(msg, ...args) {
         if (isProd()) {
-            Sentry.addBreadcrumb({
+            addBreadcrumb({
                 category: getName(),
                 level: Severity.Warning,
                 message: msg,
