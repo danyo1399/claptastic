@@ -7,7 +7,7 @@ import { render } from 'react-dom'
 import { CaptureConsole } from '@sentry/integrations'
 
 const logger = getLogger('main')
-if (process.env.SENTRY) {
+if (!!process.env.SENTRY) {
     logger.log('Initialising Sentry')
     Sentry.init({
         dsn:
