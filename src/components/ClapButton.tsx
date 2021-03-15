@@ -58,9 +58,16 @@ export default function ClapButton() {
         setPlaying(false)
     }
 
-    function resetAudio() {
+    async function resetAudio() {
         audioRef.current.src = audioUrlRef.current
         audioRef.current.load()
+    }
+
+    async function reloadAudio() {
+        const blob = await blobs.getItem(currentAudioBlobKeyRef.current)
+        const url = URL.createObjectURL(blob)
+        URL.revokeObjectURL(audioRef.current.src)
+        audioRef.current.src = url
     }
     async function play() {
         if (!playing) {
@@ -73,8 +80,17 @@ export default function ClapButton() {
                     'Failed to call play audio. Resetting and retrying',
                     [audioRef.current.src, err],
                 )
-                resetAudio()
-                await audioRef.current.play()
+                await resetAudio()
+                try {
+                    await audioRef.current.play()
+                } catch (err) {
+                    logger.warn(
+                        'failed a second time. Trying to reload blob and play again',
+                        [err, audioRef.current.src],
+                    )
+                    await reloadAudio()
+                    await audioRef.current.play()
+                }
             }
         } else {
             stopPlaying()
