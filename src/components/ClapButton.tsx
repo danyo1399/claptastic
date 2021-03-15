@@ -52,7 +52,7 @@ export default function ClapButton() {
 
     const svgRef = useRef(null)
 
-    function stopPlaying() {
+    function stopPlayingAndReload() {
         audioRef.current.load()
         stopAnim()
         setPlaying(false)
@@ -70,6 +70,7 @@ export default function ClapButton() {
         audioRef.current.src = url
     }
     async function play() {
+        // TODO: trying to figure out bug ios playing audio
         if (!playing) {
             try {
                 logger.log('Playing audio')
@@ -93,7 +94,7 @@ export default function ClapButton() {
                 }
             }
         } else {
-            stopPlaying()
+            stopPlayingAndReload()
         }
     }
 
@@ -108,7 +109,6 @@ export default function ClapButton() {
 
             const defaultAudioUrl = await defaultAudioUrlPromise
 
-            stopPlaying()
             const existingUrl = audioRef.current.src
             if (existingUrl && existingUrl !== defaultAudioUrl) {
                 URL.revokeObjectURL(existingUrl)
@@ -144,6 +144,7 @@ export default function ClapButton() {
             }
             currentAudioBlobKeyRef.current = clapper.userAudioBlobKey
             audioUrlRef.current = audioRef.current.src
+            stopPlayingAndReload()
         }
         serialisedExecutor.execute(fn)
     }, [clapper?.userAudioBlobKey, audioRef.current])
@@ -184,7 +185,7 @@ export default function ClapButton() {
         })()
 
         const onStop = () => {
-            stopPlaying()
+            stopPlayingAndReload()
         }
         const onStart = async () => {
             startAnim()
