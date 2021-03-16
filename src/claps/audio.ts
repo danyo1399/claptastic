@@ -100,7 +100,9 @@ export async function playAudio(
         return await audioPlayer.play()
     } catch (err) {
         logger.warn('An error occurred playing audio. trying to reset', err)
-        await reloadAudio(clapperId)
+        const newUrl = await reloadAudio(clapperId)
+        audioPlayer.src = newUrl
+        audioPlayer.load()
         return await audioPlayer.play()
     }
 }
