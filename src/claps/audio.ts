@@ -2,8 +2,6 @@
 import audioFileUrl from '../media/audio.mp3'
 import { blobs } from './clap.db'
 import getLogger from '../utils/logger'
-import { createQueueProcessor } from '../utils/createQueueProcessor'
-import { createObjectUrl } from '../utils/objectUrl'
 const numberOfAudioTracks = 3
 const logger = getLogger('audio')
 
@@ -35,10 +33,6 @@ async function getDefaultAudio() {
 export const defaultAudioUrlPromise = getDefaultAudio()
 
 export let defaultAudioUrl: string
-
-const audio = new Audio()
-
-const processor = createQueueProcessor()
 
 const audioCache: string[] = []
 
