@@ -1,5 +1,4 @@
 import PouchDB from 'pouchdb-browser'
-import { uniqueId } from '../utils/id.utils'
 import { EventModel } from './events'
 
 const eventsDb = new PouchDB<EventModel<unknown>>('events')

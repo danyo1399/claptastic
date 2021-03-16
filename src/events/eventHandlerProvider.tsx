@@ -28,6 +28,8 @@ export function EventHandlerProvider({
                 handleState.last_seq = change.seq as number
             }
 
+            // Hydrate existing changes when starting app.
+            // We dont want to trigger react render for each change
             await getEventChanges(
                 { live: false, return_docs: false },
                 (change) => {
@@ -36,6 +38,8 @@ export function EventHandlerProvider({
             )
             setState(() => initialState)
             logger.log('last seq', initialState.last_seq)
+
+            // once we caught up start listening and processing events as they occur
             await getEventChanges(
                 {
                     live: true,
