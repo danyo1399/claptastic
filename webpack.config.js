@@ -9,17 +9,18 @@ const devMode = process.env.NODE_ENV !== 'production'
 const httpOnly = !!process.env.HTTP_ONLY
 const fs = require('fs')
 const date = new Date()
-const buildNo =
-    date.getFullYear() +
-    (date.getMonth() + 1).toString().padStart(2, '0') +
-    date.getDate().toString().padStart(2, '0') +
-    date.getHours().toString().padStart(2, '0') +
-    date.getMinutes().toString().padStart(2, '0') +
-    date.getSeconds().toString().padStart(2, '0')
+// const buildNo =
+//     date.getFullYear() +
+//     (date.getMonth() + 1).toString().padStart(2, '0') +
+//     date.getDate().toString().padStart(2, '0') +
+//     date.getHours().toString().padStart(2, '0') +
+//     date.getMinutes().toString().padStart(2, '0') +
+//     date.getSeconds().toString().padStart(2, '0')
 const versionInfo = require('./package.json')
 const SENTRY = process.env.SENTRY || ''
 
-const version = `${versionInfo.version}-${buildNo}`
+// const version = `${versionInfo.version}-${buildNo}`
+const version = `${versionInfo.version}`
 module.exports = {
     entry: {
         main: { import: './src/main.tsx', filename: '[name].[hash].js' },
