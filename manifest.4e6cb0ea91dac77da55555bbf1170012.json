@@ -82,7 +82,7 @@
   "short_name": "Claptastic",
   "orientation": "portrait",
   "display": "fullscreen",
-  "start_url": "index.html",
+  "start_url": "index.html?src=manifest",
   "description": "You ever tried clapping while holding your phone? Well now you can",
   "background_color": "#323030",
   "theme_color": "#323030",
