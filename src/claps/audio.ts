@@ -42,6 +42,23 @@ const processor = createQueueProcessor()
 
 const audioCache: string[] = []
 
+const audioEventsCache: {
+    [clapperId: number]: { onplay: any; onstop: any }
+} = {}
+
+const audioPlayerCache: {
+    [clapperId: number]: HTMLAudioElement
+} = {}
+
+export function setAudioEvents(clapperId: number, onplay, onstop) {
+    const existingEvents = audioEventsCache[clapperId]
+    if (existingEvents) {
+        // TODO
+        throw new Error('Yeah todo')
+    }
+    audioEventsCache[clapperId] = { onplay, onstop }
+}
+
 function createBlobKey(clapperId: number) {
     return `${clapperId}#audio`
 }
@@ -70,13 +87,33 @@ async function getAudio(clapperId: number) {
     return blobs.getItem(createBlobKey(clapperId))
 }
 
-export function playAudio(clapperId: number, audioPlayer: HTMLAudioElement) {
+export async function playAudio(
+    clapperId: number,
+    audioPlayer: HTMLAudioElement,
+) {
     const url = getAudioUrl(clapperId)
     if (audioPlayer.src !== url) {
         audioPlayer.src = url
         audioPlayer.load()
     }
-    return audioPlayer.play()
+    try {
+        return await audioPlayer.play()
+    } catch (err) {
+        logger.warn('An error occurred playing audio. trying to reset', err)
+        await reloadAudio(clapperId)
+        return await audioPlayer.play()
+    }
+}
+
+async function reloadAudio(clapperId: number): Promise<string> {
+    const blob = await getAudio(clapperId)
+    const newUrl = URL.createObjectURL(blob)
+    const existingUrl = audioCache[clapperId]
+    if (existingUrl) {
+        URL.revokeObjectURL(existingUrl)
+        audioCache[clapperId] = newUrl
+    }
+    return newUrl
 }
 
 async function loadAudio() {
