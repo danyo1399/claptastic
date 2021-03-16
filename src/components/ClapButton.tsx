@@ -2,14 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import getLogger from '../utils/logger'
 import ClapSvg from './ClapSvg'
-
 import { clapped } from '../claps/clap.events'
 import { ClapIconContainer } from './ClapIconContainer'
-import { useRecoilValue } from 'recoil'
-import { clappersSelector } from '../claps/clap.state'
-import { defaultAudioUrlPromise } from '../claps/audio'
-import { blobs } from '../claps/clap.db'
-import { createSerialisedExecutor } from '../utils/create-serialised-executor'
+import { playAudio } from '../claps/audio'
 
 const logger = getLogger('clap-button')
 const Wrapper = styled.div`
@@ -41,16 +36,17 @@ const Wrapper = styled.div`
     } ;
 `
 
-const serialisedExecutor = createSerialisedExecutor()
 export default function ClapButton() {
     const [playing, setPlaying] = useState<boolean>(false)
-    const clapper = useRecoilValue(clappersSelector)[0]
     const intervalRef = useRef<NodeJS.Timeout>()
     const audioRef = useRef<HTMLAudioElement>()
-    const audioUrlRef = useRef<string>()
-    const currentAudioBlobKeyRef = useRef<string>()
 
     const svgRef = useRef(null)
+
+    if (!audioRef.current) {
+        const audio = new Audio()
+        audioRef.current = audio
+    }
 
     function stopPlayingAndReload() {
         audioRef.current.load()
@@ -58,98 +54,19 @@ export default function ClapButton() {
         setPlaying(false)
     }
 
-    async function resetAudio() {
-        audioRef.current.src = audioUrlRef.current
-        audioRef.current.load()
-    }
-
-    async function reloadAudio() {
-        const blob = await blobs.getItem(currentAudioBlobKeyRef.current)
-        const url = URL.createObjectURL(blob)
-        URL.revokeObjectURL(audioRef.current.src)
-        audioRef.current.src = url
-    }
     async function play() {
         // TODO: trying to figure out bug ios playing audio
         if (!playing) {
             try {
                 logger.log('Playing audio')
-                await audioRef.current.play()
+                await playAudio(0, audioRef.current)
             } catch (err) {
-                // Something funny with ios unloading audio at random intervals
-                logger.warn(
-                    'Failed to call play audio. Resetting and retrying',
-                    [audioRef.current.src, err],
-                )
-                audioRef.current = new Audio(audioRef.current.src)
-                await audioRef.current.play()
-                // await resetAudio()
-                // try {
-                //     await audioRef.current.play()
-                // } catch (err) {
-                //     logger.warn(
-                //         'failed a second time. Trying to reload blob and play again',
-                //         [err, audioRef.current.src],
-                //     )
-                //     await reloadAudio()
-                //     await audioRef.current.play()
-                // }
+                logger.error('Error playing audio', err)
             }
         } else {
             stopPlayingAndReload()
         }
     }
-
-    useEffect(() => {
-        const fn = async () => {
-            if (!audioRef.current) {
-                return
-            }
-            if (currentAudioBlobKeyRef.current == clapper.userAudioBlobKey) {
-                return
-            }
-
-            const defaultAudioUrl = await defaultAudioUrlPromise
-
-            const existingUrl = audioRef.current.src
-            if (existingUrl && existingUrl !== defaultAudioUrl) {
-                URL.revokeObjectURL(existingUrl)
-                audioRef.current.src = defaultAudioUrl
-
-                logger.log(
-                    'removing custom audio file, and deleting blob doc',
-                    [existingUrl, currentAudioBlobKeyRef.current],
-                )
-                await blobs.deleteItem(currentAudioBlobKeyRef.current)
-            }
-
-            if (clapper.userAudioBlobKey) {
-                const blob = await blobs.getItem(clapper.userAudioBlobKey)
-                if (blob) {
-                    audioRef.current.src = URL.createObjectURL(blob)
-                    logger.log('setting audio to custom blob file', [
-                        audioRef.current.src,
-                        clapper.userAudioBlobKey,
-                    ])
-                } else {
-                    logger.log(
-                        'No blob file found for docid',
-                        clapper.userAudioBlobKey,
-                    )
-                }
-            }
-
-            if (!audioRef.current.src) {
-                currentAudioBlobKeyRef.current = null
-                logger.log('Setting audio to default file', defaultAudioUrl)
-                audioRef.current.src = defaultAudioUrl
-            }
-            currentAudioBlobKeyRef.current = clapper.userAudioBlobKey
-            audioUrlRef.current = audioRef.current.src
-            stopPlayingAndReload()
-        }
-        serialisedExecutor.execute(fn)
-    }, [clapper?.userAudioBlobKey, audioRef.current])
 
     // TODO: Replace this with a css animation
     function startAnim() {
@@ -179,15 +96,9 @@ export default function ClapButton() {
     }
 
     useEffect(() => {
-        const audio = new Audio()
-        audioRef.current = audio
-        ;(async () => {
-            audio.src = await defaultAudioUrlPromise
-            logger.log('setting default audio')
-        })()
-
         const onStop = () => {
-            stopPlayingAndReload()
+            stopAnim()
+            setPlaying(false)
         }
         const onStart = async () => {
             startAnim()
@@ -195,12 +106,12 @@ export default function ClapButton() {
             await clapped.raiseEvent({})
         }
 
-        audio.addEventListener('ended', onStop)
-        audio.addEventListener('play', onStart)
+        audioRef.current.addEventListener('ended', onStop)
+        audioRef.current.addEventListener('play', onStart)
 
         return () => {
-            audio.removeEventListener('ended', onStop)
-            audio.removeEventListener('play', onStart)
+            audioRef.current.removeEventListener('ended', onStop)
+            audioRef.current.removeEventListener('play', onStart)
         }
     }, [])
 
@@ -221,10 +132,8 @@ export default function ClapButton() {
         }
         async function handleVisibilityChange() {
             if (document[hidden]) {
-                stopAnim()
+                stopPlayingAndReload()
                 logger.log('calling audio.load due to visibility change')
-                audioRef.current.load()
-                setPlaying(false)
             }
         }
 

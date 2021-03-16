@@ -2,10 +2,12 @@
 import audioFileUrl from '../media/audio.mp3'
 import { blobs } from './clap.db'
 import getLogger from '../utils/logger'
-
+import { createQueueProcessor } from '../utils/createQueueProcessor'
+import { createObjectUrl } from '../utils/objectUrl'
+const numberOfAudioTracks = 3
 const logger = getLogger('audio')
 
-async function loadMp3() {
+async function loadDefaultAudio() {
     // Noticed some odd behavior in android where if offline for certain amount of time looks like audio is
     // removed from cache?
     // store in indexdb just to be safe
@@ -26,13 +28,73 @@ async function loadMp3() {
 }
 
 async function getDefaultAudio() {
-    const blob = await loadMp3()
+    const blob = await loadDefaultAudio()
     return URL.createObjectURL(blob)
 }
 
 export const defaultAudioUrlPromise = getDefaultAudio()
 
-export let defaultAudioUrl
-;(async () => {
+export let defaultAudioUrl: string
+
+const audio = new Audio()
+
+const processor = createQueueProcessor()
+
+const audioCache: string[] = []
+
+function createBlobKey(clapperId: number) {
+    return `${clapperId}#audio`
+}
+
+export function getAudioUrl(clapperId: number): string {
+    return audioCache[clapperId] || defaultAudioUrl
+}
+
+export async function setAudio(clapperId: number, file: Blob) {
+    await removeAudio(clapperId)
+    await blobs.setItem(createBlobKey(clapperId), file)
+    const url = URL.createObjectURL(file)
+    audioCache[clapperId] = url
+}
+
+export async function removeAudio(clapperId: number) {
+    await blobs.deleteItem(createBlobKey(clapperId))
+    const url = audioCache[clapperId]
+    if (url) {
+        URL.revokeObjectURL(url)
+        audioCache[clapperId] = null
+    }
+}
+
+async function getAudio(clapperId: number) {
+    return blobs.getItem(createBlobKey(clapperId))
+}
+
+export function playAudio(clapperId: number, audioPlayer: HTMLAudioElement) {
+    const url = getAudioUrl(clapperId)
+    if (audioPlayer.src !== url) {
+        audioPlayer.src = url
+        audioPlayer.load()
+    }
+    return audioPlayer.play()
+}
+
+async function loadAudio() {
     defaultAudioUrl = await defaultAudioUrlPromise
-})()
+    const promises = []
+    for (let i = 0; i < numberOfAudioTracks; i++) {
+        promises.push(getAudio(i))
+    }
+    const audioBlobs = await Promise.all(promises)
+    for (let i = 0; i < audioBlobs.length; i++) {
+        const blob = audioBlobs[i]
+        if (blob) {
+            const url = URL.createObjectURL(blob)
+            audioCache[i] = url
+        } else {
+            audioCache[i] = null
+        }
+    }
+}
+
+loadAudio()

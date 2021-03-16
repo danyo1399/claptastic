@@ -6,8 +6,9 @@ export interface ClapState extends EventState {
 }
 
 export interface ClapperModel {
-    userAudioBlobKey: string | undefined
     color: string
+    audioFilename?: string
+    audioType?: string
 }
 export interface ContainerColor {
     id: string

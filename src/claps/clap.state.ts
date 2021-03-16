@@ -14,7 +14,7 @@ const logger = getLogger('clap-state')
 export function defaultState(): ClapState {
     return {
         claps: [],
-        clappers: [{ color: 'yellow', userAudioBlobKey: null }],
+        clappers: [{ color: 'yellow' }],
         last_seq: 0,
     }
 }
@@ -24,16 +24,20 @@ const clapAtom = atom<ClapState>({
 })
 
 function stateActions(state: ClapState) {
-    function setAudio(id: number, key) {
+    function setAudio(id: number, filename: string, audioType: string) {
         const clapper = state.clappers[id]
         if (clapper) {
-            clapper.userAudioBlobKey = key
+            clapper.audioFilename = filename
+            clapper.audioType = audioType
         }
     }
 
     function removeAudio(id: number) {
         const clapper = state.clappers[id]
-        clapper.userAudioBlobKey = null
+        if (clapper) {
+            clapper.audioFilename = null
+            clapper.audioType = null
+        }
     }
     return { removeAudio, setAudio: setAudio }
 }
@@ -52,7 +56,7 @@ export const clapReducer: ChangeHandler = (
 
     clapperAudioUpdated.applyEvent(change, (x) => {
         const data = x.doc.data
-        stateActions(state).setAudio(data.clapperId, data.key)
+        stateActions(state).setAudio(data.clapperId, data.name, data.type)
     })
 }
 

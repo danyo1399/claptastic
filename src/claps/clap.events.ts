@@ -12,7 +12,6 @@ export interface ClapperAudioEventData {
     clapperId: number
     name: string
     type: string
-    key: string
 }
 export const clapperAudioUpdated = createEventFn<ClapperAudioEventData>(
     'clapperAudioUpdated',
