@@ -7,15 +7,20 @@ import {
 } from './clap.events'
 import { ClapState } from './clap.models'
 import getLogger from '../utils/logger'
+import { ChangeHandler, EventModel, EventState } from '../events'
 
 const logger = getLogger('clap-state')
 
-const clapAtom = atom<ClapState>({
-    key: 'clapAtom',
-    default: {
+export function defaultState(): ClapState {
+    return {
         claps: [],
         clappers: [{ color: 'yellow', userAudioBlobKey: null }],
-    },
+        last_seq: 0,
+    }
+}
+const clapAtom = atom<ClapState>({
+    key: 'clapAtom',
+    default: defaultState(),
 })
 
 function stateActions(state: ClapState) {
@@ -33,30 +38,22 @@ function stateActions(state: ClapState) {
     return { removeAudio, setAudio: setAudio }
 }
 
-export function useClapReducer() {
-    const [, setState] = useImmerRecoilState(clapAtom)
+export const clapReducer: ChangeHandler = (
+    change: PouchDB.Core.ChangesResponseChange<EventModel<any>>,
+    state: any,
+) => {
+    clapperCustomAudioRemoved.applyEvent(change, (ev) => {
+        stateActions(state).removeAudio(ev.doc.data.clapperId)
+    })
 
-    return (change) => {
-        const doc = change.doc
-        clapped.applyEvent(doc, (ev) => {
-            setState((x) => {
-                x.claps.push(ev.data)
-            })
-        })
+    clapped.applyEvent(change, (ev) => {
+        state.claps.push(ev.doc.data)
+    })
 
-        clapperCustomAudioRemoved.applyEvent(doc, (ev) => {
-            setState((draft) => {
-                stateActions(draft).removeAudio(ev.data.clapperId)
-            })
-        })
-
-        clapperAudioUpdated.applyEvent(doc, (x) => {
-            const data = x.data
-            setState((state) => {
-                stateActions(state).setAudio(data.clapperId, data.key)
-            })
-        })
-    }
+    clapperAudioUpdated.applyEvent(change, (x) => {
+        const data = x.doc.data
+        stateActions(state).setAudio(data.clapperId, data.key)
+    })
 }
 
 export default clapAtom
