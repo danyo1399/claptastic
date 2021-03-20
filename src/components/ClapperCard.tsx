@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import ClapSvg from './ClapSvg'
 import { ClapIconContainer } from './ClapIconContainer'
-import { setClapperAudio } from '../claps/clap.db'
 import getLogger from '../utils/logger'
-import { clapperCustomAudioRemoved } from '../claps/clap.events'
-import { removeAudio } from '../claps/audio'
+import {
+    clapperAudioUpdated,
+    clapperCustomAudioRemoved,
+} from '../claps/clap.events'
+import { removeAudio, setAudio } from '../claps/audio'
 
 const logger = getLogger('clapper-card')
 
@@ -55,7 +57,7 @@ const Container = styled.div`
         outline: none;
     }
 `
-export function ClapperCard(props: {}) {
+export function ClapperCard() {
     async function onChange(e) {
         const ele: HTMLInputElement = e.target
         const file = ele.files[0] as File
@@ -71,7 +73,13 @@ export function ClapperCard(props: {}) {
             logger.log('file cant be bigger than 2 MB')
             return
         }
-        await setClapperAudio(0, file.name, file)
+        await setAudio(0, file)
+
+        await clapperAudioUpdated.raiseEvent({
+            clapperId: 0,
+            name: file.name,
+            type: file.type,
+        })
         ele.value = null
     }
 

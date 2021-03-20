@@ -1,5 +1,4 @@
 import { atom, selector } from 'recoil'
-import { useImmerRecoilState } from '../state/immerRecoil'
 import {
     clapped,
     clapperAudioUpdated,
@@ -11,16 +10,17 @@ import { ChangeHandler, EventModel, EventState } from '../events'
 
 const logger = getLogger('clap-state')
 
-export function defaultState(): ClapState {
-    return {
+export function clapDefault(): ClapState {
+    return <ClapState>{
         claps: [],
         clappers: [{ color: 'yellow' }],
         last_seq: 0,
     }
 }
+
 const clapAtom = atom<ClapState>({
     key: 'clapAtom',
-    default: defaultState(),
+    default: clapDefault(),
 })
 
 function stateActions(state: ClapState) {
@@ -39,7 +39,7 @@ function stateActions(state: ClapState) {
             clapper.audioType = null
         }
     }
-    return { removeAudio, setAudio: setAudio }
+    return { removeAudio, setAudio }
 }
 
 export const clapReducer: ChangeHandler = (

@@ -1,6 +1,6 @@
 // @ts-ignore
 import audioFileUrl from '../media/audio.mp3'
-import { blobs } from './clap.db'
+import { clapStorage } from './clap.db'
 import getLogger from '../utils/logger'
 const numberOfAudioTracks = 3
 const logger = getLogger('audio')
@@ -18,11 +18,11 @@ async function loadDefaultAudio() {
         }
 
         const blob = await response.blob()
-        await blobs.setItem('default-audio', blob)
+        await clapStorage.setItem('default-audio', blob)
         return blob
     } catch (e) {}
 
-    return await blobs.getItem('default-audio')
+    return await clapStorage.getItem('default-audio')
 }
 
 async function getDefaultAudio() {
@@ -63,13 +63,13 @@ export function getAudioUrl(clapperId: number): string {
 
 export async function setAudio(clapperId: number, file: Blob) {
     await removeAudio(clapperId)
-    await blobs.setItem(createBlobKey(clapperId), file)
+    await clapStorage.setItem(createBlobKey(clapperId), file)
     const url = URL.createObjectURL(file)
     audioCache[clapperId] = url
 }
 
 export async function removeAudio(clapperId: number) {
-    await blobs.deleteItem(createBlobKey(clapperId))
+    await clapStorage.deleteItem(createBlobKey(clapperId))
     const url = audioCache[clapperId]
     if (url) {
         URL.revokeObjectURL(url)
@@ -78,7 +78,7 @@ export async function removeAudio(clapperId: number) {
 }
 
 async function getAudio(clapperId: number) {
-    return blobs.getItem(createBlobKey(clapperId))
+    return clapStorage.getItem(createBlobKey(clapperId))
 }
 
 export async function playAudio(

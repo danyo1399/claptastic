@@ -6,6 +6,7 @@ import { RecoilRoot } from 'recoil'
 import { render } from 'react-dom'
 import { CaptureConsole } from '@sentry/integrations'
 import './claps/audio'
+import './external/external.db'
 
 const logger = getLogger('main')
 if (!!process.env.SENTRY) {
@@ -32,6 +33,7 @@ import App from './components/App'
 import * as mic from './utils/mic.utils'
 import './db.legacy'
 import { isProd } from './utils/environment'
+import ExternalDbSync from './external/external.db'
 
 // Experimenting with mic
 // mic
@@ -67,6 +69,7 @@ if (env !== 'development') {
 
 render(
     <RecoilRoot>
+        <ExternalDbSync></ExternalDbSync>
         <App />
     </RecoilRoot>,
     document.getElementById('root'),

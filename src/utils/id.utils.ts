@@ -1,6 +1,8 @@
 let nextId = 0
 
+const startDate = Date.now()
 export function uniqueId(prefix: string) {
     nextId++
-    return `${prefix}#${(nextId + Date.now()).toString(36)}`
+    prefix = prefix ? `${prefix}#` : ''
+    return `${prefix}${(nextId + Date.now() + startDate).toString(36)}`
 }

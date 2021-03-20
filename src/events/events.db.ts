@@ -1,10 +1,10 @@
 import PouchDB from 'pouchdb-browser'
 import { EventModel } from './events'
 
-const eventsDb = new PouchDB<EventModel<unknown>>('events')
+const eventDb = new PouchDB<EventModel<unknown>>('events')
 
 export function addEvent<T>(event: EventModel<T>) {
-    return eventsDb.put(event)
+    return eventDb.put(event)
 }
 
 export function getEventChanges(
@@ -13,7 +13,7 @@ export function getEventChanges(
         change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>,
     ) => any,
 ) {
-    return eventsDb
+    return eventDb
         .changes({ ...options, include_docs: true })
         .on('change', changeFn)
 }
