@@ -58,7 +58,7 @@ exec(
 
 function mkdir(path) {
     if (!fs.existsSync(path)) {
-        fs.mkdirSync(path)
+        fs.mkdirSync(path, { recursive: true })
     }
 }
 
