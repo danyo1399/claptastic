@@ -39,7 +39,7 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
             return next()
         }
 
-        console.log('rejected req', { req, url })
+        console.log('rejected req', { method: req.method, url })
         res.status(401)
         res.end()
         return
@@ -47,7 +47,7 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
     app.use(
         '/claptastic-public',
         createProxyMiddleware({
-            target: `http://${COUCHDB_SERVER}/claptastic-public`,
+            target: `http://${COUCHDB_SERVER}`,
             changeOrigin: true,
             auth: `${COUCHDB_USER}:${COUCHDB_PASSWORD}`,
         }),

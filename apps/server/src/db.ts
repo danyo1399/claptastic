@@ -3,14 +3,11 @@ import { Doc, Summary } from './models'
 const { COUCHDB_USER, COUCHDB_PASSWORD, COUCHDB_SERVER } = process.env
 
 const url = `http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@${COUCHDB_SERVER}`
+console.log('Connecting to ' + COUCHDB_SERVER)
 const _nano = nano({
     url,
 })
 const db = _nano.db
-
-const x = function (doc) {
-    return doc._id === 'stats'
-}
 
 export async function setupDb() {
     const dbs = await db.list()

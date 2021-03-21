@@ -1,4 +1,4 @@
 {
   "SENTRY": "",
-  "API_SERVER": "http://localhost"
+  "API_SERVER": "http://localhost:3000"
 }
