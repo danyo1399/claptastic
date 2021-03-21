@@ -8,7 +8,7 @@ const ClapsCounter = memo((props: { count: number }) => {
     const externalState = useRecoilValue(externalAtom)
     return (
         <div className="flex items-center pr-1">
-            <span className="px-2">{externalState.count}</span>
+            <span className="px-2 text-md">{externalState.count}</span>
             <div className="counter-icon">
                 <ClapSvg width="1.25rem"></ClapSvg>
             </div>

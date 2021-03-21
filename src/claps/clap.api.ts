@@ -2,7 +2,7 @@ import config from '../config.json'
 import getLogger from '../utils/logger'
 
 const logger = getLogger('clap api')
-export function addClap(clap: { userId: string; message: '' }) {
+export function addClap(clap: { userId: string; message: string }) {
     fetch(`${config.apiServer}/claps`, {
         method: 'POST',
 

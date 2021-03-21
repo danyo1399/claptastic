@@ -11,21 +11,28 @@ const app = express()
 
 const port = process.env.PORT || 3000
 app.use(cors({ origin: true, credentials: true }))
-
+const { COUCHDB_USER, COUCHDB_PASSWORD } = process.env
+console.log('server settings', process.env)
 setupDb().then(({ clapDbPublic, clapDb }) => {
     app.use('/claptastic-public', (req, res, next) => {
         const { url, method } = req
 
-        const allowedPrefixes = ['/_bulk_get?', '/_changes?', '/']
-        const match = allowedPrefixes.some((prefix) => url.startsWith(prefix))
+        const allowedPostPrefixes = ['/_all_docs', '/_bulk_get?']
+        const allowedGetPrefixes = [, '/_changes?', '/_all_docs', '/']
+        if (
+            allowedGetPrefixes.some(
+                (prefix) => url.startsWith(prefix) && req.method === 'GET',
+            )
+        ) {
+            return next()
+        }
 
-        if (match) {
-            if (url.startsWith('/_bulk_get?') && method === 'POST') {
-                return next()
-            }
-            if (['GET', 'OPTIONS'].includes(method)) {
-                return next()
-            }
+        if (
+            allowedPostPrefixes.some(
+                (prefix) => url.startsWith(prefix) && req.method === 'POST',
+            )
+        ) {
+            return next()
         }
 
         console.log('rejected req', { req, url })
@@ -36,8 +43,9 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
     app.use(
         '/claptastic-public',
         createProxyMiddleware({
-            target: 'http://localhost:5984',
+            target: `http://claptastic-couchdb:5984`,
             changeOrigin: true,
+            auth: `${COUCHDB_USER}:${COUCHDB_PASSWORD}`,
         }),
     )
 

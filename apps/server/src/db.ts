@@ -1,8 +1,8 @@
 import nano from 'nano'
 import { Doc, Summary } from './models'
-const { DB_USERNAME, DB_PASSWORD, SERVER } = process.env
+const { COUCHDB_USER, COUCHDB_PASSWORD } = process.env
 
-const url = `http://${DB_USERNAME}:${DB_PASSWORD}@${SERVER}`
+const url = `http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@claptastic-couchdb:5984`
 const _nano = nano({
     url,
 })
@@ -17,6 +17,15 @@ export async function setupDb() {
     if (dbs.indexOf('claptastic-public') === -1) {
         await db.create('claptastic-public')
     }
+
+    if (dbs.indexOf('_users') === -1) {
+        await db.create('_users')
+    }
+
+    if (dbs.indexOf('_replicator') === -1) {
+        await db.create('_replicator')
+    }
+
     if (dbs.indexOf('claptastic') === -1) {
         await db.create('claptastic')
     }

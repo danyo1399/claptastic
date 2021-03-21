@@ -34,3 +34,12 @@ netlify to host a pre prod env for testing on mobile phones etc
 ## Publish to github docs
 - check in to main and youre done.
 - Just run npm script npm run publish publish to github
+
+
+## env setup
+- setup a ubuntu vm
+- install docker
+- install nvm
+- logout and log back in  
+- install node lts (nvm install --lts)
+- create a network (docker network create claptastic-net)

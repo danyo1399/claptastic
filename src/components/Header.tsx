@@ -49,7 +49,7 @@ export default function Header() {
             <div className="flex">
                 <ExpandIconButton></ExpandIconButton>
                 <span className="pl-4">Claptastic</span>
-                <span className="sub-header">by danyo1399</span>
+                {/*<span className="sub-header">by danyo1399</span>*/}
             </div>
             <div className="right-section flex">
                 <ClapsCounter

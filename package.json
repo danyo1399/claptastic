@@ -17,6 +17,7 @@
     "cypress:open": "cypress open",
     "cypress:headless": "cypress run --headless chrome",
     "server:build:watch": "tsc --project ./apps/server/tsconfig.json --watch",
+    "server:build": "tsc --project ./apps/server/tsconfig.json",
     "server:start": "nodemon node dist/server/index.js",
     "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh"
   },
@@ -50,7 +51,6 @@
     "cross-env": "^7.0.3",
     "css-loader": "^5.1.1",
     "cypress": "^6.6.0",
-    "dotenv": "^8.2.0",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
@@ -84,6 +84,7 @@
     "workbox-webpack-plugin": "^6.1.1"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "@sentry/integrations": "^6.2.2",
     "@sentry/react": "^6.2.2",
     "@sentry/tracing": "^6.2.2",
