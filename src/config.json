@@ -1,4 +1,0 @@
-{
-  "externalServers": ["http://localhost:80/claptastic-public"],
-  "apiServer": "http://localhost:80"
-}

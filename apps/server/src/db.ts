@@ -1,8 +1,8 @@
 import nano from 'nano'
 import { Doc, Summary } from './models'
-const { COUCHDB_USER, COUCHDB_PASSWORD } = process.env
+const { COUCHDB_USER, COUCHDB_PASSWORD, COUCHDB_SERVER } = process.env
 
-const url = `http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@claptastic-couchdb:5984`
+const url = `http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@${COUCHDB_SERVER}`
 const _nano = nano({
     url,
 })

@@ -8,12 +8,16 @@ import { setupDb } from './db'
 import { Clap, Summary } from './models'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 const app = express()
-
+import compression from 'compression'
+import morgan from 'morgan'
 const port = process.env.PORT || 3000
 app.use(cors({ origin: true, credentials: true }))
-const { COUCHDB_USER, COUCHDB_PASSWORD } = process.env
-console.log('server settings', process.env)
+const { COUCHDB_USER, COUCHDB_PASSWORD, COUCHDB_SERVER } = process.env
+
 setupDb().then(({ clapDbPublic, clapDb }) => {
+    app.use(morgan('combined'))
+    app.use(compression())
+
     app.use('/claptastic-public', (req, res, next) => {
         const { url, method } = req
 
@@ -43,7 +47,7 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
     app.use(
         '/claptastic-public',
         createProxyMiddleware({
-            target: `http://claptastic-couchdb:5984`,
+            target: `http://${COUCHDB_SERVER}/claptastic-public`,
             changeOrigin: true,
             auth: `${COUCHDB_USER}:${COUCHDB_PASSWORD}`,
         }),

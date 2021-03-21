@@ -1,5 +1,5 @@
-import { isProd } from './environment'
 import { addBreadcrumb, Severity } from '@sentry/react'
+import Config from '../config'
 
 export type NameFn = () => string
 
@@ -7,13 +7,13 @@ export type NameFn = () => string
 // warn and above log to console in prod
 // In dev all sentry logging disabled, and all all console logging enabled
 export default function getLogger(name: string | NameFn) {
-    const version = process.env.version
+    const version = Config.version
     function getName() {
         if (typeof name === 'function') return name()
         return name
     }
     function log(msg, ...args) {
-        if (isProd()) {
+        if (Config.isProd()) {
             addBreadcrumb({
                 category: getName(),
                 level: Severity.Info,
@@ -26,7 +26,7 @@ export default function getLogger(name: string | NameFn) {
     }
 
     function error(msg, ...args) {
-        if (isProd()) {
+        if (Config.isProd()) {
             addBreadcrumb({
                 category: getName(),
                 level: Severity.Error,
@@ -38,7 +38,7 @@ export default function getLogger(name: string | NameFn) {
     }
 
     function warn(msg, ...args) {
-        if (isProd()) {
+        if (Config.isProd()) {
             addBreadcrumb({
                 category: getName(),
                 level: Severity.Warning,
@@ -50,7 +50,7 @@ export default function getLogger(name: string | NameFn) {
     }
 
     function debug(msg, ...args) {
-        if (!isProd()) {
+        if (!Config.isProd()) {
             console.debug(`[${getName()} ${version}] ${msg}`, ...args)
         }
     }

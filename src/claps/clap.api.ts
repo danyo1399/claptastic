@@ -1,4 +1,4 @@
-import config from '../config.json'
+import config from '../config'
 import getLogger from '../utils/logger'
 
 const logger = getLogger('clap api')

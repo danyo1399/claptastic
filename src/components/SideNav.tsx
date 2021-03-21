@@ -4,6 +4,7 @@ import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import CloseIcon from './CloseIcon'
 import MenuIcon from './MenuIcon'
 import { ClapperCard } from './ClapperCard'
+import Config from '../config'
 
 const StyledButton = styled.button`
     color: white;
@@ -63,7 +64,7 @@ const SideNavContainer = styled.div`
 `
 
 export default function SideNav() {
-    const version = process.env.version
+    const version = Config.version
     const expanded = useRecoilValue(expandedAtom)
     return (
         <SideNavContainer

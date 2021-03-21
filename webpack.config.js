@@ -8,16 +8,20 @@ const webpack = require('webpack')
 const devMode = process.env.NODE_ENV !== 'production'
 const httpOnly = !!process.env.HTTP_ONLY
 const fs = require('fs')
-const date = new Date()
-// const buildNo =
-//     date.getFullYear() +
-//     (date.getMonth() + 1).toString().padStart(2, '0') +
-//     date.getDate().toString().padStart(2, '0') +
-//     date.getHours().toString().padStart(2, '0') +
-//     date.getMinutes().toString().padStart(2, '0') +
-//     date.getSeconds().toString().padStart(2, '0')
 const versionInfo = require('./package.json')
-const SENTRY = process.env.SENTRY || ''
+
+const baseConfig = require('./src/environment/environment.json')
+const envConfig = process.env.CONFIG
+    ? require(`./src/environment/environment.${process.env.CONFIG}.json`)
+    : {}
+const tempConfig = { ...baseConfig, ...envConfig }
+const combinedConfig = {}
+const keys = Object.keys(tempConfig)
+for (let key of keys) {
+    combinedConfig['process.env.' + key] = JSON.stringify(tempConfig[key])
+}
+
+console.log('combined config', combinedConfig)
 
 // const version = `${versionInfo.version}-${buildNo}`
 const version = `${versionInfo.version}`
@@ -102,8 +106,8 @@ module.exports = {
         }),
 
         new webpack.DefinePlugin({
-            'process.env.version': JSON.stringify(version),
-            'process.env.SENTRY': JSON.stringify(SENTRY),
+            'process.env.VERSION': JSON.stringify(version),
+            ...combinedConfig,
         }),
         new MiniCssExtractPlugin({
             filename: devMode ? '[name].css' : '[name].[contenthash].css',

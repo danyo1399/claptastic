@@ -9,7 +9,7 @@ import './claps/audio'
 import './external/external.db'
 
 const logger = getLogger('main')
-if (!!process.env.SENTRY) {
+if (!!Config.sentry) {
     logger.log('Initialising Sentry')
     Sentry.init({
         dsn:
@@ -32,8 +32,8 @@ import App from './components/App'
 
 import * as mic from './utils/mic.utils'
 import './db.legacy'
-import { isProd } from './utils/environment'
 import ExternalDbSync from './external/external.db'
+import Config from './config'
 
 // Experimenting with mic
 // mic
@@ -50,7 +50,7 @@ import ExternalDbSync from './external/external.db'
 //     audio.play();
 //   });
 
-const env = process.env.NODE_ENV
+const env = Config.env
 logger.log('Current environment', env)
 if (env !== 'development') {
     if ('serviceWorker' in navigator) {

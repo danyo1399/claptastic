@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb-browser'
-import config from '../config.json'
+import config from '../config'
 import React, { useEffect } from 'react'
 import { useImmerRecoilSetState } from '../state/immerRecoil'
 import { externalAtom } from './external.state'
@@ -8,7 +8,7 @@ import getLogger from '../utils/logger'
 const logger = getLogger('external sync')
 export const localSyncDb = new PouchDB('serverDb', { auto_compaction: true })
 
-export const remoteDb = new PouchDB(config.externalServers[0])
+export const remoteDb = new PouchDB(config.apiServer + '/claptastic-public')
 
 localSyncDb.replicate.from(remoteDb, {
     live: true,

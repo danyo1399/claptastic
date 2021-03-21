@@ -21,19 +21,24 @@ const username = 'serveruser'
 const password = uuidv4()
 const secret = uuidv4()
 
-const contents = `COUCHDB_USER=${username}
+const configuration = `COUCHDB_USER=${username}
 COUCHDB_PASSWORD=${password}
 COUCHDB_SECRET=${secret}
 `
 
-const dir = path.resolve(cwd, 'dist', 'couchdb')
-const dataDir = path.resolve(dir, 'data')
-const envFilePath = path.resolve(dir, 'couchdb-env-file.ini')
-const jsonFilePath = path.resolve(dir, 'couchdb.json')
-mkdir(dir)
-mkdir(dataDir)
-fs.writeFileSync(envFilePath, contents)
-fs.writeFileSync(jsonFilePath, JSON.stringify({ username, password, secret }))
+const nodeServerPort = process.env.SERVER_PORT || 80
+
+const couchDbBasePath = path.resolve(cwd, 'dist', 'couchdb')
+const couchdbDataPath = path.resolve(couchDbBasePath, 'data')
+const envConfigFilePath = path.resolve(couchDbBasePath, 'couchdb-env-file.ini')
+const jsonConfigFilePath = path.resolve(couchDbBasePath, 'couchdb.json')
+mkdir(couchDbBasePath)
+mkdir(couchdbDataPath)
+fs.writeFileSync(envConfigFilePath, configuration)
+fs.writeFileSync(
+    jsonConfigFilePath,
+    JSON.stringify({ username, password, secret }),
+)
 
 // stop all
 exec(`docker stop claptastic-server`, true)
@@ -46,7 +51,7 @@ exec(`npm run server:build`)
 
 // couchdb
 exec(
-    `docker run -p:5984:5984 -d -it --restart always --network claptastic-net -v ${dataDir}:/opt/couchdb/data --env-file ${envFilePath} --name claptastic-couchdb couchdb`,
+    `docker run -p:5984:5984 -d -it --restart always --network claptastic-net -v ${couchdbDataPath}:/opt/couchdb/data --env-file ${envConfigFilePath} --name claptastic-couchdb couchdb`,
 )
 
 // server
@@ -54,7 +59,7 @@ exec(
 exec(`docker build -f Dockerfile.server -t claptastic-server:latest .`)
 
 exec(
-    `docker run -d -it --restart always -p:80:80 --env PORT=80 --network claptastic-net --env-file ${envFilePath} --name claptastic-server claptastic-server`,
+    `docker run -d -it --restart always -p:${nodeServerPort}:${nodeServerPort} --env PORT=${nodeServerPort} --network claptastic-net --env-file ${envConfigFilePath} --name claptastic-server claptastic-server`,
 )
 
 function mkdir(path) {
@@ -67,10 +72,12 @@ function exec(cmd, continueOnError) {
     try {
         let buffer = cp.execSync(cmd)
         console.log(buffer.toString())
+        return true
     } catch (err) {
         console.log(err.toString())
         if (!continueOnError) {
             throw err
         }
+        return false
     }
 }
