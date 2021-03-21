@@ -2,6 +2,7 @@ import { getEventChanges } from './events.db'
 import { useEffect } from 'react'
 import getLogger from '../utils/logger'
 import { ChangeHandler, EventModel, EventState } from './events'
+import { createQueueProcessor } from '../utils/createQueueProcessor'
 
 const logger = getLogger('events')
 
@@ -16,16 +17,18 @@ export function EventHandlerProvider({
 }) {
     useEffect(() => {
         ;(async () => {
+            let last_seq = undefined
             function handleChange(
                 change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>,
-                handleState: any,
+                replaying: boolean,
+                state: any,
             ) {
                 for (const handler of handlers) {
                     logger.debug('event:' + change.doc.type, change)
 
-                    handler(change, handleState)
+                    handler(change, replaying, state)
                 }
-                handleState.last_seq = change.seq as number
+                last_seq = change.seq as number
             }
 
             // Hydrate existing changes when starting app.
@@ -33,7 +36,7 @@ export function EventHandlerProvider({
             await getEventChanges(
                 { live: false, return_docs: false },
                 (change) => {
-                    handleChange(change, initialState)
+                    handleChange(change, true, initialState)
                 },
             )
             setState(() => initialState)
@@ -44,11 +47,11 @@ export function EventHandlerProvider({
                 {
                     live: true,
                     return_docs: false,
-                    since: initialState.last_seq,
+                    since: last_seq,
                 },
                 (change) => {
                     setState((state) => {
-                        handleChange(change, state)
+                        handleChange(change, false, state)
                     })
                 },
             )

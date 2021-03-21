@@ -10,6 +10,7 @@ import { EventHandlerProvider } from '../events/eventHandlerProvider'
 import ReleaseInfo from './ReleaseInfo'
 import clapAtom, { clapReducer, clapDefault } from '../claps/clap.state'
 import { useImmerRecoilSetState } from '../state/immerRecoil'
+import { clappedHandler } from '../claps/clap.effects'
 export default function App() {
     const setInstallState = useSetRecoilState(installPromptState)
     const setState = useImmerRecoilSetState(clapAtom)
@@ -28,7 +29,7 @@ export default function App() {
     return (
         <>
             <EventHandlerProvider
-                handlers={[clapReducer]}
+                handlers={[clapReducer, clappedHandler]}
                 initialState={clapDefault()}
                 setState={setState}
             />

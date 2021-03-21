@@ -4,8 +4,8 @@ import ClapSvg from './ClapSvg'
 import { ClapIconContainer } from './ClapIconContainer'
 import getLogger from '../utils/logger'
 import {
-    clapperAudioUpdated,
-    clapperCustomAudioRemoved,
+    clapperAudioUpdatedEvent,
+    clapperCustomAudioRemovedEvent,
 } from '../claps/clap.events'
 import { removeAudio, setAudio } from '../claps/audio'
 
@@ -75,7 +75,7 @@ export function ClapperCard() {
         }
         await setAudio(0, file)
 
-        await clapperAudioUpdated.raiseEvent({
+        await clapperAudioUpdatedEvent.raiseEvent({
             clapperId: 0,
             name: file.name,
             type: file.type,
@@ -85,7 +85,7 @@ export function ClapperCard() {
 
     async function removeCustomAudio() {
         await removeAudio(0)
-        await clapperCustomAudioRemoved.raiseEvent({ clapperId: 0 })
+        await clapperCustomAudioRemovedEvent.raiseEvent({ clapperId: 0 })
     }
     return (
         <Container className="rounded border p-2 ">

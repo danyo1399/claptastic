@@ -9,8 +9,6 @@ import { Clap, Summary } from './models'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 const app = express()
 
-const id = 0
-
 const port = process.env.PORT || 3000
 app.use(cors({ origin: true, credentials: true }))
 
@@ -43,32 +41,6 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
         }),
     )
 
-    // app.use('/claptastic-public*', (req, res, next) => {
-    //     const suffix = 'claptastic-public'
-    //     const index = req.url.indexOf(suffix)
-    //     console.log('orig url', req.url)
-    //     const url =
-    //         'http://localhost:5984/claptastic-public/' +
-    //         req.url.slice(index + suffix.length)
-    //     console.log(url)
-    //
-    //     https.get(
-    //         url,
-    //         { headers: { origin: req.headers.origin } },
-    //         (extRes) => {
-    //             res.status(extRes.statusCode)
-    //             extRes.on('data', (d) => {
-    //                 res.write(d)
-    //             })
-    //             extRes.on('error', (err) => console.log(err))
-    //
-    //             extRes.on('end', () => {
-    //                 res.end()
-    //             })
-    //         },
-    //     )
-    // })
-
     // stick this after other streaming routes
     app.use(bodyParser.json())
 
@@ -76,9 +48,13 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
         const maxclaps = 2
         const summary: Summary = await clapDbPublic.get('summary')
         const doc: Clap = req.body
+
+        doc.message = (doc.message || '').slice(0, 50)
+        doc.userId = (doc.userId || '').slice(0, 20)
+
         summary.mostRecentClaps.push({
             message: doc.message,
-            date: doc.date,
+            date: Date.now(),
             userId: doc.userId,
         })
         summary.count++

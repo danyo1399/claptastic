@@ -6,14 +6,14 @@ export interface ClapEventData {
     message?: string
 }
 
-export const clapped = createEventFn<ClapEventData>('CLAPPED')
+export const clappedEvent = createEventFn<ClapEventData>('CLAPPED')
 
 export interface ClapperAudioEventData {
     clapperId: number
     name: string
     type: string
 }
-export const clapperAudioUpdated = createEventFn<ClapperAudioEventData>(
+export const clapperAudioUpdatedEvent = createEventFn<ClapperAudioEventData>(
     'clapperAudioUpdated',
 )
 
@@ -23,6 +23,6 @@ export interface ClapperEventData {
 }
 export const clapperCreated = createEventFn<ClapperEventData>('clapperCreated')
 
-export const clapperCustomAudioRemoved = createEventFn<{ clapperId: number }>(
-    'clapperCustomAudioRemoved',
-)
+export const clapperCustomAudioRemovedEvent = createEventFn<{
+    clapperId: number
+}>('clapperCustomAudioRemoved')

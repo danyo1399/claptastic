@@ -40,7 +40,7 @@ export async function upsert(db: nano.DocumentScope<any>, doc: Doc) {
     if (!existing) {
         await db.insert(doc)
     } else {
-       await db.insert({ ...doc, _id: existing._id, _rev: existing._rev })
+        await db.insert({ ...doc, _id: existing._id, _rev: existing._rev })
     }
 }
 export async function tryGet(db: nano.DocumentScope<any>, id: string) {

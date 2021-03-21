@@ -37,11 +37,18 @@ export function createEventFn<T>(type: string) {
         }
     }
 
-    return { create, isType, raiseEvent: _raiseEvent, applyEvent }
+    function getData(event: EventModel<any>): T {
+        if (isType(event)) {
+            return event.data as T
+        }
+        throw new Error('event is not correct type' + event.type)
+    }
+    return { create, isType, raiseEvent: _raiseEvent, applyEvent, getData }
 }
 
 export type ChangeHandler = (
     change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>,
+    replaying: boolean,
     state: EventState,
 ) => void
 

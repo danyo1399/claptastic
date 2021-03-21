@@ -1,8 +1,8 @@
 import { atom, selector } from 'recoil'
 import {
-    clapped,
-    clapperAudioUpdated,
-    clapperCustomAudioRemoved,
+    clappedEvent,
+    clapperAudioUpdatedEvent,
+    clapperCustomAudioRemovedEvent,
 } from './clap.events'
 import { ClapState } from './clap.models'
 import getLogger from '../utils/logger'
@@ -44,17 +44,18 @@ function stateActions(state: ClapState) {
 
 export const clapReducer: ChangeHandler = (
     change: PouchDB.Core.ChangesResponseChange<EventModel<any>>,
+    replaying,
     state: any,
 ) => {
-    clapperCustomAudioRemoved.applyEvent(change, (ev) => {
+    clapperCustomAudioRemovedEvent.applyEvent(change, (ev) => {
         stateActions(state).removeAudio(ev.doc.data.clapperId)
     })
 
-    clapped.applyEvent(change, (ev) => {
+    clappedEvent.applyEvent(change, (ev) => {
         state.claps.push(ev.doc.data)
     })
 
-    clapperAudioUpdated.applyEvent(change, (x) => {
+    clapperAudioUpdatedEvent.applyEvent(change, (x) => {
         const data = x.doc.data
         stateActions(state).setAudio(data.clapperId, data.name, data.type)
     })

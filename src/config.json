@@ -1,3 +1,4 @@
 {
-  "externalServers": ["http://localhost:3000/claptastic-public"]
+  "externalServers": ["http://localhost:3000/claptastic-public"],
+  "apiServer": "http://localhost:3000"
 }

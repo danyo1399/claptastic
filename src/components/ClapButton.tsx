@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import getLogger from '../utils/logger'
 import ClapSvg from './ClapSvg'
-import { clapped } from '../claps/clap.events'
+import { clappedEvent } from '../claps/clap.events'
 import { ClapIconContainer } from './ClapIconContainer'
 import { playAudio } from '../claps/audio'
 
@@ -103,7 +103,7 @@ export default function ClapButton() {
         const onStart = async () => {
             startAnim()
             setPlaying(true)
-            await clapped.raiseEvent({})
+            await clappedEvent.raiseEvent({})
         }
 
         audioRef.current.addEventListener('ended', onStop)
