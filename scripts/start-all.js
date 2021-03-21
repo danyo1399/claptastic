@@ -40,6 +40,7 @@ exec(`docker stop claptastic-server`, true)
 exec(`docker stop claptastic-couchdb`, true)
 exec(`docker rm claptastic-server`, true)
 exec(`docker rm claptastic-couchdb`, true)
+exec(`docker network create claptastic-net`, true)
 
 exec(`npm run server:build`)
 
@@ -67,7 +68,7 @@ function exec(cmd, continueOnError) {
         let buffer = cp.execSync(cmd)
         console.log(buffer.toString())
     } catch (err) {
-        console.log(err)
+        console.log(err.toString())
         if (!continueOnError) {
             throw err
         }
