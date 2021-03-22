@@ -10,4 +10,4 @@ const Config = {
 
 export default Config
 
-window._config = Config
+console.log('config', Config)
