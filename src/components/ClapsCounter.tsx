@@ -4,7 +4,6 @@ import { useRecoilValue } from 'recoil'
 import { externalAtom } from '../external/external.state'
 
 const ClapsCounter = memo((props: { count: number }) => {
-    console.log('counter render')
     const externalState = useRecoilValue(externalAtom)
     return (
         <div className="flex items-center pr-1">
