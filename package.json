@@ -1,6 +1,6 @@
 {
   "name": "claptastic",
-  "version": "1.1.31",
+  "version": "1.1.32",
   "description": "",
   "scripts": {
     "live-server": "node apps/server/bin/index.js",
