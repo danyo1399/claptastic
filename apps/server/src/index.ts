@@ -17,7 +17,6 @@ const { COUCHDB_USER, COUCHDB_PASSWORD, COUCHDB_SERVER } = process.env
 
 setupDb().then(({ clapDbPublic, clapDb }) => {
     app.use(morgan('combined'))
-    app.use(compression())
 
     app.use('/claptastic-public', (req, res, next) => {
         const { url, method } = req
@@ -45,15 +44,22 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
         res.end()
         return
     })
-    app.use(
-        '/claptastic-public',
-        createProxyMiddleware({
-            target: `http://${COUCHDB_SERVER}`,
-            changeOrigin: true,
-            auth: `${COUCHDB_USER}:${COUCHDB_PASSWORD}`,
-        }),
-    )
 
+    const proxy = createProxyMiddleware({
+        target: `http://${COUCHDB_SERVER}`,
+        changeOrigin: true,
+        auth: `${COUCHDB_USER}:${COUCHDB_PASSWORD}`,
+    })
+    app.use('/', (req, res, next) => {
+        const proxyUrl =
+            req.url.toLowerCase().startsWith('/claptastic-public') ||
+            req.url === '/'
+        if (proxyUrl) {
+            return proxy(req, res, next)
+        }
+        return next()
+    })
+    app.use(compression())
     // stick this after other streaming routes
     app.use(bodyParser.json())
 
