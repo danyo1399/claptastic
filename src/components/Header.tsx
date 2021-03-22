@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import InstallPrompt from './InstallPrompt'
 import { ExpandIconButton } from './SideNav'
 import { useRecoilValue } from 'recoil'
-import clapAtom from '../claps/clap.state'
+import { clapAtom } from '../claps'
 import ClapsCounter from './ClapsCounter'
 
 const HeaderWrapper = styled.div`

@@ -6,8 +6,8 @@ import getLogger from '../utils/logger'
 import {
     clapperAudioUpdatedEvent,
     clapperCustomAudioRemovedEvent,
-} from '../claps/clap.events'
-import { removeAudio, setAudio } from '../claps/audio'
+} from '../claps'
+import { removeAudio, setAudio } from '../claps'
 
 const logger = getLogger('clapper-card')
 

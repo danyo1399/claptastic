@@ -8,7 +8,7 @@ import { log } from '../utils/logger'
 import SideNav from './SideNav'
 import { EventHandlerProvider } from '../events/eventHandlerProvider'
 import ReleaseInfo from './ReleaseInfo'
-import clapAtom, { clapReducer, clapDefault } from '../claps/clap.state'
+import { clapAtom, clapReducer, clapDefault } from '../claps'
 import { useImmerRecoilSetState } from '../state/immerRecoil'
 export default function App() {
     const setInstallState = useSetRecoilState(installPromptState)

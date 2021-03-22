@@ -18,7 +18,7 @@ export function clapDefault(): ClapState {
     }
 }
 
-const clapAtom = atom<ClapState>({
+export const clapAtom = atom<ClapState>({
     key: 'clapAtom',
     default: clapDefault(),
 })
@@ -60,8 +60,6 @@ export const clapReducer: ChangeHandler = (
         stateActions(state).setAudio(data.clapperId, data.name, data.type)
     })
 }
-
-export default clapAtom
 
 export const clappersSelector = selector({
     key: 'clappersSelector',

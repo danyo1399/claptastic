@@ -5,7 +5,7 @@ import React from 'react'
 import { RecoilRoot } from 'recoil'
 import { render } from 'react-dom'
 import { CaptureConsole } from '@sentry/integrations'
-import './claps/audio'
+import './claps'
 import './external/external.db'
 
 const logger = getLogger('main')

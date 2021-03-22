@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import getLogger from '../utils/logger'
 import ClapSvg from './ClapSvg'
-import { clappedEvent } from '../claps/clap.events'
+import { clappedEvent } from '../claps'
 import { ClapIconContainer } from './ClapIconContainer'
-import { playAudio } from '../claps/audio'
+import { playAudio } from '../claps'
 
 const logger = getLogger('clap-button')
 const Wrapper = styled.div`
@@ -58,7 +58,6 @@ export default function ClapButton() {
         // TODO: trying to figure out bug ios playing audio
         if (!playing) {
             try {
-                logger.log('Playing audio')
                 await playAudio(0, audioRef.current)
             } catch (err) {
                 logger.error('Error playing audio', err)
