@@ -9,6 +9,13 @@ const releaseData: ReleaseData = [
             'Optimise state hydration from db',
         ],
     },
+    {
+        version: '1.1.32',
+        date: 1616412698464,
+        notes: [
+            'The clap counter now represents total number of claps worldwide!!',
+        ],
+    },
 ]
 
 export default releaseData
