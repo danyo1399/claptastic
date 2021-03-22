@@ -1,5 +1,5 @@
 import getLogger from './logger'
-import { createEventEmitter } from './events'
+import { createEventEmitter } from './eventEmitter'
 
 export interface QueueEntry {
     fn: () => Promise<any>

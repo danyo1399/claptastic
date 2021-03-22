@@ -1,4 +1,4 @@
-import { createEventEmitter } from './events'
+import { createEventEmitter } from './eventEmitter'
 
 describe('events tests', function () {
     it('should do nothing with empty emitters', async function () {

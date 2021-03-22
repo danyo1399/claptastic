@@ -1,6 +1,7 @@
 import { uniqueId } from '../utils/id.utils'
 import PouchDB from 'pouchdb-browser'
 import { addEvent } from './events.db'
+import { createEventEmitter } from '../utils/eventEmitter'
 
 export interface EventModel<T> {
     _id: string
@@ -10,6 +11,7 @@ export interface EventModel<T> {
     data: T
 }
 
+export const eventStream = createEventEmitter<EventModel<any>>()
 export function createEventFn<T>(type: string) {
     function create(data: T) {
         return {
@@ -24,8 +26,10 @@ export function createEventFn<T>(type: string) {
         return event.type === type
     }
 
-    function _raiseEvent(data: T) {
-        return addEvent(create(data))
+    function raiseEvent(data: T) {
+        const event = create(data)
+        eventStream.dispatch(event)
+        return addEvent(event)
     }
 
     function applyEvent(
@@ -43,7 +47,7 @@ export function createEventFn<T>(type: string) {
         }
         throw new Error('event is not correct type' + event.type)
     }
-    return { create, isType, raiseEvent: _raiseEvent, applyEvent, getData }
+    return { create, isType, raiseEvent, applyEvent, getData }
 }
 
 export type ChangeHandler = (
