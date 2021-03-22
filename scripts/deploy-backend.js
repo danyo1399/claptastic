@@ -27,6 +27,7 @@ COUCHDB_SECRET=${secret}
 `
 
 const nodeServerPort = process.env.SERVER_PORT || 80
+const couchdbServer = 'claptastic-couchdb:5984'
 
 const couchDbBasePath = path.resolve(cwd, 'dist', 'couchdb')
 const couchdbDataPath = path.resolve(couchDbBasePath, 'data')
@@ -59,7 +60,7 @@ exec(
 exec(`docker build -f Dockerfile.server -t claptastic-server:latest .`)
 
 exec(
-    `docker run -d -it --restart always -p:${nodeServerPort}:${nodeServerPort} --env PORT=${nodeServerPort} --network claptastic-net --env-file ${envConfigFilePath} --name claptastic-server claptastic-server`,
+    `docker run -d -it --restart always -p:${nodeServerPort}:${nodeServerPort} --env COUCHDB_SERVER=${couchdbServer} --env PORT=${nodeServerPort} --network claptastic-net --env-file ${envConfigFilePath} --name claptastic-server claptastic-server`,
 )
 
 function mkdir(path) {
