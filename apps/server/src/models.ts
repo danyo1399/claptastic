@@ -12,5 +12,4 @@ export interface Clap {
 
 export interface Summary extends Doc {
     count: number
-    mostRecentClaps: Clap[]
 }

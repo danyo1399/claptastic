@@ -2,7 +2,6 @@ import { getEventChanges } from './events.db'
 import { useEffect } from 'react'
 import getLogger from '../utils/logger'
 import { ChangeHandler, EventModel, EventState } from './events'
-import { createQueueProcessor } from '../utils/createQueueProcessor'
 
 const logger = getLogger('events')
 

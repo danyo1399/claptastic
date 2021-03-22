@@ -32,7 +32,6 @@ export async function setupDb() {
     const summary = await tryGet(clapDbPublic, 'summary')
     if (!summary) {
         await upsert(clapDbPublic, {
-            mostRecentClaps: [],
             count: 0,
             _id: 'summary',
         } as Summary)

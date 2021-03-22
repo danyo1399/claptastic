@@ -10,6 +10,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 const app = express()
 import compression from 'compression'
 import morgan from 'morgan'
+import { useClapRouter } from './routes/clap.router'
 const port = process.env.PORT || 3000
 app.use(cors({ origin: true, credentials: true }))
 const { COUCHDB_USER, COUCHDB_PASSWORD, COUCHDB_SERVER } = process.env
@@ -56,29 +57,7 @@ setupDb().then(({ clapDbPublic, clapDb }) => {
     // stick this after other streaming routes
     app.use(bodyParser.json())
 
-    app.post('/claps', async (req, res, next) => {
-        const maxclaps = 2
-        const summary: Summary = await clapDbPublic.get('summary')
-        const doc: Clap = req.body
-
-        doc.message = (doc.message || '').slice(0, 50)
-        doc.userId = (doc.userId || '').slice(0, 20)
-
-        summary.mostRecentClaps.push({
-            message: doc.message,
-            date: Date.now(),
-            userId: doc.userId,
-        })
-        summary.count++
-        const len = summary.mostRecentClaps.length
-        if (len > maxclaps) {
-            summary.mostRecentClaps = summary.mostRecentClaps.slice(
-                len - maxclaps,
-            )
-        }
-        await clapDbPublic.insert(summary)
-        res.json(req.body)
-    })
+    useClapRouter(clapDbPublic, app)
 
     app.listen(port, () => {
         console.log(`Example app listening at http://localhost:${port}`)
