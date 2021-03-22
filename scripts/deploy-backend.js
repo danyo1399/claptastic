@@ -51,7 +51,7 @@ exec(`npm run server:build`)
 
 // couchdb
 exec(
-    `docker run -p:5984:5984 -d -it --restart always --network claptastic-net -v ${couchdbDataPath}:/opt/couchdb/data --env-file ${envConfigFilePath} --name claptastic-couchdb couchdb`,
+    `docker run -p:5984:5984 -d -it --restart always --network claptastic-net -v ${couchdbDataPath}:/opt/couchdb/data --env-file ${envConfigFilePath} --name claptastic-couchdb couchdb:3.1.1`,
 )
 
 // server
@@ -70,6 +70,7 @@ function mkdir(path) {
 
 function exec(cmd, continueOnError) {
     try {
+        console.log(cmd)
         let buffer = cp.execSync(cmd)
         console.log(buffer.toString())
         return true
