@@ -17,14 +17,14 @@ export function createEventEmitter<T>() {
         })
     }
 
-    function addEventListener(handler: (event: any) => void) {
+    function addEventListener(handler: (event: T) => void) {
         if (!handler[idProperty]) {
             handler[idProperty] = ++id
         }
         dict[handler[idProperty]] = handler
     }
 
-    function removeEventListener(handler: (event: any) => void) {
+    function removeEventListener(handler: (event: T) => void) {
         delete dict[handler[idProperty]]
     }
 
