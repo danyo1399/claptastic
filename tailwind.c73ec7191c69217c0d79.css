@@ -656,6 +656,10 @@ video {
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
 
+.visible {
+  visibility: visible;
+}
+
 .w-full {
   width: 100%;
 }
@@ -725,4 +729,4 @@ video {
 }
 
 
-/*# sourceMappingURL=tailwind.eeeb22a4b9c70313e414.css.map*/
+/*# sourceMappingURL=tailwind.c73ec7191c69217c0d79.css.map*/
