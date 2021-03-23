@@ -88,7 +88,7 @@ export default function SideNav() {
             data-testid="side-nav"
         >
             <div className="sidenav-content">
-                <section>
+                <section className="mb-2">
                     <div className="version-header">
                         Version:
                         <span id="version" className="version">

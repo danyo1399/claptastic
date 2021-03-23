@@ -34,7 +34,7 @@ export const ClappersState = selector({
 })
 function stateActions(state: ClapState) {
     function setAudio(id: number, filename: string, audioType: string) {
-        const clapper = state.clappers[id]
+        const clapper = state.clappers.find((x) => x.id === id)
         if (clapper) {
             clapper.audioFilename = filename
             clapper.audioType = audioType
@@ -42,7 +42,7 @@ function stateActions(state: ClapState) {
     }
 
     function removeAudio(id: number) {
-        const clapper = state.clappers[id]
+        const clapper = state.clappers.find((x) => x.id === id)
         if (clapper) {
             clapper.audioFilename = null
             clapper.audioType = null
@@ -70,7 +70,19 @@ export const clapReducer: ChangeHandler<ClapState> = (
     })
 
     clapperCreated.applyEvent(change, (x) => {
-        state.clappers.push({ id: state.clappers.length })
+        const clappers = state.clappers
+        let nextIdToAdd = 1
+        for (
+            let potentialNextId = nextIdToAdd;
+            potentialNextId < state.clappers.length;
+            potentialNextId++
+        ) {
+            if (!clappers.some((x) => x.id === potentialNextId)) {
+                nextIdToAdd = potentialNextId
+                break
+            }
+        }
+        state.clappers.push({ id: nextIdToAdd })
     })
 
     clapperRemoved.applyEvent(change, (x) => {
