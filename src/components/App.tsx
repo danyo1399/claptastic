@@ -10,6 +10,7 @@ import { EventHandlerProvider } from '../events/eventHandlerProvider'
 import ReleaseInfo from './ReleaseInfo'
 import { clapAtom, clapReducer, clapDefault } from '../claps'
 import { useImmerRecoilSetState } from '../state/immerRecoil'
+import { TestBed } from './TestBed'
 export default function App() {
     const setInstallState = useSetRecoilState(installPromptState)
     const setState = useImmerRecoilSetState(clapAtom)
@@ -27,6 +28,7 @@ export default function App() {
 
     return (
         <>
+            {/*<TestBed></TestBed>*/}
             <EventHandlerProvider
                 handlers={[clapReducer]}
                 initialState={clapDefault()}
@@ -37,7 +39,7 @@ export default function App() {
             <Header></Header>
             <SideNav></SideNav>
             <div className="page-content">
-                <ClapButton></ClapButton>
+                <ClapButton clapperId={0}></ClapButton>
             </div>
         </>
     )

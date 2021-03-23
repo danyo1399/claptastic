@@ -10,7 +10,7 @@ export function EventHandlerProvider({
     initialState,
     setState,
 }: {
-    handlers: ChangeHandler[]
+    handlers: ChangeHandler<any>[]
     initialState: EventState
     setState: (state: any) => void
 }) {

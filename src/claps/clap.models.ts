@@ -6,7 +6,7 @@ export interface ClapState extends EventState {
 }
 
 export interface ClapperModel {
-    color: string
+    id: number
     audioFilename?: string
     audioType?: string
 }

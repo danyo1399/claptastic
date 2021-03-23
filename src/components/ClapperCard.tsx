@@ -5,9 +5,13 @@ import { ClapIconContainer } from './ClapIconContainer'
 import getLogger from '../utils/logger'
 import {
     clapperAudioUpdatedEvent,
+    clapperCreated,
     clapperCustomAudioRemovedEvent,
+    clapperRemoved,
 } from '../claps'
 import { removeAudio, setAudio } from '../claps'
+import { Clap } from '../../apps/server/src/models'
+import { DeleteSvg } from './DeleteSvg'
 
 const logger = getLogger('clapper-card')
 
@@ -48,7 +52,6 @@ const Container = styled.div`
     .button {
         background-color: #676767;
         font-size: 0.9rem;
-        border-radius: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -57,7 +60,12 @@ const Container = styled.div`
         outline: none;
     }
 `
-export function ClapperCard() {
+
+export interface ClapperCardProps {
+    clapperId: number
+}
+
+export function ClapperCard({ clapperId }: ClapperCardProps) {
     async function onChange(e) {
         const ele: HTMLInputElement = e.target
         const file = ele.files[0] as File
@@ -73,10 +81,10 @@ export function ClapperCard() {
             logger.log('file cant be bigger than 2 MB')
             return
         }
-        await setAudio(0, file)
+        await setAudio(clapperId, file)
 
         await clapperAudioUpdatedEvent.raiseEvent({
-            clapperId: 0,
+            clapperId,
             name: file.name,
             type: file.type,
         })
@@ -84,12 +92,17 @@ export function ClapperCard() {
     }
 
     async function removeCustomAudio() {
-        await removeAudio(0)
-        await clapperCustomAudioRemovedEvent.raiseEvent({ clapperId: 0 })
+        await removeAudio(clapperId)
+        await clapperCustomAudioRemovedEvent.raiseEvent({ clapperId })
     }
+
+    function removeClapper() {
+        clapperRemoved.raiseEvent({ clapperId })
+    }
+
     return (
-        <Container className="rounded border p-2 ">
-            <label className="input-container button" htmlFor="file">
+        <Container className="rounded  p-3 border border-gray-300 ">
+            <label className="input-container button rounded" htmlFor="file">
                 <input
                     id="file"
                     type="file"
@@ -101,13 +114,27 @@ export function ClapperCard() {
             </label>
 
             <div className="icon-container">
-                <ClapIconContainer>
+                <ClapIconContainer clapperId={clapperId}>
                     <ClapSvg></ClapSvg>
                 </ClapIconContainer>
             </div>
-            <button className="button" onClick={removeCustomAudio}>
-                Restore
-            </button>
+            <div className="flex justify-between">
+                <button
+                    className="button flex-grow rounded"
+                    onClick={removeCustomAudio}
+                >
+                    Restore
+                </button>
+                {clapperId > 0 ? (
+                    <button
+                        onClick={removeClapper}
+                        className="rounded p-2 b bg-gr text-white ml-2 outline-none focus:outline-none"
+                        style={{ backgroundColor: '#676767' }}
+                    >
+                        <DeleteSvg className="fill-current"></DeleteSvg>
+                    </button>
+                ) : null}
+            </div>
         </Container>
     )
 }

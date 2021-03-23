@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ContainerColor } from '../claps'
+import { DivWithAnyProps } from './DivWithAnyProps'
 
-const Wrapper = styled.div`
+const Wrapper = styled(DivWithAnyProps)`
     width: 100%;
 
     animation-name: loadButton;
@@ -61,9 +62,17 @@ export const containerColors: ContainerColor[] = [
     { id: 'red', color1: '#fc7b7b', color2: '#e70000' },
 ]
 
-export function ClapIconContainer({ onClick, children, colorId }: any) {
-    const color =
-        containerColors.find((x) => x.id === colorId) || containerColors[0]
+export interface ClapIconContainerProps {
+    onClick?: any
+    children: any
+    clapperId: number
+}
+export function ClapIconContainer({
+    onClick,
+    children,
+    clapperId,
+}: ClapIconContainerProps) {
+    const color = containerColors[clapperId] || containerColors[0]
 
     const type = onClick ? 'button' : 'div'
     return (

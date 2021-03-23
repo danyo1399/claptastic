@@ -50,10 +50,10 @@ export function createEventFn<T>(type: string) {
     return { create, isType, raiseEvent, applyEvent, getData }
 }
 
-export type ChangeHandler = (
+export type ChangeHandler<T extends EventState> = (
     change: PouchDB.Core.ChangesResponseChange<EventModel<unknown>>,
     replaying: boolean,
-    state: EventState,
+    state: T,
 ) => void
 
 export interface EventState {

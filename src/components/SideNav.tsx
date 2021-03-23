@@ -5,6 +5,9 @@ import CloseIcon from './CloseIcon'
 import MenuIcon from './MenuIcon'
 import { ClapperCard } from './ClapperCard'
 import Config from '../config'
+import { AddButton } from './AddButton'
+import { clapperCreated, ClappersState } from '../claps'
+import { DivWithAnyProps } from './DivWithAnyProps'
 
 const StyledButton = styled.button`
     color: white;
@@ -30,7 +33,7 @@ export function ExpandIconButton() {
     )
 }
 
-const SideNavContainer = styled.div`
+const SideNavContainer = styled(DivWithAnyProps)`
     position: fixed;
     overflow: hidden;
     width: 100vw;
@@ -53,8 +56,14 @@ const SideNavContainer = styled.div`
             padding-left: 0.5rem;
         }
     }
-    section {
-        margin-bottom: 2rem;
+    .sidenav-content {
+        height: calc(100% - 60px);
+        overflow: auto;
+        margin-bottom: 1.2rem;
+    }
+    .sidenav-footer {
+        border-top: 1px solid white;
+        height: 60px;
     }
     ${(props) =>
         props.expanded &&
@@ -66,23 +75,40 @@ const SideNavContainer = styled.div`
 export default function SideNav() {
     const version = Config.version
     const expanded = useRecoilValue(expandedAtom)
+    const clappers = useRecoilValue(ClappersState)
+
+    function addClapper() {
+        clapperCreated.raiseEvent({})
+    }
+
     return (
         <SideNavContainer
             className="min-height-hide"
             expanded={expanded}
             data-testid="side-nav"
         >
-            <section>
-                <div className="version-header">
-                    Version:
-                    <span id="version" className="version">
-                        {version}
-                    </span>
-                </div>
-            </section>
-            <section>
-                <ClapperCard></ClapperCard>
-            </section>
+            <div className="sidenav-content">
+                <section>
+                    <div className="version-header">
+                        Version:
+                        <span id="version" className="version">
+                            {version}
+                        </span>
+                    </div>
+                </section>
+                {clappers.map((c) => (
+                    <div className="mb-3" key={c.id}>
+                        <ClapperCard clapperId={c.id}></ClapperCard>
+                    </div>
+                ))}
+
+                {clappers.length < 2 ? (
+                    <div>
+                        <AddButton onClick={addClapper}></AddButton>
+                    </div>
+                ) : null}
+            </div>
+            <div className="sidenav-footer"></div>
         </SideNavContainer>
     )
 }

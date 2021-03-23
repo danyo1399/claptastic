@@ -5,6 +5,7 @@ import ClapSvg from './ClapSvg'
 import { clappedEvent } from '../claps'
 import { ClapIconContainer } from './ClapIconContainer'
 import { playAudio } from '../claps'
+import { Clap } from '../../apps/server/src/models'
 
 const logger = getLogger('clap-button')
 const Wrapper = styled.div`
@@ -35,8 +36,11 @@ const Wrapper = styled.div`
         }
     } ;
 `
+export interface ClapButtonProps {
+    clapperId: number
+}
 
-export default function ClapButton() {
+export default function ClapButton({ clapperId }: ClapButtonProps) {
     const [playing, setPlaying] = useState<boolean>(false)
     const intervalRef = useRef<NodeJS.Timeout>()
     const audioRef = useRef<HTMLAudioElement>()
@@ -149,7 +153,7 @@ export default function ClapButton() {
     }, [])
     return (
         <Wrapper>
-            <ClapIconContainer onClick={play}>
+            <ClapIconContainer onClick={play} clapperId={clapperId}>
                 <ClapSvg clapping={playing} ref={svgRef} />
             </ClapIconContainer>
         </Wrapper>

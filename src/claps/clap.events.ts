@@ -17,11 +17,15 @@ export const clapperAudioUpdatedEvent = createEventFn<ClapperAudioEventData>(
     'clapperAudioUpdated',
 )
 
-export interface ClapperEventData {
+// export interface ClapperEventData {}
+export const clapperCreated = createEventFn<any>('clapperCreated')
+
+export interface ClapperRemovedEventData {
     clapperId: number
-    buttonType: string
 }
-export const clapperCreated = createEventFn<ClapperEventData>('clapperCreated')
+export const clapperRemoved = createEventFn<ClapperRemovedEventData>(
+    'clapperRemoved',
+)
 
 export const clapperCustomAudioRemovedEvent = createEventFn<{
     clapperId: number
