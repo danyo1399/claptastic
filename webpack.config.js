@@ -37,7 +37,7 @@ module.exports = {
     devServer: {
         serveIndex: true,
         contentBase: './dist',
-        publicPath: '/claptastic/',
+        publicPath,
         compress: true,
         historyApiFallback: true,
         watchContentBase: true,
@@ -136,7 +136,7 @@ module.exports = {
             crossorigin: 'anonymous', //can be null, use-credentials or anonymous
             display: 'fullscreen',
             orientation: 'portrait',
-            publicPath: '/claptastic/',
+            publicPath,
             start_url: 'index.html?src=manifest',
             prefer_related_applications: false,
 
