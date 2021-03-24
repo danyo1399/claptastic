@@ -10,6 +10,7 @@ const httpOnly = !!process.env.HTTP_ONLY
 const fs = require('fs')
 const versionInfo = require('./package.json')
 
+const publicPath = process.env.PUBLIC_PATH || '/claptastic/'
 const baseConfig = require('./src/environment/environment.json')
 const envConfig = process.env.CONFIG
     ? require(`./src/environment/environment.${process.env.CONFIG}.json`)

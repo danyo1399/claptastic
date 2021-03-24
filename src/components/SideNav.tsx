@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import CloseIcon from './CloseIcon'
@@ -30,7 +30,14 @@ export function ExpandIconButton() {
     )
 }
 
-const SideNavContainer = styled.div`
+interface SideNavContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+    expanded: boolean
+}
+
+function SideNavContainer({ expanded, ...props }: SideNavContainerProps) {
+    return <div {...props}></div>
+}
+const StyledSideNavContainer = styled(SideNavContainer)`
     position: fixed;
     overflow: hidden;
     width: 100vw;
@@ -45,44 +52,52 @@ const SideNavContainer = styled.div`
     transition-property: all;
     transition-duration: 200ms;
     transition-timing-function: ease-out;
-
-    .version-header {
-        font-weight: normal;
-        font-size: 0.8rem;
-        .version {
-            padding-left: 0.5rem;
-        }
-    }
-    section {
-        margin-bottom: 2rem;
-    }
     ${(props) =>
         props.expanded &&
         css`
             margin-left: 0px;
         `}
+
+    section {
+        margin-bottom: 2rem;
+    }
+`
+
+interface VersionHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    version: string
+}
+function VersionHeader({ version, ...props }: VersionHeaderProps) {
+    return (
+        <section {...props}>
+            Version:
+            <span id="version" className="version">
+                {version}
+            </span>
+        </section>
+    )
+}
+const StyledVersionHeader = styled(VersionHeader)`
+    font-weight: normal;
+    font-size: 0.8rem;
+    .version {
+        padding-left: 0.5rem;
+    }
 `
 
 export default function SideNav() {
     const version = Config.version
     const expanded = useRecoilValue(expandedAtom)
     return (
-        <SideNavContainer
+        <StyledSideNavContainer
             className="min-height-hide"
             expanded={expanded}
             data-testid="side-nav"
         >
-            <section>
-                <div className="version-header">
-                    Version:
-                    <span id="version" className="version">
-                        {version}
-                    </span>
-                </div>
-            </section>
+            <StyledVersionHeader version={version}></StyledVersionHeader>
+
             <section>
                 <ClapperCard></ClapperCard>
             </section>
-        </SideNavContainer>
+        </StyledSideNavContainer>
     )
 }

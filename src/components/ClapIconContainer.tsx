@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { ContainerColor } from '../claps'
 
@@ -32,26 +32,41 @@ const Wrapper = styled.div`
         height: 0;
         width: 100%;
     }
+`
 
-    .button-icon {
-        outline: none !important;
+interface ButtonIconProps extends React.HTMLAttributes<HTMLElement> {
+    color1: string
+    color2: string
+    type: 'button' | 'div'
+    children: ReactNode
+}
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 999px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(
-            circle at bottom center,
-            ${(props) => props.color1} 15px,
-            ${(props) => props.color2}
-        );
-        box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+function ButtonIcon({ type, ...props }: ButtonIconProps) {
+    if (type === 'button') {
+        return <button {...props}>{props.children}</button>
+    } else {
+        return <div {...props}>{props.children}</div>
     }
+}
+
+const StyledButtonIcon = styled(ButtonIcon)`
+    outline: none !important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 999px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at bottom center,
+        ${(props) => props.color1} 15px,
+        ${(props) => props.color2}
+    );
+    box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 `
 
 export const containerColors: ContainerColor[] = [
@@ -67,24 +82,17 @@ export function ClapIconContainer({ onClick, children, colorId }: any) {
 
     const type = onClick ? 'button' : 'div'
     return (
-        <Wrapper color1={color.color1} color2={color.color2}>
+        <Wrapper>
             <div className="button-wrapper">
-                <ButtonOrDiv
+                <StyledButtonIcon
+                    color1={color.color1}
+                    color2={color.color2}
                     type={type}
-                    className="button-icon"
                     onClick={onClick}
                 >
                     <div className="svg-wrapper">{children}</div>
-                </ButtonOrDiv>
+                </StyledButtonIcon>
             </div>
         </Wrapper>
     )
-}
-
-function ButtonOrDiv({ children, type, ...props }: any) {
-    if (type === 'button') {
-        return <button {...props}>{children}</button>
-    } else {
-        return <div {...props}>{children}</div>
-    }
 }
