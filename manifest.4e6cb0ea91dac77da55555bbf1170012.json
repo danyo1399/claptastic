@@ -1,0 +1,90 @@
+{
+  "icons": [
+    {
+      "src": "/claptastic/icon_1024x1024.0346cc42caf658fe5ccf8f76524c967d.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_512x512.36e91ad2e5db895c529bb767b9763443.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_384x384.68e751bfe4b7e21d3fbe32d3474e099c.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_256x256.631a9bacc925152575a5464de057d154.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_192x192.b14a4d008414b6bebab7a8cf3015d01d.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_128x128.52488ee14f66c636e069a16a8902658e.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_96x96.c3abd059b4258e011d520b816873e711.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/claptastic/icon_1024x1024.86744b649e597dc29943b2d67ea91aed.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "/claptastic/icon_512x512.782c557802b7cf6ae93ad50c256c1239.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/claptastic/icon_384x384.7464394210226118191523c3e47738ca.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/claptastic/icon_256x256.c82907fa446d731c30d68efee5387e8a.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/claptastic/icon_192x192.590c875f4c58cce7f14fcbfbea312311.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/claptastic/icon_128x128.a93f21b2c65f8b13aff029de5a8f4c4b.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/claptastic/icon_96x96.a35141814f076a3adfd94bd5911285af.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "Claptastic",
+  "short_name": "Claptastic",
+  "orientation": "portrait",
+  "display": "fullscreen",
+  "start_url": "index.html?src=manifest",
+  "description": "You ever tried clapping while holding your phone? Well now you can",
+  "background_color": "#323030",
+  "theme_color": "#323030",
+  "prefer_related_applications": false
+}

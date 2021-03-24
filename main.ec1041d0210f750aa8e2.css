@@ -1,0 +1,43 @@
+:root {
+  touch-action: pan-x pan-y;
+  height: 100%;
+}
+
+.icon {
+  width: 60%;
+  height: 60%;
+  transition: transform 50ms;
+}
+
+body {
+  width: 100%;
+  /*
+    Try fix rabis android device where back buttons appear onscreen and you have to scroll down
+     in order to exit app. I suspect pushing body down pushes down overlay phone nav buttons.
+    */
+  height: calc(100% - 50px) ;
+  background-color: #f3466f;
+  margin-top: 50px !important;
+  overflow: hidden;
+}
+
+.page-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-height: 360px) {
+  body {
+    padding-top: 0px;
+  }
+
+  .min-height-hide {
+    display:none !important;
+  }
+}
+
+
+/*# sourceMappingURL=main.ec1041d0210f750aa8e2.css.map*/
