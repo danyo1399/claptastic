@@ -11,6 +11,7 @@ https://web.dev/how-to-use-local-https/
 - git client
 - docker
 - mkcert
+
 ## Setup
 - install mkcert for your os
 - Execute the following commands  
@@ -47,5 +48,5 @@ netlify to host a pre prod env for testing on mobile phones etc
 - install nvm
 - logout and log back in  
 - install node lts (nvm install --lts)
-- create a network (docker network create claptastic-net)
+- run npm run 
 

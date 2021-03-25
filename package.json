@@ -22,7 +22,8 @@
     "server:build:watch": "tsc --project ./apps/server/tsconfig.json --watch",
     "server:build": "tsc --project ./apps/server/tsconfig.json",
     "server:start": "nodemon node dist/server/index.js",
-    "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh"
+    "ssl-setup": "chmod +x ./scripts/cert-setup.sh &&  ./scripts/cert-setup.sh",
+    "deploy-backend": "node scripts/deploy-backend.js"
   },
   "repository": {
     "type": "git",
