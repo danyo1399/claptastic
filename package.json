@@ -12,7 +12,7 @@
     "client:build:github": "cross-env NODE_ENV=production CONFIG=prod webpack --config=webpack.prod.js && ncp dist/assets dist/claptastic",
     "client:build:netlify": "cross-env NODE_ENV=production CONFIG=test webpack --config=webpack.prod.js && ncp dist/assets dist/claptastic",
     "client:build:cloudflare": "cross-env NODE_ENV=production PUBLIC_PATH=/ CONFIG=prod webpack --config=webpack.prod.js && ncp dist/assets dist/claptastic",
-    "client:build:all": "npm run client:build:github && npm run client:build:netlify && npm run client:build:cloudflare",
+    "client:build:all": "npm run bump-version && npm run client:build:github && npm run client:build:netlify && npm run client:build:cloudflare",
     "client:build:dev": "cross-env NODE_ENV=development webpack --config=webpack.dev.js ",
     "client:publish:netlify:preview": "npm run client:build:netlify && netlify deploy --dir=dist && echo dont forget to add /claptastic/ to end of url",
     "client:publish:netlify": "npm run client:build:netlify && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
