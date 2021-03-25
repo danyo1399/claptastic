@@ -1,4 +1,4 @@
-import Dialog from './Dialog'
+import Dialog from './toolkit/Dialog'
 import React from 'react'
 import styled from 'styled-components'
 import releaseData from '../releaseData'

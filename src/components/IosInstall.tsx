@@ -1,6 +1,6 @@
 import React, { useState, useEffect, HTMLAttributes } from 'react'
 import styled, { css, keyframes } from 'styled-components'
-import { SlideUpPanel } from './SlideUpPanel'
+import { SlideUpPanel } from './toolkit/SlideUpPanel'
 import { atom } from 'recoil'
 import { useImmerRecoilState } from '../state/immerRecoil'
 

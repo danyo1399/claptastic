@@ -1,8 +1,8 @@
 import React, { useState, useEffect, ReactNode } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import CloseIcon from './CloseIcon'
-import MenuIcon from './MenuIcon'
+import CloseIcon from './toolkit/CloseIcon'
+import MenuIcon from './toolkit/MenuIcon'
 import { ClapperCard } from './ClapperCard'
 import Config from '../config'
 
