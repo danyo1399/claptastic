@@ -556,6 +556,10 @@ video {
   justify-content: center;
 }
 
+.font-semibold {
+  font-weight: 600;
+}
+
 .h-full {
   height: 100%;
 }
@@ -565,12 +569,26 @@ video {
   line-height: 1.75rem;
 }
 
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
 .m-3 {
   margin: 0.75rem;
 }
 
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
 }
 
 .mb-6 {
@@ -729,4 +747,4 @@ video {
 }
 
 
-/*# sourceMappingURL=tailwind.c73ec7191c69217c0d79.css.map*/
+/*# sourceMappingURL=tailwind.2e03001e638bf0eee21a.css.map*/
