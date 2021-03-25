@@ -44,8 +44,8 @@ const Container = styled.div`
     height: 32px;
     button {
         position: fixed;
-        bottom: 10px;
-        right: 10px;
+        bottom: 15px;
+        right: 15px;
         margin-right: -50px;
         animation-name: ${installKeyFrames};
         animation-duration: 1000ms;
