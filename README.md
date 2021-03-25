@@ -6,13 +6,18 @@ https://danyo1399.github.io/claptastic/
 setup local cert 
 https://web.dev/how-to-use-local-https/
 
+## Dependencies
+- Nodejs
+- git client
+- docker
+- mkcert
 ## Setup
 - install mkcert for your os
 - Execute the following commands  
 ```
 npm install
 npm run ssh-setup
-npm run start:dev
+
 ```
 - open browser to https://localhost:8080/claptastic/
 
@@ -43,3 +48,4 @@ netlify to host a pre prod env for testing on mobile phones etc
 - logout and log back in  
 - install node lts (nvm install --lts)
 - create a network (docker network create claptastic-net)
+
