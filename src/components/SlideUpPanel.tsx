@@ -20,7 +20,6 @@ const Container = styled.div`
     flex-direction: column;
     row-gap: 1rem;
     padding: 1rem 0.5rem;
-    border: 1px solid lightgray;
 
     animation-name: ${openAnimation};
     animation-duration: 0.5s;
