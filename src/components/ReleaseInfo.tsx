@@ -41,23 +41,37 @@ const Container = styled.div`
 `
 
 function getNextIndexToShow() {
-    const lastIndex = +localStorage.getItem('release_notes')
+    const value = localStorage.getItem('release_notes')
+    if (value == null) {
+        return null
+    }
+    const lastIndex = +value
     return lastIndex || 0
 }
 function setNextIndexToShow(index: number) {
     localStorage.setItem('release_notes', index.toString())
 }
 export default function ReleaseInfo() {
-    const lastIndex = getNextIndexToShow()
+    const lastIndexOrNull = getNextIndexToShow()
+
+    // Dont show first release notes when installed.
+
     const notesToShow: string[] = []
-    for (let i = lastIndex; i < releaseData.length; i++) {
+    for (let i = lastIndexOrNull || 0; i < releaseData.length; i++) {
         notesToShow.push(...releaseData[i].notes)
     }
     if (notesToShow.length === 0) {
         return null
     }
 
-    function close() {
+    // First time users skip all existing release notes and only show new
+    // release notes from install date.
+    if (lastIndexOrNull == null) {
+        setNextIndexToShow(releaseData.length)
+        return null
+    }
+
+    function closeDialog() {
         setNextIndexToShow(releaseData.length)
     }
     function ReleaseInfoList({ closeDialog }: any) {
@@ -75,5 +89,5 @@ export default function ReleaseInfo() {
             </Container>
         )
     }
-    return <Dialog onClose={close} render={ReleaseInfoList}></Dialog>
+    return <Dialog onClose={closeDialog} render={ReleaseInfoList}></Dialog>
 }
