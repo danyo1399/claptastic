@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 const devMode = process.env.NODE_ENV !== 'production'
 const httpOnly = !!process.env.HTTP_ONLY
@@ -115,12 +116,12 @@ module.exports = {
             chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
         }),
         new CleanWebpackPlugin(),
-        // new CopyPlugin({
-        //   patterns: [
-        //     { from: "./src/icons", to: "icons" },
-        //     { from: "./src/media", to: "media" },
-        //   ],
-        // }),
+        new CopyPlugin({
+            patterns: [
+                { from: './src/screenshots', to: 'screenshots' },
+                // { from: "./src/media", to: "media" },
+            ],
+        }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
             excludeChunks: ['service-worker'],
