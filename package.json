@@ -6,6 +6,7 @@
     "bump-version": "npm version patch",
     "test": "jest",
     "test:watch": "jest --watch",
+    "client:bumbversion": "npm version",
     "client:serve:bundle": "node bin/index.js",
     "client:serve:dev-server": "cross-env NODE_ENV=development webpack serve",
     "client:build:github": "cross-env NODE_ENV=production CONFIG=prod webpack && ncp dist/assets dist/claptastic",
