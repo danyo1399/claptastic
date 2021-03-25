@@ -16,5 +16,7 @@ if (usingInstalledApp()) {
 }
 
 export function usingInstalledApp() {
-    return window.location.search.includes('=manifest')
+    return (
+        'standalone' in window.navigator && (window.navigator as any).standalone
+    )
 }
