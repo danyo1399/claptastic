@@ -6,7 +6,7 @@ const distPath = path.resolve(__dirname, '../dist/claptastic')
 const version = require('../package.json')
 
 console.log('dist path', distPath)
-const branch = process.env.BRANCH || 'gh-pages.'
+const branch = process.env.BRANCH || 'gh-pages'
 console.log('branch', branch)
 ghpages.publish(distPath, { tag: version.version, branch }, function (err) {
     if (err) {
