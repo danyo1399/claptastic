@@ -1,3 +1,4 @@
+'use strict'
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -6,9 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
-const devMode = process.env.NODE_ENV !== 'production'
-const httpOnly = !!process.env.HTTP_ONLY
-const fs = require('fs')
+
 const versionInfo = require('./package.json')
 
 const publicPath = process.env.PUBLIC_PATH || '/claptastic/'
@@ -22,6 +21,7 @@ const keys = Object.keys(tempConfig)
 for (let key of keys) {
     combinedConfig['process.env.' + key] = JSON.stringify(tempConfig[key])
 }
+const devMode = process.env.NODE_ENV !== 'production'
 
 console.log('combined config', combinedConfig)
 
@@ -33,31 +33,16 @@ module.exports = {
 
         tailwind: { import: './src/tailwind.js', filename: '[name].[hash].js' },
     },
-    devtool: devMode ? 'source-map' : 'source-map',
+    devtool: 'source-map',
     target: 'web',
-    devServer: {
-        serveIndex: true,
-        contentBase: './dist',
-        publicPath,
-        compress: true,
-        historyApiFallback: true,
-        watchContentBase: true,
-        // hot: true,
-        // injectHot: true,
-        // inline: true,
-        https: httpOnly
-            ? undefined
-            : {
-                  key: fs.readFileSync('./keys/localhost-key.pem'),
-                  cert: fs.readFileSync('./keys/localhost.pem'),
-              },
-    },
+
     output: {
         path: path.resolve(__dirname, 'dist/claptastic'),
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+
     module: {
         rules: [
             {
