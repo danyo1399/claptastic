@@ -1,15 +1,16 @@
+'use strict'
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
-const devMode = process.env.NODE_ENV !== 'production'
-const httpOnly = !!process.env.HTTP_ONLY
-const fs = require('fs')
+
 const versionInfo = require('./package.json')
 
+const publicPath = process.env.PUBLIC_PATH || '/claptastic/'
 const baseConfig = require('./src/environment/environment.json')
 const envConfig = process.env.CONFIG
     ? require(`./src/environment/environment.${process.env.CONFIG}.json`)
@@ -20,6 +21,7 @@ const keys = Object.keys(tempConfig)
 for (let key of keys) {
     combinedConfig['process.env.' + key] = JSON.stringify(tempConfig[key])
 }
+const devMode = process.env.NODE_ENV !== 'production'
 
 console.log('combined config', combinedConfig)
 
@@ -31,31 +33,16 @@ module.exports = {
 
         tailwind: { import: './src/tailwind.js', filename: '[name].[hash].js' },
     },
-    devtool: devMode ? 'source-map' : 'source-map',
+    devtool: 'source-map',
     target: 'web',
-    devServer: {
-        serveIndex: true,
-        contentBase: './dist',
-        publicPath: '/claptastic/',
-        compress: true,
-        historyApiFallback: true,
-        watchContentBase: true,
-        // hot: true,
-        // injectHot: true,
-        // inline: true,
-        https: httpOnly
-            ? undefined
-            : {
-                  key: fs.readFileSync('./keys/localhost-key.pem'),
-                  cert: fs.readFileSync('./keys/localhost.pem'),
-              },
-    },
+
     output: {
         path: path.resolve(__dirname, 'dist/claptastic'),
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+
     module: {
         rules: [
             {
@@ -114,12 +101,12 @@ module.exports = {
             chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
         }),
         new CleanWebpackPlugin(),
-        // new CopyPlugin({
-        //   patterns: [
-        //     { from: "./src/icons", to: "icons" },
-        //     { from: "./src/media", to: "media" },
-        //   ],
-        // }),
+        new CopyPlugin({
+            patterns: [
+                { from: './src/screenshots', to: 'screenshots' },
+                // { from: "./src/media", to: "media" },
+            ],
+        }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
             excludeChunks: ['service-worker'],
@@ -135,7 +122,7 @@ module.exports = {
             crossorigin: 'anonymous', //can be null, use-credentials or anonymous
             display: 'fullscreen',
             orientation: 'portrait',
-            publicPath: '/claptastic/',
+            publicPath,
             start_url: 'index.html?src=manifest',
             prefer_related_applications: false,
 

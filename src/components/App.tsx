@@ -11,6 +11,7 @@ import ReleaseInfo from './ReleaseInfo'
 import { clapAtom, clapReducer, clapDefault } from '../claps'
 import { useImmerRecoilSetState } from '../state/immerRecoil'
 import { TestBed } from './TestBed'
+import { IosInstall } from './IosInstall'
 export default function App() {
     const setInstallState = useSetRecoilState(installPromptState)
     const setState = useImmerRecoilSetState(clapAtom)
@@ -28,6 +29,8 @@ export default function App() {
 
     return (
         <>
+            <IosInstall></IosInstall>
+
             {/*<TestBed></TestBed>*/}
             <EventHandlerProvider
                 handlers={[clapReducer]}

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import CloseIcon from './CloseIcon'
-import MenuIcon from './MenuIcon'
+import CloseIcon from './toolkit/CloseIcon'
+import MenuIcon from './toolkit/MenuIcon'
 import { ClapperCard } from './ClapperCard'
 import Config from '../config'
 import { AddButton } from './AddButton'
@@ -33,7 +33,14 @@ export function ExpandIconButton() {
     )
 }
 
-const SideNavContainer = styled(DivWithAnyProps)`
+interface SideNavContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+    expanded: boolean
+}
+
+function SideNavContainer({ expanded, ...props }: SideNavContainerProps) {
+    return <div {...props}></div>
+}
+const StyledSideNavContainer = styled(SideNavContainer)`
     position: fixed;
     overflow: hidden;
     width: 100vw;
@@ -48,28 +55,36 @@ const SideNavContainer = styled(DivWithAnyProps)`
     transition-property: all;
     transition-duration: 200ms;
     transition-timing-function: ease-out;
-
-    .version-header {
-        font-weight: normal;
-        font-size: 0.8rem;
-        .version {
-            padding-left: 0.5rem;
-        }
-    }
-    .sidenav-content {
-        height: calc(100% - 60px);
-        overflow: auto;
-        margin-bottom: 1.2rem;
-    }
-    .sidenav-footer {
-        border-top: 1px solid white;
-        height: 60px;
-    }
     ${(props) =>
         props.expanded &&
         css`
             margin-left: 0px;
         `}
+
+    section {
+        margin-bottom: 2rem;
+    }
+`
+
+interface VersionHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    version: string
+}
+function VersionHeader({ version, ...props }: VersionHeaderProps) {
+    return (
+        <section {...props}>
+            Version:
+            <span id="version" className="version">
+                {version}
+            </span>
+        </section>
+    )
+}
+const StyledVersionHeader = styled(VersionHeader)`
+    font-weight: normal;
+    font-size: 0.8rem;
+    .version {
+        padding-left: 0.5rem;
+    }
 `
 
 export default function SideNav() {
@@ -82,20 +97,14 @@ export default function SideNav() {
     }
 
     return (
-        <SideNavContainer
+        <StyledSideNavContainer
             className="min-height-hide"
             expanded={expanded}
             data-testid="side-nav"
         >
-            <div className="sidenav-content">
-                <section className="mb-2">
-                    <div className="version-header">
-                        Version:
-                        <span id="version" className="version">
-                            {version}
-                        </span>
-                    </div>
-                </section>
+            <StyledVersionHeader version={version}></StyledVersionHeader>
+
+            <section>
                 {clappers.map((c) => (
                     <div className="mb-3" key={c.id}>
                         <ClapperCard clapperId={c.id}></ClapperCard>
@@ -107,8 +116,8 @@ export default function SideNav() {
                         <AddButton onClick={addClapper}></AddButton>
                     </div>
                 ) : null}
-            </div>
-            <div className="sidenav-footer"></div>
-        </SideNavContainer>
+
+            </section>
+        </StyledSideNavContainer>
     )
 }
