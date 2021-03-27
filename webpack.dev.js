@@ -10,7 +10,7 @@ module.exports = merge(common, {
     devServer: {
         serveIndex: true,
         contentBase: './dist',
-        publicPath,
+        publicPath: '/claptastic/',
         compress: true,
         historyApiFallback: true,
         watchContentBase: true,
