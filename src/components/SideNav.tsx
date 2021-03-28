@@ -87,18 +87,48 @@ const StyledVersionHeader = styled(VersionHeader)`
     }
 `
 
+interface ClapperCardWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+    clapperId: number
+    remove?: boolean
+}
+
+function ClapperCardWrapper({
+    clapperId,
+    remove,
+    ...props
+}: ClapperCardWrapperProps) {
+    return (
+        <div {...props}>
+            <ClapperCard clapperId={clapperId}></ClapperCard>
+        </div>
+    )
+}
+const StyledClapperCardWrapper = styled(ClapperCardWrapper)`
+    transition-property: left;
+    transition-duration: 300ms;
+    position: relative;
+    margin-bottom: 0.5rem;
+    left: ${(props) => (props.remove ? '-500px' : '0px')}; ;
+`
+
 export default function SideNav() {
     const version = Config.version
     const expanded = useRecoilValue(expandedAtom)
     const clappers = useRecoilValue(ClappersState)
 
+    const [removed, setRemoved] = useState<any>(null)
     function addClapper() {
         clapperCreated.raiseEvent({})
     }
     function removeClapper() {
-        clapperRemoved.raiseEvent({
-            clapperId: clappers[clappers.length - 1].id,
-        })
+        const removedId = clappers[clappers.length - 1].id
+        setRemoved(removedId)
+        setTimeout(() => {
+            clapperRemoved.raiseEvent({
+                clapperId: clappers[clappers.length - 1].id,
+            })
+            setRemoved(null)
+        }, 350)
     }
 
     return (
@@ -111,11 +141,13 @@ export default function SideNav() {
 
             <section>
                 {clappers.map((c) => (
-                    <div className="mb-3" key={c.id}>
-                        <ClapperCard clapperId={c.id}></ClapperCard>
-                    </div>
+                    <StyledClapperCardWrapper
+                        key={c.id}
+                        remove={removed === c.id}
+                        clapperId={c.id}
+                    ></StyledClapperCardWrapper>
                 ))}
-                <div className="flex mt-2">
+                <div className="flex mt-4">
                     {clappers.length < 3 ? (
                         <div>
                             <AddButton onClick={addClapper}></AddButton>
