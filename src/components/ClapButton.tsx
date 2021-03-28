@@ -42,10 +42,7 @@ export interface ClapButtonProps {
 
 export default function ClapButton({ clapperId }: ClapButtonProps) {
     const [playing, setPlaying] = useState<boolean>(false)
-    const intervalRef = useRef<NodeJS.Timeout>()
     const audioRef = useRef<HTMLAudioElement>()
-
-    const svgRef = useRef(null)
 
     if (!audioRef.current) {
         const audio = new Audio()
@@ -54,7 +51,6 @@ export default function ClapButton({ clapperId }: ClapButtonProps) {
 
     function stopPlayingAndReload() {
         audioRef.current.load()
-        stopAnim()
         setPlaying(false)
     }
 
@@ -71,40 +67,11 @@ export default function ClapButton({ clapperId }: ClapButtonProps) {
         }
     }
 
-    // TODO: Replace this with a css animation
-    function startAnim() {
-        if (intervalRef.current != null) {
-            return
-        }
-        const ele = svgRef.current
-        let toggle = false
-        intervalRef.current = setInterval(() => {
-            if (!toggle) {
-                ele.style.transform = 'scale(1.2)'
-                toggle = true
-            } else {
-                ele.style.transform = 'scale(1)'
-                toggle = false
-            }
-        }, 100)
-    }
-    function stopAnim() {
-        if (intervalRef.current == null) {
-            return
-        }
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-
-        svgRef.current.style.transform = undefined
-    }
-
     useEffect(() => {
         const onStop = () => {
-            stopAnim()
             setPlaying(false)
         }
         const onStart = async () => {
-            startAnim()
             setPlaying(true)
             await clappedEvent.raiseEvent({})
         }
@@ -154,7 +121,7 @@ export default function ClapButton({ clapperId }: ClapButtonProps) {
     return (
         <Wrapper>
             <ClapIconContainer onClick={play} clapperId={clapperId}>
-                <ClapSvg clapping={playing} ref={svgRef} />
+                <ClapSvg clapping={playing} />
             </ClapIconContainer>
         </Wrapper>
     )
