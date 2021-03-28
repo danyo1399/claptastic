@@ -20,6 +20,43 @@ const Container = styled.div`
         display: flex;
         justify-content: center;
     }
+
+    .swipe-button {
+        --arrow-color: #5353ff;
+        padding: 0 5px;
+
+        outline: none;
+        outline:focus {
+        }
+
+        align-items: center;
+        display: none;
+    }
+    .swipe-button:before {
+        content: '';
+        display: block;
+        width: 2rem;
+        height: 2rem;
+        border-right: var(--arrow-color) solid 5px;
+        border-top: var(--arrow-color) solid 5px;
+        transform: rotateZ(45deg);
+    }
+    .swipe-button:first-of-type:before {
+        border-right: none;
+        border-top: none;
+        transform: rotateZ(45deg);
+        border-left: var(--arrow-color) solid 5px;
+        border-bottom: var(--arrow-color) solid 5px;
+    }
+
+    @media (min-width: 600px) {
+        .swipe-button {
+            display: flex;
+        }
+        .wrapper {
+            transition-duration: 200ms;
+        }
+    }
 `
 
 export interface ButtonSwipeContainerProps
@@ -75,11 +112,19 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
             <div className="wrapper" ref={wrapperRef}>
                 {clappers.map((x) => (
                     <div className="item-wrapper" key={x.id}>
+                        <button
+                            className="swipe-button left"
+                            onClick={() => handleSwipe(hammer.DIRECTION_RIGHT)}
+                        ></button>
                         <ClapButton
                             clapperId={x.id}
                             swipe={swipe}
                             pan={pan}
                         ></ClapButton>
+                        <button
+                            className="swipe-button "
+                            onClick={() => handleSwipe(hammer.DIRECTION_LEFT)}
+                        ></button>
                     </div>
                 ))}
             </div>
