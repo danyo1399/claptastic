@@ -23,7 +23,7 @@ const Container = styled.div`
 
     .swipe-button {
         --arrow-color: #5353ff;
-        padding: 0 5px;
+        padding: 0 0px;
 
         outline: none;
         outline:focus {
@@ -35,18 +35,18 @@ const Container = styled.div`
     .swipe-button:before {
         content: '';
         display: block;
-        width: 2rem;
-        height: 2rem;
-        border-right: var(--arrow-color) solid 5px;
-        border-top: var(--arrow-color) solid 5px;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-right: var(--arrow-color) solid 6px;
+        border-top: var(--arrow-color) solid 6px;
         transform: rotateZ(45deg);
     }
     .swipe-button:first-of-type:before {
         border-right: none;
         border-top: none;
         transform: rotateZ(45deg);
-        border-left: var(--arrow-color) solid 5px;
-        border-bottom: var(--arrow-color) solid 5px;
+        border-left: var(--arrow-color) solid 6px;
+        border-bottom: var(--arrow-color) solid 6px;
     }
 
     @media (min-width: 600px) {
