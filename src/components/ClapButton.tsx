@@ -6,13 +6,18 @@ import { clappedEvent } from '../claps'
 import { ClapIconContainer } from './ClapIconContainer'
 import { playAudio } from '../claps'
 import { Clap } from '../../apps/server/src/models'
+import hammer from 'hammerjs'
 
 const logger = getLogger('clap-button')
+
 const Wrapper = styled.div`
     width: 80vw;
     max-width: 400px;
     max-height: 80vh;
+    transition: left;
+    transition-duration: 50ms;
 
+    position: relative;
     animation-name: loadButton;
     animation-duration: 500ms;
     animation-fill-mode: both;
@@ -38,12 +43,14 @@ const Wrapper = styled.div`
 `
 export interface ClapButtonProps {
     clapperId: number
+    pan?: (x: any) => void
+    swipe?: (x: any) => void
 }
 
-export default function ClapButton({ clapperId }: ClapButtonProps) {
+export default function ClapButton({ pan, clapperId, swipe }: ClapButtonProps) {
     const [playing, setPlaying] = useState<boolean>(false)
     const audioRef = useRef<HTMLAudioElement>()
-
+    const eleRef = useRef<HTMLDivElement>()
     if (!audioRef.current) {
         const audio = new Audio()
         audioRef.current = audio
@@ -66,6 +73,35 @@ export default function ClapButton({ clapperId }: ClapButtonProps) {
             stopPlayingAndReload()
         }
     }
+
+    useEffect(() => {
+        const manager = new hammer.Manager(eleRef.current)
+        const swiper = new hammer.Swipe({
+            direction: hammer.DIRECTION_HORIZONTAL,
+        })
+        const panner = new hammer.Pan({
+            direction: Hammer.DIRECTION_HORIZONTAL,
+        })
+
+        manager.add(swiper)
+        manager.add(panner).recognizeWith(swiper)
+
+        function pannerFn(event) {
+            event.clapperId = this.clapperId
+            pan && pan(event)
+        }
+        function swipperFn(event) {
+            event.clapperId = clapperId
+            swipe && swipe(event)
+        }
+        manager.on('pan', pannerFn)
+        manager.on('swipe', swipperFn)
+        return () => {
+            pan && manager.off('pan', pannerFn)
+            swipe && manager.off('swipe', swipperFn)
+            manager.destroy()
+        }
+    }, [swipe, pan])
 
     useEffect(() => {
         const onStop = () => {
@@ -119,7 +155,7 @@ export default function ClapButton({ clapperId }: ClapButtonProps) {
             )
     }, [])
     return (
-        <Wrapper>
+        <Wrapper ref={eleRef}>
             <ClapIconContainer onClick={play} clapperId={clapperId}>
                 <ClapSvg clapping={playing} />
             </ClapIconContainer>
