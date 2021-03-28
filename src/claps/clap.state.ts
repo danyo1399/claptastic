@@ -71,7 +71,7 @@ export const clapReducer: ChangeHandler<ClapState> = (
 
     clapperCreated.applyEvent(change, (x) => {
         const clappers = state.clappers
-        let nextIdToAdd = 1
+        let nextIdToAdd = state.clappers.length
         for (
             let potentialNextId = nextIdToAdd;
             potentialNextId < state.clappers.length;

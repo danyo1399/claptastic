@@ -13,7 +13,7 @@
     "client:build:cloudflare": "cross-env NODE_ENV=production PUBLIC_PATH=/ CONFIG=prod webpack --config=webpack.prod.js ",
     "client:build:dev": "cross-env NODE_ENV=development webpack --config=webpack.dev.js ",
     "client:publish:netlify:preview": "npm run client:build:netlify && netlify deploy --dir=dist && echo dont forget to add /claptastic/ to end of url",
-    "client:publish:netlify": "npm run client:build:netlify && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
+    "client:publish:netlify": "npm run bump-version && npm run client:build:netlify && netlify deploy --dir=dist --prod && echo dont forget to add /claptastic/ to end of url",
     "client:publish:github": "npm run client:build:github && node ./scripts/github-publish.js",
     "client:publish:cloudflare": "npm run client:build:cloudflare && cross-env BRANCH=cf-pages node ./scripts/github-publish.js",
     "cypress:open": "cypress open",

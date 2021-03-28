@@ -6,8 +6,8 @@ import MenuIcon from './toolkit/MenuIcon'
 import { ClapperCard } from './ClapperCard'
 import Config from '../config'
 import { AddButton } from './AddButton'
-import { clapperCreated, ClappersState } from '../claps'
-import { DivWithAnyProps } from './DivWithAnyProps'
+import { clapperCreated, clapperRemoved, ClappersState } from '../claps'
+import { RemoveButton } from './RemoveButton'
 
 const StyledButton = styled.button`
     color: white;
@@ -95,6 +95,11 @@ export default function SideNav() {
     function addClapper() {
         clapperCreated.raiseEvent({})
     }
+    function removeClapper() {
+        clapperRemoved.raiseEvent({
+            clapperId: clappers[clappers.length - 1].id,
+        })
+    }
 
     return (
         <StyledSideNavContainer
@@ -110,13 +115,20 @@ export default function SideNav() {
                         <ClapperCard clapperId={c.id}></ClapperCard>
                     </div>
                 ))}
-
-                {clappers.length < 2 ? (
-                    <div>
-                        <AddButton onClick={addClapper}></AddButton>
-                    </div>
-                ) : null}
-
+                <div className="flex mt-2">
+                    {clappers.length < 3 ? (
+                        <div>
+                            <AddButton onClick={addClapper}></AddButton>
+                        </div>
+                    ) : null}
+                    {clappers.length > 1 ? (
+                        <div className="ml-2">
+                            <RemoveButton
+                                onClick={removeClapper}
+                            ></RemoveButton>
+                        </div>
+                    ) : null}
+                </div>
             </section>
         </StyledSideNavContainer>
     )

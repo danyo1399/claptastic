@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { ContainerColor } from '../claps'
-import { DivWithAnyProps } from './DivWithAnyProps'
 
-const Wrapper = styled(DivWithAnyProps)`
+const Wrapper = styled.div`
     width: 100%;
 
     animation-name: loadButton;

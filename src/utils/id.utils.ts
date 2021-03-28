@@ -6,3 +6,8 @@ export function uniqueId(prefix: string) {
     prefix = prefix ? `${prefix}#` : ''
     return `${prefix}${(nextId + Date.now() + startDate).toString(36)}`
 }
+
+export function uniqueNumberId() {
+    nextId++
+    return startDate + nextId
+}

@@ -66,7 +66,7 @@ export interface ClapperCardProps {
 }
 
 export function ClapperCard({ clapperId }: ClapperCardProps) {
-    async function onChange(e) {
+    const onChange = async (e) => {
         const ele: HTMLInputElement = e.target
         const file = ele.files[0] as File
         if (!file) {
@@ -96,15 +96,10 @@ export function ClapperCard({ clapperId }: ClapperCardProps) {
         await clapperCustomAudioRemovedEvent.raiseEvent({ clapperId })
     }
 
-    function removeClapper() {
-        clapperRemoved.raiseEvent({ clapperId })
-    }
-
     return (
         <Container className="rounded  p-3 border border-gray-300 ">
-            <label className="input-container button rounded" htmlFor="file">
+            <label className="input-container button rounded">
                 <input
-                    id="file"
                     type="file"
                     className="file-upload-input"
                     accept="audio/mp3, audio/wav"
@@ -125,15 +120,6 @@ export function ClapperCard({ clapperId }: ClapperCardProps) {
                 >
                     Restore
                 </button>
-                {clapperId > 0 ? (
-                    <button
-                        onClick={removeClapper}
-                        className="rounded p-2 b bg-gr text-white ml-2 outline-none focus:outline-none"
-                        style={{ backgroundColor: '#676767' }}
-                    >
-                        <DeleteSvg className="fill-current"></DeleteSvg>
-                    </button>
-                ) : null}
             </div>
         </Container>
     )

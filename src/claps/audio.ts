@@ -36,23 +36,6 @@ export let defaultAudioUrl: string
 
 const audioCache: string[] = []
 
-const audioEventsCache: {
-    [clapperId: number]: { onplay: any; onstop: any }
-} = {}
-
-const audioPlayerCache: {
-    [clapperId: number]: HTMLAudioElement
-} = {}
-
-export function setAudioEvents(clapperId: number, onplay, onstop) {
-    const existingEvents = audioEventsCache[clapperId]
-    if (existingEvents) {
-        // TODO
-        throw new Error('Yeah todo')
-    }
-    audioEventsCache[clapperId] = { onplay, onstop }
-}
-
 function createBlobKey(clapperId: number) {
     return `${clapperId}#audio`
 }
