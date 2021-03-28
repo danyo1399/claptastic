@@ -5,6 +5,9 @@ import { useRecoilValue } from 'recoil'
 import { ClappersState } from '../claps'
 
 import hammer from 'hammerjs'
+import { throttle } from '../utils/utils'
+import getTimerCount = jest.getTimerCount
+import { isTouchEnabled } from '../utils/browser.utils'
 
 const Container = styled.div`
     display: flex;
@@ -14,6 +17,9 @@ const Container = styled.div`
         position: relative;
         transition: left;
         transition-duration: 70ms;
+    }
+    .wrapper.swiping {
+        transition-duration: 45ms;
     }
     .item-wrapper {
         min-width: 100vw;
@@ -67,8 +73,16 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
     const wrapperRef = useRef<HTMLDivElement>()
     const [index, setIndex] = useState(0)
     const currentLeft = `-${100 * index}vw`
-
+    const { fn: swipeMove, getTimeout } = throttle(
+        (value) => {
+            wrapperRef.current.style.left = value
+        },
+        30,
+        {},
+    )
     const resetSwipe = () => {
+        const timeout = getTimeout()
+        clearTimeout(timeout)
         wrapperRef.current.style.left = currentLeft
     }
 
@@ -84,10 +98,6 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
         }
     }
 
-    const swipe = (e) => {
-        // its a bit janky. maybe just try with pan delta for now
-        //     handleSwipe(e.direction)
-    }
     const pan = (e) => {
         if (e.isFinal) {
             if (Math.abs(e.deltaX) > 100) {
@@ -95,10 +105,12 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
                     handleSwipe(hammer.DIRECTION_RIGHT)
                 } else handleSwipe(hammer.DIRECTION_LEFT)
             }
+            wrapperRef.current.classList.remove('swiping')
             resetSwipe()
-            return
+        } else {
+            wrapperRef.current.classList.add('swiping')
+            swipeMove(`calc(${currentLeft}  + ${e.deltaX}px)`)
         }
-        wrapperRef.current.style.left = `calc(${currentLeft}  + ${e.deltaX}px)`
     }
 
     useEffect(() => {
@@ -107,24 +119,30 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
     useEffect(() => {
         resetSwipe()
     }, [index])
+
+    const showButtons = clappers.length > 1 && !isTouchEnabled()
     return (
         <Container {...props}>
             <div className="wrapper" ref={wrapperRef}>
                 {clappers.map((x) => (
                     <div className="item-wrapper" key={x.id}>
-                        <button
-                            className="swipe-button left"
-                            onClick={() => handleSwipe(hammer.DIRECTION_RIGHT)}
-                        ></button>
-                        <ClapButton
-                            clapperId={x.id}
-                            swipe={swipe}
-                            pan={pan}
-                        ></ClapButton>
-                        <button
-                            className="swipe-button "
-                            onClick={() => handleSwipe(hammer.DIRECTION_LEFT)}
-                        ></button>
+                        {showButtons && (
+                            <button
+                                className="swipe-button left"
+                                onClick={() =>
+                                    handleSwipe(hammer.DIRECTION_RIGHT)
+                                }
+                            ></button>
+                        )}
+                        <ClapButton clapperId={x.id} pan={pan}></ClapButton>
+                        {showButtons && (
+                            <button
+                                className="swipe-button "
+                                onClick={() =>
+                                    handleSwipe(hammer.DIRECTION_LEFT)
+                                }
+                            ></button>
+                        )}
                     </div>
                 ))}
             </div>
