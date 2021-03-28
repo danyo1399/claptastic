@@ -3,8 +3,8 @@ import styled, { css, keyframes } from 'styled-components'
 
 const Container = styled.div`
     position: fixed;
-    bottom: 5px;
-    left: 5px;
+    bottom: 20px;
+    left: 15px;
     color: white;
     font-weight: 300;
 `

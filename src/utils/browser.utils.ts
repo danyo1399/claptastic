@@ -23,4 +23,8 @@ async function handleVisibilityChange() {
     }
 }
 
+export function isUsingObsoleteUrl() {
+    return window.location.href.toLowerCase().includes('github')
+}
+
 document.addEventListener(visibilityChange, handleVisibilityChange, false)
