@@ -9,7 +9,7 @@ import { visibilityEventEmitter } from '../utils/browser.utils'
 const logger = getLogger('external sync')
 export const localSyncDb = new PouchDB('serverDb', { auto_compaction: true })
 
-export const remoteDb = new PouchDB(config.apiServer + '/claptastic-public')
+//export const remoteDb = new PouchDB(config.apiServer + '/claptastic-public')
 
 function onError(err) {
     logger.error('sync error', err)
@@ -17,7 +17,7 @@ function onError(err) {
 
 function setupSync() {
     return localSyncDb.replicate
-        .from(remoteDb, {
+        .from(config.apiServer + '/claptastic-public', {
             live: true,
             retry: true,
             checkpoint: 'target',
