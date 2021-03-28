@@ -17,7 +17,7 @@ export interface InfoProps extends HTMLAttributes<HTMLDivElement> {}
 export function Info({ ...props }: InfoProps) {
     return (
         <Container {...props}>
-            <a href="https://claptastic.tty.nz">https://claptastic.tty.nz</a>
+            <span>https://claptastic.tty.nz</span>
         </Container>
     )
 }
