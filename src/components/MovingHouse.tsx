@@ -27,7 +27,7 @@ export function MovingHouse({ ...props }: MovingHouseProps) {
                         reinstall from the new website
                     </p>
                     <p className="mb-4">
-                        The site has many new features such as support for
+                        The latest version has many new features such as support for
                         multiple clap buttons and swipe support.
                     </p>
                     <p className="mb-4">Hope to see you there</p>
