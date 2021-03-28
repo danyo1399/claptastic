@@ -79,9 +79,7 @@ export default function ClapButton({ pan, clapperId, swipe }: ClapButtonProps) {
         const swiper = new hammer.Swipe({
             direction: hammer.DIRECTION_HORIZONTAL,
         })
-        const panner = new hammer.Pan({
-            direction: Hammer.DIRECTION_HORIZONTAL,
-        })
+        const panner = new hammer.Pan({})
 
         manager.add(swiper)
         manager.add(panner).recognizeWith(swiper)
