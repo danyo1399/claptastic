@@ -65,7 +65,7 @@ export default function ClapButton({ pan, clapperId, swipe }: ClapButtonProps) {
         // TODO: trying to figure out bug ios playing audio
         if (!playing) {
             try {
-                await playAudio(0, audioRef.current)
+                await playAudio(clapperId, audioRef.current)
             } catch (err) {
                 logger.error('Error playing audio', err)
             }
