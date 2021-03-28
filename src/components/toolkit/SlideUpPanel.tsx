@@ -39,13 +39,13 @@ const Content = styled.div`
 `
 
 export interface SlidUpPanelProps extends HTMLAttributes<HTMLElement> {
-    close: () => void
+    close?: () => void
 }
 
 export function SlideUpPanel({ children, close, ...props }: SlidUpPanelProps) {
     return (
         <Container {...props}>
-            <CloseButton onClick={close}>Close</CloseButton>
+            {close && <CloseButton onClick={close}>Close</CloseButton>}
             <Content>{children}</Content>
         </Container>
     )
