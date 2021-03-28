@@ -36,7 +36,8 @@ body {
 
 @media (max-height: 360px) {
     body {
-        padding-top: 0px;
+        top: 0px;
+        height: 100%;
     }
 
     .min-height-hide {
