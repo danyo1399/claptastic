@@ -62,7 +62,12 @@ const StyledSideNavContainer = styled(SideNavContainer)`
         `}
 
     section {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    .version {
+        position: absolute;
+        right: 10px;
+        top: 10px;
     }
 `
 
@@ -72,9 +77,8 @@ interface VersionHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 function VersionHeader({ version, ...props }: VersionHeaderProps) {
     return (
         <section {...props}>
-            Version:
             <span id="version" className="version">
-                {version}
+                V{version}
             </span>
         </section>
     )
@@ -137,6 +141,7 @@ export default function SideNav() {
             expanded={expanded}
             data-testid="side-nav"
         >
+            <span>https://claptastic.tty.nz</span>
             <StyledVersionHeader version={version}></StyledVersionHeader>
 
             <section>

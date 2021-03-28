@@ -17,9 +17,10 @@ const Container = styled.div`
         position: relative;
         transition: left;
         transition-duration: 70ms;
+        transform: translate3d(0, 0, 0);
     }
     .wrapper.swiping {
-        transition-duration: 45ms;
+        transition-duration: 70ms;
     }
     .item-wrapper {
         min-width: 100vw;
@@ -77,7 +78,7 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
         (value) => {
             wrapperRef.current.style.left = value
         },
-        30,
+        40,
         {},
     )
     const resetSwipe = () => {
