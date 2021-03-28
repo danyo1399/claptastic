@@ -65,6 +65,9 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
     }
 
     useEffect(() => {
+        setIndex(0)
+    }, [clappers?.length])
+    useEffect(() => {
         resetSwipe()
     }, [index])
     return (
