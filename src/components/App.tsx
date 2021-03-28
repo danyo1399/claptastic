@@ -13,6 +13,7 @@ import { useImmerRecoilSetState } from '../state/immerRecoil'
 import { TestBed } from './TestBed'
 import { IosInstall } from './IosInstall'
 import { ButtonSwipeContainer } from './ButtonSwipeContainer'
+import { Info } from './Info'
 export default function App() {
     const setInstallState = useSetRecoilState(installPromptState)
     const setState = useImmerRecoilSetState(clapAtom)
@@ -31,6 +32,7 @@ export default function App() {
 
     return (
         <>
+            <Info></Info>
             <IosInstall></IosInstall>
 
             {/*<TestBed></TestBed>*/}
