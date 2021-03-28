@@ -12,7 +12,7 @@ export function MovingHouse({ ...props }: MovingHouseProps) {
         <Container {...props}>
             {isUsingObsoleteUrl() && (
                 <SlideUpPanel>
-                    <h1 className="mb-6 text-xl">Our Site/App has moved!</h1>
+                    <h1 className="mb-6 text-xl">Claptastic has moved!</h1>
                     <p className="mb-4">
                         The new web address for Claptastic is &nbsp;
                         <a
@@ -27,8 +27,8 @@ export function MovingHouse({ ...props }: MovingHouseProps) {
                         reinstall from the new website
                     </p>
                     <p className="mb-4">
-                        The latest version has many new features such as support for
-                        multiple clap buttons and swipe support.
+                        The latest version has many new features such as support
+                        for multiple clap buttons and swipe support.
                     </p>
                     <p className="mb-4">Hope to see you there</p>
                 </SlideUpPanel>
