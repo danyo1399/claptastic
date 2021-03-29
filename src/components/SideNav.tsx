@@ -8,6 +8,7 @@ import Config from '../config'
 import { AddButton } from './AddButton'
 import { clapperCreated, clapperRemoved, ClappersState } from '../claps'
 import { RemoveButton } from './RemoveButton'
+import { SideNavMenu } from './SideNavMenu'
 
 const StyledButton = styled.button`
     color: white;
@@ -55,6 +56,10 @@ const StyledSideNavContainer = styled(SideNavContainer)`
     transition-property: all;
     transition-duration: 200ms;
     transition-timing-function: ease-out;
+    .sidenav-body {
+        height: calc(100% - 65px);
+        width: 100%;
+    }
     ${(props) =>
         props.expanded &&
         css`
@@ -68,6 +73,10 @@ const StyledSideNavContainer = styled(SideNavContainer)`
         position: absolute;
         right: 10px;
         top: 10px;
+    }
+    .sidenav-footer {
+        margin-left: -10px;
+        margin-right: -10px;
     }
 `
 
@@ -138,35 +147,40 @@ export default function SideNav() {
     return (
         <StyledSideNavContainer
             className="min-height-hide"
-            expanded={expanded}
+            expanded={expanded || true}
             data-testid="side-nav"
         >
-            <span>https://claptastic.tty.nz</span>
-            <StyledVersionHeader version={version}></StyledVersionHeader>
+            <div className="sidenav-body">
+                <span>https://claptastic.tty.nz</span>
+                <StyledVersionHeader version={version}></StyledVersionHeader>
 
-            <section>
-                {clappers.map((c) => (
-                    <StyledClapperCardWrapper
-                        key={c.id}
-                        remove={removed === c.id}
-                        clapperId={c.id}
-                    ></StyledClapperCardWrapper>
-                ))}
-                <div className="flex mt-4">
-                    {clappers.length < 3 ? (
-                        <div>
-                            <AddButton onClick={addClapper}></AddButton>
-                        </div>
-                    ) : null}
-                    {clappers.length > 1 ? (
-                        <div className="ml-2">
-                            <RemoveButton
-                                onClick={removeClapper}
-                            ></RemoveButton>
-                        </div>
-                    ) : null}
-                </div>
-            </section>
+                <section>
+                    {clappers.map((c) => (
+                        <StyledClapperCardWrapper
+                            key={c.id}
+                            remove={removed === c.id}
+                            clapperId={c.id}
+                        ></StyledClapperCardWrapper>
+                    ))}
+                    <div className="flex mt-4">
+                        {clappers.length < 3 ? (
+                            <div>
+                                <AddButton onClick={addClapper}></AddButton>
+                            </div>
+                        ) : null}
+                        {clappers.length > 1 ? (
+                            <div className="ml-2">
+                                <RemoveButton
+                                    onClick={removeClapper}
+                                ></RemoveButton>
+                            </div>
+                        ) : null}
+                    </div>
+                </section>
+            </div>
+            <div className="sidenav-footer">
+                <SideNavMenu></SideNavMenu>
+            </div>
         </StyledSideNavContainer>
     )
 }
