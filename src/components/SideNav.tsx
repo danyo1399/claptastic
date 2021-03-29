@@ -59,6 +59,7 @@ const StyledSideNavContainer = styled(SideNavContainer)`
     .sidenav-body {
         height: calc(100% - 75px);
         width: 100%;
+        overflow-y: auto;
     }
     ${(props) =>
         props.expanded &&
@@ -147,7 +148,7 @@ export default function SideNav() {
     return (
         <StyledSideNavContainer
             className="min-height-hide"
-            expanded={expanded || true}
+            expanded={expanded}
             data-testid="side-nav"
         >
             <div className="sidenav-body">

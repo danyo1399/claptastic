@@ -1,6 +1,7 @@
 import React, { useState, useEffect, HTMLAttributes } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import ClapSvg from './ClapSvg'
+import InfoSvg from './svg/InfoSvg'
 
 const Container = styled.div`
     height: 80px;
@@ -28,7 +29,7 @@ const Container = styled.div`
     }
     .wrapper {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         width: 100%;
         height: 100%;
         padding: 0 10px;
@@ -55,7 +56,10 @@ export function SideNavMenu({ ...props }: SideNavMenuProps) {
                     </div>
                     <div className="button-label">clappers</div>
                 </button>
-                <button></button>
+                <button>
+                    <InfoSvg></InfoSvg>
+                    <div className="button-label">Info</div>
+                </button>
             </div>
         </Container>
     )
