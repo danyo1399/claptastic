@@ -57,7 +57,7 @@ const StyledSideNavContainer = styled(SideNavContainer)`
     transition-duration: 200ms;
     transition-timing-function: ease-out;
     .sidenav-body {
-        height: calc(100% - 65px);
+        height: calc(100% - 75px);
         width: 100%;
     }
     ${(props) =>
