@@ -4,6 +4,7 @@ import {
     clapperAudioUpdatedEvent,
     clapperCreated,
     clapperCustomAudioRemovedEvent,
+    clapperIconChangedEvent,
     clapperRemoved,
 } from './clap.events'
 import { ClapState } from './clap.models'
@@ -41,6 +42,13 @@ function stateActions(state: ClapState) {
         }
     }
 
+    function setEmoji(clapperId: number, emoji: string) {
+        const clapper = state.clappers.find((x) => x.id === clapperId)
+        if (clapper) {
+            clapper.emoji = emoji
+        }
+    }
+
     function removeAudio(id: number) {
         const clapper = state.clappers.find((x) => x.id === id)
         if (clapper) {
@@ -48,7 +56,11 @@ function stateActions(state: ClapState) {
             clapper.audioType = null
         }
     }
-    return { removeAudio, setAudio }
+
+    function removeClapper(clapperId: number) {
+        state.clappers = state.clappers.filter((c) => c.id !== clapperId)
+    }
+    return { removeAudio, setAudio, setEmoji, removeClapper }
 }
 
 export const clapReducer: ChangeHandler<ClapState> = (
@@ -86,9 +98,12 @@ export const clapReducer: ChangeHandler<ClapState> = (
     })
 
     clapperRemoved.applyEvent(change, (x) => {
-        state.clappers = state.clappers.filter(
-            (c) => c.id !== x.doc.data.clapperId,
-        )
+        stateActions(state).removeClapper(x.doc.data.clapperId)
+    })
+
+    clapperIconChangedEvent.applyEvent(change, (x) => {
+        const { clapperId, emoji } = x.doc.data
+        stateActions(state).setEmoji(clapperId, emoji)
     })
 }
 

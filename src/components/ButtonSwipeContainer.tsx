@@ -125,8 +125,8 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
     return (
         <Container {...props}>
             <div className="wrapper" ref={wrapperRef}>
-                {clappers.map((x) => (
-                    <div className="item-wrapper" key={x.id}>
+                {clappers.map((clapper) => (
+                    <div className="item-wrapper" key={clapper.id}>
                         {showButtons && (
                             <button
                                 className="swipe-button left"
@@ -135,7 +135,11 @@ export function ButtonSwipeContainer({ ...props }: ButtonSwipeContainerProps) {
                                 }
                             ></button>
                         )}
-                        <ClapButton clapperId={x.id} pan={pan}></ClapButton>
+                        <ClapButton
+                            emoji={clapper.emoji}
+                            clapperId={clapper.id}
+                            pan={pan}
+                        ></ClapButton>
                         {showButtons && (
                             <button
                                 className="swipe-button "

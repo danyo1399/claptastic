@@ -8,10 +8,15 @@ import {
     clapperCreated,
     clapperCustomAudioRemovedEvent,
     clapperRemoved,
+    ClappersState,
 } from '../claps'
 import { removeAudio, setAudio } from '../claps'
 import { Clap } from '../../apps/server/src/models'
 import { DeleteSvg } from './DeleteSvg'
+import { useRecoilValue } from 'recoil'
+import { useImmerRecoilState } from '../state/immerRecoil'
+import { emojiState as _emojiState } from './EmojiList'
+import { EmojiIcon } from './EmojiIcon'
 
 const logger = getLogger('clapper-card')
 
@@ -66,6 +71,8 @@ export interface ClapperCardProps {
 }
 
 export function ClapperCard({ clapperId }: ClapperCardProps) {
+    const clappersState = useRecoilValue(ClappersState)
+    const [emojiState, setEmojiState] = useImmerRecoilState(_emojiState)
     const onChange = async (e) => {
         const ele: HTMLInputElement = e.target
         const file = ele.files[0] as File
@@ -91,11 +98,18 @@ export function ClapperCard({ clapperId }: ClapperCardProps) {
         ele.value = null
     }
 
+    function chooseIcon() {
+        setEmojiState((x) => {
+            x.clapperId = clapperId
+            x.closed = false
+        })
+    }
+
     async function removeCustomAudio() {
         await removeAudio(clapperId)
         await clapperCustomAudioRemovedEvent.raiseEvent({ clapperId })
     }
-
+    const clapper = clappersState[clapperId]
     return (
         <Container className="rounded  p-3 border border-gray-300 ">
             <label className="input-container button rounded">
@@ -109,8 +123,12 @@ export function ClapperCard({ clapperId }: ClapperCardProps) {
             </label>
 
             <div className="icon-container">
-                <ClapIconContainer clapperId={clapperId}>
-                    <ClapSvg></ClapSvg>
+                <ClapIconContainer onClick={chooseIcon} clapperId={clapperId}>
+                    {clapper.emoji ? (
+                        <EmojiIcon>{clapper.emoji}</EmojiIcon>
+                    ) : (
+                        <ClapSvg></ClapSvg>
+                    )}
                 </ClapIconContainer>
             </div>
             <div className="flex justify-between">

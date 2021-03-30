@@ -7,6 +7,8 @@ import { ClapIconContainer } from './ClapIconContainer'
 import { playAudio } from '../claps'
 import { Clap } from '../../apps/server/src/models'
 import hammer from 'hammerjs'
+import { EmojiIcon } from './EmojiIcon'
+import { Throbber } from './toolkit/Throbber'
 
 const logger = getLogger('clap-button')
 
@@ -43,11 +45,17 @@ const Wrapper = styled.div`
 `
 export interface ClapButtonProps {
     clapperId: number
+    emoji: string
     pan?: (x: any) => void
     swipe?: (x: any) => void
 }
 
-export default function ClapButton({ pan, clapperId, swipe }: ClapButtonProps) {
+export default function ClapButton({
+    pan,
+    clapperId,
+    swipe,
+    emoji,
+}: ClapButtonProps) {
     const [playing, setPlaying] = useState<boolean>(false)
     const audioRef = useRef<HTMLAudioElement>()
     const eleRef = useRef<HTMLDivElement>()
@@ -155,7 +163,13 @@ export default function ClapButton({ pan, clapperId, swipe }: ClapButtonProps) {
     return (
         <Wrapper ref={eleRef}>
             <ClapIconContainer onClick={play} clapperId={clapperId}>
-                <ClapSvg clapping={playing} />
+                {emoji ? (
+                    <Throbber enabled={playing}>
+                        <EmojiIcon full={true}>{emoji}</EmojiIcon>
+                    </Throbber>
+                ) : (
+                    <ClapSvg clapping={playing} />
+                )}
             </ClapIconContainer>
         </Wrapper>
     )

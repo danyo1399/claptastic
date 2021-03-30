@@ -30,3 +30,8 @@ export const clapperRemoved = createEventFn<ClapperRemovedEventData>(
 export const clapperCustomAudioRemovedEvent = createEventFn<{
     clapperId: number
 }>('clapperCustomAudioRemoved')
+
+export const clapperIconChangedEvent = createEventFn<{
+    clapperId: number
+    emoji?: string
+}>('clapperIconChanged')

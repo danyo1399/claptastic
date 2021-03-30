@@ -9,6 +9,7 @@ export interface ClapperModel {
     id: number
     audioFilename?: string
     audioType?: string
+    emoji?: string
 }
 export interface ContainerColor {
     id: string

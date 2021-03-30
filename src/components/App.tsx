@@ -14,6 +14,7 @@ import { TestBed } from './TestBed'
 import { IosInstall } from './IosInstall'
 import { ButtonSwipeContainer } from './ButtonSwipeContainer'
 import { MovingHouse } from './MovingHouse'
+import { EmojiList } from './EmojiList'
 export default function App() {
     const setInstallState = useSetRecoilState(installPromptState)
     const setState = useImmerRecoilSetState(clapAtom)
@@ -32,6 +33,7 @@ export default function App() {
 
     return (
         <>
+            <EmojiList></EmojiList>
             <MovingHouse></MovingHouse>
             <IosInstall></IosInstall>
 
