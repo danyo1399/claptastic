@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import InstallPrompt from './InstallPrompt'
-import { ExpandIconButton } from './SideNav'
+import { ExpandIconButton } from './sidenav/SideNav'
 import { useRecoilValue } from 'recoil'
 import { clapAtom } from '../claps'
 import ClapsCounter from './ClapsCounter'

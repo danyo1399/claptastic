@@ -32,17 +32,19 @@ const Container = styled.div`
         justify-content: flex-start;
         width: 100%;
         height: 100%;
-        padding: 0 10px;
+        padding: 5px 10px;
     }
 `
 
-export interface SideNavMenuProps extends HTMLAttributes<HTMLDivElement> {}
+export interface SideNavMenuProps extends HTMLAttributes<HTMLDivElement> {
+    click: (pageId: number) => void
+}
 
-export function SideNavMenu({ ...props }: SideNavMenuProps) {
+export function SideNavMenu({ click, ...props }: SideNavMenuProps) {
     return (
         <Container {...props}>
             <div className="wrapper">
-                <button>
+                <button onClick={() => click(1)}>
                     <div>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +58,7 @@ export function SideNavMenu({ ...props }: SideNavMenuProps) {
                     </div>
                     <div className="button-label">clappers</div>
                 </button>
-                <button>
+                <button onClick={() => click(2)}>
                     <InfoSvg></InfoSvg>
                     <div className="button-label">Info</div>
                 </button>

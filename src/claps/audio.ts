@@ -2,7 +2,7 @@
 import audioFileUrl from '../media/audio.mp3'
 import { clapStorage } from './clap.db'
 import getLogger from '../utils/logger'
-const numberOfAudioTracks = 3
+import { maxClappers } from '../constants'
 const logger = getLogger('audio')
 
 async function loadDefaultAudio() {
@@ -98,7 +98,7 @@ async function reloadAudio(clapperId: number): Promise<string> {
 async function loadAudio() {
     defaultAudioUrl = await defaultAudioUrlPromise
     const promises = []
-    for (let i = 0; i < numberOfAudioTracks; i++) {
+    for (let i = 0; i < maxClappers; i++) {
         promises.push(getAudio(i))
     }
     const audioBlobs = await Promise.all(promises)
