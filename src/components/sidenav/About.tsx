@@ -18,15 +18,23 @@ function VersionHeader({ version, ...props }: VersionHeaderProps) {
 const StyledVersionHeader = styled(VersionHeader)`
     font-weight: normal;
     font-size: 0.8rem;
+    margin-bottom: 0.2rem;
 `
+
+
 
 export interface AboutProps extends HTMLAttributes<HTMLDivElement> {}
 const version = Config.version
 export function About({ ...props }: AboutProps) {
     return (
         <Container {...props}>
-            <span>https://claptastic.tty.nz</span>
             <StyledVersionHeader version={version} />
+            <span>https://claptastic.tty.nz</span>
+
+            <p className="mt-4">
+                Have you ever tried clapping on with your phone in your hand.
+                Well now you can.
+            </p>
         </Container>
     )
 }

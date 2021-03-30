@@ -50,7 +50,7 @@ interface SideNavContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 function SideNavContainer({ expanded, ...props }: SideNavContainerProps) {
     return <div {...props}></div>
 }
-const bodyHeight = isIosSafari() ? '75px' : '55px'
+const bodyHeight = isIosSafari() ? '85px' : '68px'
 const StyledSideNavContainer = styled(SideNavContainer)`
     position: fixed;
     overflow: hidden;
@@ -60,7 +60,6 @@ const StyledSideNavContainer = styled(SideNavContainer)`
     background-color: rgb(82 79 79);
     bottom: 0;
     margin-left: -100vw;
-    padding: 10px;
     color: white;
     z-index: 20;
     transition-property: all;
@@ -69,6 +68,7 @@ const StyledSideNavContainer = styled(SideNavContainer)`
     .sidenav-body {
         height: calc(100% - ${bodyHeight});
         width: 100%;
+        padding: 0.4rem 0.4rem;
         overflow-y: auto;
     }
     ${(props) =>
